@@ -1,0 +1,213 @@
+/*
+Theme Name: shinken
+Theme URl: テーマのURL
+Author: sigling
+Description: theme for 奈良心剣道場
+tags: テーマのタグ
+License: テーマのライセンス
+License URl: テーマのライセンスURL
+Version: 1.0
+*/
+
+/***** border *****/
+/***** border: 1px solid black; *****/
+
+/***************************/
+/******** pagetitle ********/
+/***************************/
+.container_pagetitle {
+    margin: 0;
+    padding: 0;    
+}
+.bg_pagetitle {
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    height: 5rem;
+    position: relative;
+
+    z-index: -20;
+}
+.bg_pagetitle img {
+    margin: 0;
+    padding: 0;
+
+    object-fit: cover;
+
+    filter: brightness(70%);
+}
+.pagetitle {
+    margin: 0;
+    padding: 0;
+    padding-inline-start: 1.25rem;
+
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+
+.pagetitle span {
+    margin: 0;
+    padding: 0;
+}
+.text_pagetitle {
+    margin: 0;
+    padding: 0;
+
+    color: var(--c-text-reverse);
+    text-shadow: 0.0625rem 0.0625rem 0.125rem #000;
+}
+
+/****************************/
+/******** breadcrumb ********/
+/****************************/
+.container_breadcrumb {
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+}
+.breadcrumb {
+    margin: 0;
+    padding: 0;
+    padding-inline-start: 1.25rem;
+
+    width: 100%;
+    height: 2.25rem;
+
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    
+    background: var(--c-bgc-active);
+}
+.breadcrumb_arrow {
+    margin: 0;
+    margin-inline-end: 0.75rem;
+    padding: 0;
+
+    content: '';
+    display: block;
+    width: 0.375rem;
+    height: 0.375rem;
+    border-top: 0.125rem solid var(--c-card-arrow);
+    border-left: 0.125rem solid var(--c-card-arrow);
+    transform: rotate(135deg);
+}
+.breadcrumb_item {
+    margin: 0;
+    margin-inline-end: 0.75rem;
+    padding: 0;
+
+    color: var(--c-text);
+    font-size: 0.9rem;
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.08em;
+
+    display: flex;
+    background: none;
+}
+.breadcrumb_item a {
+    color: var(--c-text-link);
+    text-decoration: underline;
+}
+
+/************************/
+/***** page_content *****/
+/************************/
+.page_content {
+    margin: 0;
+    margin-block-start: 2rem;
+    margin-block-end: 4rem;
+    padding: 0;
+
+    display: grid;
+    grid-template-columns: var(--grid-12columns);
+    gap: var(--grid-gap);
+}
+
+/***** main_col *****/
+.main_col {
+    margin: 0;
+    padding: 0;
+
+    grid-column: span 9;
+}
+
+/***** side_col *****/
+.side_col {
+    margin: 0;
+    padding: 0;
+
+    grid-column: span 3;
+}
+
+/**********************/
+/***** single.php *****/
+/**********************/
+.single_wrapper {
+    margin: 0;
+    padding: 0;
+}
+.single_header {
+    margin: 0;
+    margin-block-end: 1.5rem;
+    padding: 0;
+}
+.single_title {
+    margin: 0;
+    margin-block-end: 0.75rem;
+    padding: 0;
+}
+.single_data {
+    margin: 0;
+    padding: 0;
+}
+.single_date_wrapper {
+    margin-block-end: 0.875rem;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/***********************/
+/***** archive.php *****/
+/***********************/
+
+/**********************/
+/***** responsive *****/
+/**********************/
+
+/******************/
+/***** tablet *****/
+/******************/
+@media(max-width: 960px) {
+    /*********************/
+    /***** .main_col *****/
+    /*********************/
+    .main_col {
+        grid-column: span 12;
+    }
+}
+
+/**********************/
+/***** smartphone *****/
+/**********************/
+@media(max-width: 428px) {
+    .single_thumbnail img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+}

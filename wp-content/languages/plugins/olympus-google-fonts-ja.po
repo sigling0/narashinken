@@ -1,0 +1,857 @@
+# Translation of Plugins - Fonts Plugin | Google Fonts Typography - Stable (latest release) in Japanese
+# This file is distributed under the same license as the Plugins - Fonts Plugin | Google Fonts Typography - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2024-04-22 12:38:42+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: ja_JP\n"
+"Project-Id-Version: Plugins - Fonts Plugin | Google Fonts Typography - Stable (latest release)\n"
+
+#: includes/functions.php:117
+msgid "Lists"
+msgstr "リスト"
+
+#: admin/class-ogf-welcome-screen.php:101
+msgid "Read Guide"
+msgstr "ガイドを読む"
+
+#: includes/customizer/controls/class-ogf-customize-upsell-control.php:39
+msgid "Learn More"
+msgstr "さらに詳しく"
+
+#: includes/customizer/controls/class-ogf-customize-upsell-control.php:37
+msgid "🧙‍ Upload Custom Fonts"
+msgstr "🧙‍ カスタムフォントをアップロード"
+
+#: includes/customizer/class-ogf-optimization-controls.php:45
+msgid "Optimization"
+msgstr "最適化"
+
+#: includes/class-ogf-clear-cache.php:64
+msgid "Clear Cache"
+msgstr "キャッシュを消去"
+
+#: includes/class-ogf-clear-cache.php:58
+msgid "Clear Font Cache"
+msgstr "フォントキャッシュを消去"
+
+#: includes/class-ogf-clear-cache.php:40 includes/class-ogf-clear-cache.php:59
+msgid "This will clear the local font cache."
+msgstr "これによりローカルフォントのキャッシュが消去されます。"
+
+#: includes/customizer/panels.php:86
+msgid "Font Subsets"
+msgstr "フォントサブセット"
+
+#: includes/customizer/settings.php:288
+msgid "Learn more →"
+msgstr "さらに詳しく→"
+
+#. Description of the plugin
+#: olympus-google-fonts.php
+msgid "The easiest to use Google Fonts Plugin. No coding required. Optimized for Speed. 1000+ font choices."
+msgstr "最も簡単に使える Google Fonts プラグインです。コードを書く必要はありません。スピードに対して最適化されています。1000以上のフォントから選択可能。"
+
+#: includes/class-ogf-dashboard-widget.php:30
+msgid "Typography News from Fonts Plugin"
+msgstr "フォントプラグインからのタイポグラフィ情報"
+
+#: includes/functions.php:123
+msgid "Quotes"
+msgstr "引用"
+
+#: includes/functions.php:124
+msgid "Select and configure the font for quotations."
+msgstr "引用のフォントを選択、設定します。"
+
+#: includes/class-ogf-typekit.php:106
+msgid "Enabled"
+msgstr "有効化"
+
+#: includes/class-ogf-typekit.php:106
+msgid "Disabled"
+msgstr "無効化"
+
+#: includes/class-ogf-typekit.php:116
+msgid "Enable Kit"
+msgstr "キットを有効化"
+
+#: includes/class-ogf-typekit.php:114
+msgid "Disable Kit"
+msgstr "キットを無効化"
+
+#: includes/class-ogf-typekit.php:95
+msgid "Enter your Adobe Fonts API Key to retrieve the fonts."
+msgstr "Adobe Fonts API キーを入力し、フォントを取得します。"
+
+#: includes/class-ogf-typekit.php:93
+msgid "There is a problem connecting to the API. Please check your API Key."
+msgstr "API への接続に問題があります。API キーを確認してください。"
+
+#: includes/class-ogf-typekit.php:32 includes/class-ogf-typekit.php:33
+msgid "Adobe Fonts"
+msgstr "Adobe Fonts"
+
+#: includes/class-ogf-typekit.php:81
+msgid "Save"
+msgstr "保存"
+
+#: includes/class-ogf-typekit.php:62
+msgid "Refresh Fonts"
+msgstr "フォントを再読み込み"
+
+#: includes/class-ogf-typekit.php:48
+msgid "API Key"
+msgstr "API キー"
+
+#: includes/class-ogf-typekit.php:73
+msgid "<p>You can retrieve your Adobe Fonts API Key here: <a target=\"_blank\" href=\"https://fonts.adobe.com/account/tokens\">https://fonts.adobe.com/account/tokens</a></p>"
+msgstr "<p>Adobe Fonts API キーはこちらから取得できます: <a target=\"_blank\" href=\"https://fonts.adobe.com/account/tokens\">https://fonts.adobe.com/account/tokens</a></p>"
+
+#: includes/class-ogf-typekit.php:110
+msgid "Font Family: "
+msgstr "Font Family:"
+
+#: includes/class-ogf-typekit.php:47
+msgid "Results"
+msgstr "結果"
+
+#: includes/class-ogf-typekit.php:46
+msgid "Configuration"
+msgstr "設定"
+
+#: includes/class-ogf-typekit.php:104
+msgid "Kit: "
+msgstr "Kit:"
+
+#: includes/class-ogf-typekit.php:100
+msgid "The following data was retrieved from the Typekit API:"
+msgstr "以下のデータは、Typekit API から取得したものです:"
+
+#: includes/class-ogf-typekit.php:56
+msgid "Adobe Fonts (Typekit) Configuration"
+msgstr "Adobe Fonts (Typekit) 設定"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:135
+#: blocks/dist/blocks.build.js:1 blocks/src/google-fonts/edit.js:48
+msgid "- Typekit Fonts -"
+msgstr "Typekit フォント"
+
+#: includes/customizer/settings.php:248
+msgid "Disable Editor Controls"
+msgstr "エディターによる制御を無効化"
+
+#: includes/customizer/settings.php:249
+msgid "Remove font controls from the individual post editor screen (Gutenberg and Classic)."
+msgstr "個別投稿エディター画面からのフォント制御の削除 (Gutenberg や Classic)"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:282
+msgid "None"
+msgstr "なし"
+
+#: includes/customizer/settings.php:293
+msgid "Block"
+msgstr "ブロック"
+
+#: admin/class-ogf-welcome-screen.php:49 admin/class-ogf-welcome-screen.php:50
+msgid "Documentation"
+msgstr "ドキュメンテーション"
+
+#: includes/customizer/settings.php:294
+msgid "Fallback"
+msgstr "フォールバック"
+
+#: includes/customizer/settings.php:295
+msgid "Optional"
+msgstr "オプション"
+
+#: includes/customizer/settings.php:287
+msgid "Font Display"
+msgstr "フォント表示"
+
+#: includes/customizer/settings.php:292
+msgid "Swap"
+msgstr "スワップ"
+
+#: includes/class-ogf-fonts.php:118
+msgid "Font Missing"
+msgstr "欠落フォント"
+
+#: includes/class-ogf-fonts-taxonomy.php:65
+msgid "Custom Fonts"
+msgstr "カスタムフォント"
+
+#: admin/class-ogf-welcome-screen.php:39 admin/class-ogf-welcome-screen.php:40
+msgid "Customize Fonts"
+msgstr "フォントのカスタマイズ"
+
+#: admin/class-ogf-upload-fonts-screen.php:171
+#: admin/class-ogf-upload-fonts-screen.php:195
+msgid "Upload"
+msgstr "アップロード"
+
+#: admin/class-ogf-upload-fonts-screen.php:138
+msgid "WOFF2 Font File"
+msgstr "WOFF2 フォントファイル"
+
+#: admin/class-ogf-upload-fonts-screen.php:137
+msgid "WOFF Font File"
+msgstr "WOFF フォントファイル"
+
+#: admin/class-ogf-upload-fonts-screen.php:81
+msgid "Upload Fonts"
+msgstr "フォントをアップロード"
+
+#: includes/class-ogf-fonts-taxonomy.php:73
+msgid "Update Font"
+msgstr "フォントを更新"
+
+#: admin/class-ogf-upload-fonts-screen.php:151
+msgid "Upload the font's .woff2 file or enter the URL."
+msgstr "フォントの .woff2 ファイルをアップロードするか、URL を入力してください。"
+
+#: admin/class-ogf-upload-fonts-screen.php:150
+msgid "Upload the font's .woff file or enter the URL."
+msgstr "フォントの .woff ファイルをアップロードするか、URL を入力してください。"
+
+#: admin/class-ogf-upload-fonts-screen.php:152
+msgid "Upload the font's .ttf file or enter the URL."
+msgstr "フォントの .ttf ファイルをアップロードするか、URL を入力してください。"
+
+#: admin/class-ogf-upload-fonts-screen.php:153
+msgid "Upload the font's .otf file or enter the URL."
+msgstr "フォントの .orf ファイルをアップロードするか、URL を入力してください。"
+
+#: admin/class-ogf-upload-fonts-screen.php:140
+msgid "TrueType (.ttf) Font File"
+msgstr "TrueType (.ttf) フォントファイル"
+
+#: includes/class-ogf-fonts-taxonomy.php:68
+msgid "Search Fonts"
+msgstr "フォントを検索"
+
+#: includes/class-ogf-fonts-taxonomy.php:71
+msgid "Parent Font:"
+msgstr "親フォント:"
+
+#: includes/class-ogf-fonts-taxonomy.php:70
+msgid "Parent Font"
+msgstr "親フォント"
+
+#: admin/class-ogf-upload-fonts-screen.php:153
+msgid "Font .otf"
+msgstr "フォント .otf"
+
+#: admin/class-ogf-upload-fonts-screen.php:151
+msgid "Font .woff2"
+msgstr "フォント .woff2"
+
+#: admin/class-ogf-upload-fonts-screen.php:150
+msgid "Font .woff"
+msgstr "フォント .woff"
+
+#: admin/class-ogf-upload-fonts-screen.php:152
+msgid "Font .ttf"
+msgstr "フォント .ttf"
+
+#: includes/class-ogf-fonts-taxonomy.php:72
+msgid "Edit Font"
+msgstr "フォントを編集"
+
+#: includes/class-ogf-fonts-taxonomy.php:67
+msgctxt "Admin menu name"
+msgid "Custom Fonts"
+msgstr "カスタムフォント"
+
+#: admin/class-ogf-upload-fonts-screen.php:139
+msgid "OpenType (.otf) Font File"
+msgstr "OpenType (.otf) フォントファイル"
+
+#: includes/class-ogf-fonts-taxonomy.php:69
+msgid "All Fonts"
+msgstr "すべてのフォント"
+
+#: includes/class-ogf-fonts-taxonomy.php:74
+msgid "Add New Font"
+msgstr "新規フォントを追加"
+
+#: includes/class-ogf-fonts-taxonomy.php:76
+msgid "No fonts found"
+msgstr "フォントが見つかりません"
+
+#: includes/class-ogf-fonts-taxonomy.php:75
+msgid "New Font Name"
+msgstr "新規フォント名"
+
+#: admin/class-ogf-upload-fonts-screen.php:107
+msgid "The name of the font as it appears in the customizer options."
+msgstr "カスタマイザーオプションに表示されるフォントの名前です。"
+
+#. Plugin Name of the plugin
+#: olympus-google-fonts.php
+msgid "Fonts Plugin | Google Fonts Typography"
+msgstr "Fonts Plugin | Google Fonts Typography"
+
+#. Author URI of the plugin
+#: olympus-google-fonts.php
+msgid "https://fontsplugin.com/?utm_source=wporg&utm_medium=readme&utm_campaign=description"
+msgstr "https://fontsplugin.com/?utm_source=wporg&utm_medium=readme&utm_campaign=description"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:279
+msgid "Capitalize"
+msgstr "先頭大文字"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:281
+msgid "Lowercase"
+msgstr "小文字"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:54
+msgid "Text Transform"
+msgstr "文字の変形"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:280
+msgid "Uppercase"
+msgstr "大文字"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:53
+msgid "Letter Spacing (px)"
+msgstr "文字間隔 (px)"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:205
+#: includes/functions.php:317
+msgid "Ultra Bold Italic"
+msgstr "Ultra Bold Italic"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:203
+#: includes/functions.php:315
+msgid "Bold Italic"
+msgstr "Bold Italic"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:200
+#: includes/functions.php:312
+msgid "Normal Italic"
+msgstr "Normal Italic"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:201
+#: includes/functions.php:313
+msgid "Medium Italic"
+msgstr "Medium Italic"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:202
+#: includes/functions.php:314
+msgid "Semi Bold Italic"
+msgstr "Semi Bold Italic"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:199
+#: includes/functions.php:311
+msgid "Light Italic"
+msgstr "Light Italic"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:198
+#: includes/functions.php:310
+msgid "Extra Light Italic"
+msgstr "Extra Light Italic"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:197
+#: includes/functions.php:309
+msgid "Thin Italic"
+msgstr "Thin Italic"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:204
+#: includes/functions.php:316
+msgid "Extra Bold Italic"
+msgstr "Extra Bold Italic"
+
+#: includes/functions.php:237
+msgid "Helvetica Neue"
+msgstr "Helvetica Neue"
+
+#: includes/functions.php:257
+msgid "Segoe UI"
+msgstr "Segoe UI"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:129
+#: blocks/dist/blocks.build.js:1 blocks/src/google-fonts/edit.js:35
+msgid "- Custom Fonts -"
+msgstr "- カスタムフォント -"
+
+#: includes/functions.php:222
+msgid "Century Gothic"
+msgstr "Century Gothic"
+
+#: includes/customizer/panels.php:161 includes/customizer/settings.php:67
+msgid "Load Fonts Only"
+msgstr "フォントのみを読み込む"
+
+#: includes/functions.php:247
+msgid "Futura"
+msgstr "Futura"
+
+#: includes/class-ogf-reset.php:56 includes/class-ogf-reset.php:62
+msgid "Reset All Fonts"
+msgstr "すべてのフォントをリセット"
+
+#: includes/class-ogf-reset.php:40 includes/class-ogf-reset.php:57
+msgid "This will reset all fonts set by this plugin to their defaults. This action can not be reversed."
+msgstr "これにより、このプラグインで設定されたすべてのフォントがデフォルトにリセットされます。この操作を元に戻すことはできません。"
+
+#: includes/customizer/settings.php:68
+msgid "Load fonts but don't automatically assign them to an element."
+msgstr "フォントを読み込み、要素には自動的に割り当てない。"
+
+#: includes/functions.php:242
+msgid "Georgia"
+msgstr "ジョージア"
+
+#: includes/functions.php:282
+msgid "Verdana"
+msgstr "Verdana"
+
+#: includes/functions.php:277
+msgid "Palatino"
+msgstr "Palatino"
+
+#: includes/functions.php:272
+msgid "Trebuchet MS"
+msgstr "Trebuchet MS"
+
+#: includes/functions.php:267
+msgid "Times New Roman"
+msgstr "Times New Roman"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:126
+msgid "Default Font"
+msgstr "デフォルトフォント"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:144
+#: blocks/dist/blocks.build.js:1 blocks/src/google-fonts/edit.js:80
+msgid "- Google Fonts -"
+msgstr "- Google フォント -"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:140
+#: blocks/dist/blocks.build.js:1 blocks/src/google-fonts/edit.js:64
+msgid "- System Fonts -"
+msgstr "- システムフォント -"
+
+#: includes/functions.php:262
+msgid "Tahoma"
+msgstr "Tahoma"
+
+#: includes/functions.php:252
+msgid "Lucida Grande"
+msgstr "Lucida Grande"
+
+#: includes/functions.php:232
+msgid "Courier New"
+msgstr "Courier New"
+
+#: includes/functions.php:227
+msgid "Consolas"
+msgstr "Consolas"
+
+#: includes/functions.php:217
+msgid "Calibri"
+msgstr "Calibri"
+
+#: includes/functions.php:212
+msgid "Arial"
+msgstr "Arial"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:150
+msgid "Advanced"
+msgstr "高度な設定"
+
+#: includes/customizer/class-ogf-optimization-controls.php:74
+msgid "Host Google Fonts Locally"
+msgstr "Google フォントをローカルでホスティングする"
+
+#. Author of the plugin
+#: olympus-google-fonts.php admin/class-ogf-welcome-screen.php:28
+#: includes/customizer/panels.php:31
+msgid "Fonts Plugin"
+msgstr "Fonts Plugin"
+
+#: includes/class-ogf-notifications.php:221
+msgid "Google Fonts WordPress Plugin"
+msgstr "Google フォント WordPress プラグイン"
+
+#: includes/customizer/panels.php:145
+msgid "Sidebar"
+msgstr "サイドバー"
+
+#: includes/customizer/panels.php:40
+msgid "Theme Settings"
+msgstr "テーマ設定"
+
+#: includes/class-ogf-fonts-taxonomy.php:66 blocks/dist/blocks.build.js:1
+#: blocks/src/google-fonts/edit.js:274
+msgid "Font"
+msgstr "フォント"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:52
+msgid "Color"
+msgstr "色"
+
+#: includes/customizer/controls/class-ogf-customize-repeater-control.php:163
+msgid "Delete field"
+msgstr "フィールドを削除"
+
+#: includes/customizer/controls/class-ogf-customize-repeater-control.php:142
+#: includes/customizer/controls/class-ogf-customize-repeater-control.php:148
+msgid "Description"
+msgstr "説明"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:47
+msgid "Font Family"
+msgstr "フォントファミリー"
+
+#: includes/customizer/panels.php:153
+msgid "Footer"
+msgstr "フッター"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:264
+msgid "Italic"
+msgstr "イタリック"
+
+#: includes/customizer/panels.php:129
+msgid "Navigation"
+msgstr "ナビゲーション"
+
+#: class-olympus-google-fonts.php:211
+msgid "Settings"
+msgstr "設定"
+
+#: includes/customizer/controls/class-ogf-customize-repeater-control.php:81
+msgid "Add New"
+msgstr "新規追加"
+
+#: class-olympus-google-fonts.php:217
+msgid "Upgrade to Pro"
+msgstr "プロ版にアップグレード"
+
+#: includes/customizer/controls/class-ogf-customize-repeater-control.php:131
+#: includes/customizer/controls/class-ogf-customize-repeater-control.php:137
+msgid "Label"
+msgstr "ラベル"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:51
+#: blocks/dist/blocks.build.js:1 blocks/src/google-fonts/edit.js:296
+msgid "Line Height"
+msgstr "行の高さ"
+
+#: includes/customizer/panels.php:137
+msgid "Content"
+msgstr "コンテンツ"
+
+#: includes/customizer/panels.php:121
+msgid "Branding"
+msgstr "ブランディング"
+
+#: includes/customizer/panels.php:95
+msgid "Debugging"
+msgstr "デバッグ"
+
+#: includes/customizer/panels.php:113
+msgid "Theme Elements"
+msgstr "テーマ要素"
+
+#: includes/functions.php:57
+msgid "Site Title Typography"
+msgstr "サイトタイトルのタイポグラフィ"
+
+#: includes/functions.php:69
+msgid "Navigation Typography"
+msgstr "ナビゲーションのタイポグラフィ"
+
+#: includes/functions.php:63
+msgid "Site Description Typography"
+msgstr "サイト説明文のタイポグラフィ"
+
+#: includes/functions.php:58
+msgid "Select and configure the font for your site title."
+msgstr "サイト名のフォントを選択、設定します。"
+
+#: includes/functions.php:64
+msgid "Select and configure the font for your site description."
+msgstr "サイト説明文のフォントを選択、設定します。"
+
+#: includes/functions.php:70
+msgid "Select and configure the font for your site navigation."
+msgstr "サイトナビゲーションのフォントを選択、設定します。"
+
+#: includes/functions.php:112
+msgid "Select and configure the font for your H6 headings."
+msgstr "H6 見出しのフォントを選択、設定します。"
+
+#: includes/customizer/controls/class-ogf-customize-repeater-control.php:84
+msgid "Save Elements"
+msgstr "要素を保存"
+
+#: includes/customizer/controls/class-ogf-customize-repeater-control.php:153
+msgid "Selectors"
+msgstr "セレクター"
+
+#: includes/customizer/panels.php:77
+msgid "Font Loading"
+msgstr "フォント読み込み"
+
+#: includes/customizer/panels.php:67 includes/customizer/panels.php:103
+#: includes/customizer/settings.php:49
+msgid "Custom Elements"
+msgstr "カスタム要素"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:50
+msgid "Font Size (px)"
+msgstr "フォントサイズ (px)"
+
+#: includes/customizer/controls/class-ogf-customize-repeater-control.php:159
+msgid "Add your selectors..."
+msgstr "セレクターを追加…"
+
+#: includes/functions.php:111
+msgid "H6 Typography"
+msgstr "H6 タイポグラフィ"
+
+#: includes/functions.php:106
+msgid "Select and configure the font for your H5 headings."
+msgstr "H5 見出しのフォントを選択、設定します。"
+
+#: includes/functions.php:105
+msgid "H5 Typography"
+msgstr "H5 タイポグラフィ"
+
+#: includes/functions.php:100
+msgid "Select and configure the font for your H4 headings."
+msgstr "H4 見出しのフォントを選択、設定します。"
+
+#: includes/functions.php:99
+msgid "H4 Typography"
+msgstr "H4 タイポグラフィ"
+
+#: includes/functions.php:94
+msgid "Select and configure the font for your H3 headings."
+msgstr "H4 見出しのフォントを選択、設定します。"
+
+#: includes/functions.php:93
+msgid "H3 Typography"
+msgstr "H3 タイポグラフィ"
+
+#: includes/functions.php:88
+msgid "Select and configure the font for your H2 headings."
+msgstr "H2 見出しのフォントを選択、設定します。"
+
+#: includes/functions.php:87
+msgid "H2 Typography"
+msgstr "H2 タイポグラフィ"
+
+#: includes/functions.php:75 includes/functions.php:135
+#: includes/functions.php:147
+msgid "Content Typography"
+msgstr "コンテンツのタイポグラフィ"
+
+#: includes/functions.php:148
+msgid "Select and configure the font for your footer content."
+msgstr "フッターコンテンツのフォントを選択、設定します。"
+
+#: includes/functions.php:142
+msgid "Select and configure the font for your footer headings."
+msgstr "フッター見出しのフォントを選択、設定します。"
+
+#: includes/functions.php:136
+msgid "Select and configure the font for your sidebar content."
+msgstr "サイドバーコンテンツのフォントを選択、設定します。"
+
+#: includes/functions.php:130
+msgid "Select and configure the font for your sidebar headings."
+msgstr "サイドバー見出しのフォントを選択、設定します。"
+
+#: includes/functions.php:76
+msgid "Select and configure the font for your post and page content."
+msgstr "投稿・ページコンテンツのフォントを選択、設定します。"
+
+#: includes/functions.php:82
+msgid "Select and configure the font for your title and H1 headings."
+msgstr "タイトルと H1 見出しのフォントを選択、設定します。"
+
+#: includes/functions.php:52
+msgid "Select and configure the font for your input fields and buttons."
+msgstr "入力欄とボタンのフォントを選択、設定します。"
+
+#: includes/functions.php:46
+msgid "Select and configure the font for your headings."
+msgstr "見出しのフォントを選択、設定します。"
+
+#: includes/functions.php:40
+msgid "Select and configure the font for your content."
+msgstr "コンテンツのフォントを選択、設定します。"
+
+#: includes/functions.php:308 blocks/dist/blocks.build.js:1
+#: blocks/src/google-fonts/edit.js:157
+msgid "Ultra Bold"
+msgstr "Ultra Bold"
+
+#: includes/functions.php:307 blocks/dist/blocks.build.js:1
+#: blocks/src/google-fonts/edit.js:156
+msgid "Extra Bold"
+msgstr "Extra Bold"
+
+#: includes/functions.php:305 blocks/dist/blocks.build.js:1
+#: blocks/src/google-fonts/edit.js:154
+msgid "Semi Bold"
+msgstr "Semi Bold"
+
+#: includes/functions.php:301 blocks/dist/blocks.build.js:1
+#: blocks/src/google-fonts/edit.js:150
+msgid "Extra Light"
+msgstr "Extra Light"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:49
+msgid "Font Style"
+msgstr "フォントスタイル"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:48
+msgid "Font Weight"
+msgstr "フォントの太さ"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:218
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:237
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:247
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:262
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:278
+#: includes/functions.php:299 blocks/dist/blocks.build.js:1
+#: blocks/src/google-fonts/edit.js:148
+msgid "- Default -"
+msgstr "- デフォルト -"
+
+#. translators: Number of weeks
+#: includes/class-ogf-notifications.php:89
+msgid "a week"
+msgid_plural "%s weeks"
+msgstr[0] "1週間"
+
+#. translators: Number of years
+#: includes/class-ogf-notifications.php:83
+msgid "a year"
+msgid_plural "%s years"
+msgstr[0] "%s年間"
+
+#. Plugin URI of the plugin
+#: olympus-google-fonts.php
+msgid "https://wordpress.org/plugins/olympus-google-fonts/"
+msgstr "https://ja.wordpress.org/plugins/olympus-google-fonts/"
+
+#: includes/customizer/settings.php:228
+msgid "Force Styles?"
+msgstr "スタイルを強制適用しますか ?"
+
+#: includes/class-ogf-notifications.php:260
+msgid "Google Fonts for WordPress"
+msgstr "Google Fonts for WordPress"
+
+#: includes/customizer/panels.php:48
+msgid "Basic Settings"
+msgstr "基本設定"
+
+#: includes/customizer/panels.php:57
+msgid "Advanced Settings"
+msgstr "高度な設定"
+
+#: includes/class-ogf-notifications.php:233
+msgid "Leave a Review"
+msgstr "レビューを書く"
+
+#: includes/functions.php:39
+msgid "Base Typography"
+msgstr "ベースタイポグラフィ"
+
+#: includes/functions.php:45 includes/functions.php:129
+#: includes/functions.php:141
+msgid "Headings Typography"
+msgstr "見出しタイポグラフィ"
+
+#: includes/functions.php:51
+msgid "Buttons and Inputs Typography"
+msgstr "ボタンや入力のタイポグラフィ"
+
+#: includes/class-ogf-notifications.php:234
+msgid "No thanks / I already have"
+msgstr "結構です / すでにしました"
+
+#: includes/class-ogf-notifications.php:224
+msgid "Are you enjoying using Google Fonts?"
+msgstr "Google Fonts を気に入っていただけましたか ?"
+
+#. Translators: %s Custom Elements Customizer Panel URL
+#: includes/customizer/panels.php:105
+msgid "Custom Elements allow you to apply Google Fonts to any part of your website, they can be setup under <a href=\"%s\">Google Fonts &rarr; Custom Elements</a>."
+msgstr "カスタム要素を使うと、サイトの任意の部分に Google フォントを適用することができます。これは「<a href=\"%s\">Google Fonts &rarr; カスタム要素</a>」から設定可能です。"
+
+#. Translators: %s Custom Elements Customizer Panel URL
+#: includes/customizer/panels.php:69
+msgid "Define your Custom Elements here and then customize them under <a href=\"%s\">Advanced Settings &rarr; Custom Elements</a>."
+msgstr "ここでカスタム要素を定義し、「<a href=\"%s\">高度な設定 &rarr; カスタム要素</a>」でカスタマイズします。"
+
+#: includes/customizer/settings.php:229
+msgid "If your choices are not displaying correctly, check this box."
+msgstr "選択肢が正しく表示されない場合は、このボックスをチェックしてください。"
+
+#. translators: %s Link to Google Fonts customizer panel.
+#: includes/class-ogf-welcome.php:112
+msgid "Thank you for installing <strong>Google Fonts for WordPress</strong>! Configure your fonts here: <a href=\"%s\">WordPress Customizer</a>"
+msgstr "<strong>Google Fonts for WordPress</strong> をインストールしていただき、ありがとうございます。以下でフォントを設定してください: <a href=\"%s\">WordPress カスタマイザー</a>"
+
+#. translators: 1. Name, 2. Time
+#: includes/class-ogf-notifications.php:228
+msgid "You have been using <strong>%1$s</strong> for %2$s now! Could you please do me a BIG favor and give it a 5-star rating on WordPress to help us spread the word and boost our motivation?"
+msgstr "現在までに%2$s <strong>%1$s</strong> をご利用いただいています。このプラグインを広め、開発モチベーションを高めるために、WordPress で5つ星評価を付けてくだされば、とても嬉しいです。"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:249
+#: includes/functions.php:306 blocks/dist/blocks.build.js:1
+#: blocks/src/google-fonts/edit.js:155
+msgid "Bold"
+msgstr "太字"
+
+#: includes/functions.php:302 blocks/dist/blocks.build.js:1
+#: blocks/src/google-fonts/edit.js:151
+msgid "Light"
+msgstr "ライト"
+
+#: includes/functions.php:304 blocks/dist/blocks.build.js:1
+#: blocks/src/google-fonts/edit.js:153
+msgid "Medium"
+msgstr "中"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:248
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:263
+#: includes/functions.php:303 blocks/dist/blocks.build.js:1
+#: blocks/src/google-fonts/edit.js:152
+msgid "Normal"
+msgstr "通常"
+
+#: includes/customizer/controls/class-ogf-customize-typography-control.php:265
+msgid "Oblique"
+msgstr "斜体"
+
+#: includes/functions.php:300 blocks/dist/blocks.build.js:1
+#: blocks/src/google-fonts/edit.js:149
+msgid "Thin"
+msgstr "細字"
+
+#: includes/functions.php:81
+msgid "Title and H1 Typography"
+msgstr "タイトルと H1 のタイポグラフィ"
+
+#: includes/class-ogf-notifications.php:98
+msgid "%s second"
+msgid_plural "%s seconds"
+msgstr[0] "%s秒"
+
+#. translators: Number of days
+#: includes/class-ogf-notifications.php:95
+msgid "%s day"
+msgid_plural "%s days"
+msgstr[0] "%s日"

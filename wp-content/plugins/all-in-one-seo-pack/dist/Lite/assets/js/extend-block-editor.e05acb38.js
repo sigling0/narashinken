@@ -1,0 +1,33 @@
+import"./index.681f720c.js";import"./translations.d159963e.js";import{h as a,i as s}from"./icon.cee978f3.js";import{u as S}from"./CreditCounter.a03d9800.js";import{u as I}from"./App.8b3ff584.js";import{_ as d}from"./default-i18n.20001971.js";import"./runtime-dom.esm-bundler.5d5e6b71.js";import"./helpers.e8ba8937.js";import"./AiContent.a028a71a.js";import"./_plugin-vue_export-helper.eefbdd86.js";import"./SchemaStore.3c45ce4c.js";import"./Caret.202f7c21.js";import"./metabox.4ef08012.js";import"./contentHasAssets.394bde62.js";import"./toString.6346a2b4.js";import"./_baseSet.4599153a.js";import"./regex.8a6101c0.js";import"./datetime.f197aeae.js";import"./Tooltip.418c677c.js";import"./index.e5bcd650.js";/* empty css             */import"./ScrollAndHighlight.a4f2cc11.js";import"./ScrollTo.81bea8a7.js";import"./params.af7ed354.js";import"./LicenseKeyBar.fef34a92.js";import"./LogoGear.4749bc9b.js";import"./preload-helper.5f06849a.js";import"./allowed.980a2e7b.js";import"./constants.fe8bda37.js";import"./Index.7e253de2.js";import"./SettingsRow.8aa99257.js";import"./Row.aff98451.js";import"./Checkbox.28e8400d.js";import"./Checkmark.43d7168a.js";import"./Url.b0b6e9e3.js";import"./CheckSolid.7a7052c3.js";import"./Textarea.1c3d0fb8.js";import"./Simple.38db290a.js";import"./stripHTMLTags.9654b5d3.js";import"./toNumber.e0ae5bf1.js";import"./_arrayEach.6af5abac.js";import"./_getTag.dfa26aea.js";import"./Plus.5a0c4130.js";import"./HighlightToggle.ca230cdf.js";import"./Radio.ce251936.js";import"./Tabs.6e7f902f.js";import"./vue-router.ad00dfec.js";import"./ProBadge.aeac9858.js";import"./Information.3b2ed489.js";import"./Slide.a525748d.js";import"./debounce.bcf1e2f3.js";import"./Cta.56f7d5e7.js";import"./popup.92105c51.js";import"./Index.755a5d26.js";import"./Blur.4fe4b9a3.js";import"./MaxCounts.7c38e980.js";import"./Ellipse.d43639b3.js";import"./TruSeoScore.7a9d8b69.js";import"./Statistics.128b6df8.js";import"./RadioToggle.51430965.js";import"./GoogleSearchPreview.ff5a08b3.js";import"./HtmlTagsEditor.e11ea183.js";import"./Editor.d6666f4b.js";import"./isEqual.1eea7163.js";import"./_baseIsEqual.654f234d.js";import"./_baseClone.4aac6d9c.js";import"./UnfilteredHtml.a66aed1b.js";import"./ConnectStore.1aaccbd1.js";import"./SetupWizardStore.f030492a.js";import"./license.85061030.js";import"./upperFirst.555c1a56.js";import"./Mobile.be5b9df1.js";import"./Settings.56c8f382.js";import"./TableOfContentsStore.33ce64a5.js";import"./Cta.bce043d1.js";import"./GoogleSearchConsole.378de9eb.js";import"./ConnectCta.67801aa6.js";import"./Graph.b9d3f1bb.js";import"./numbers.9fc174f3.js";import"./vue3-apexcharts.fa14b090.js";import"./WpTable.3d42004c.js";import"./Table.b2328bf4.js";import"./Download.cd0121de.js";import"./RequiredPlans.91265b27.js";import"./addons.f0fb0b6d.js";import"./PostTypes.dafa8837.js";import"./External.10aa7540.js";import"./InternalOutbound.649b4901.js";import"./Image.8b7e4d59.js";import"./FacebookPreview.f400e3e8.js";import"./Img.ecbf3c99.js";import"./Profile.9d23c2f0.js";import"./ImageUploader.72fda9f2.js";import"./TwitterPreview.22d6eb29.js";import"./Book.a4f504a3.js";import"./Build.2bfc4dbf.js";import"./Redirects.46897844.js";import"./Index.1f85f823.js";import"./JsonValues.3fcfec97.js";import"./External.4ed94f4a.js";import"./escapeRegExp.84741e17.js";import"./Exclamation.991934cc.js";import"./Gear.de600e87.js";import"./date.b84c8300.js";import"./DatePicker.e22ce7ce.js";import"./Calendar.951abd63.js";import"./pick.9f90ab80.js";import"./Card.9816f16f.js";import"./Upsell.6ee2453b.js";const{addFilter:h}=window.wp.hooks,{BlockControls:g}=window.wp.blockEditor,{Button:p,ToolbarGroup:f,ToolbarButton:x}=window.wp.components,{Fragment:b,render:y,unmountComponentAtNode:_}=window.wp.element,{createHigherOrderComponent:k}=window.wp.compose,{select:c,useSelect:A}=window.wp.data,$="all-in-one-seo-pack",l={generateWithAI:d("Generate with AI",$),editWithAI:d("Edit with AI",$)};let w=!1;const u=(r,t={})=>{window.aioseoBus.$emit("do-post-settings-main-tab-change",{name:"aiContent"}),r.classList.add("is-busy"),r.disabled=!0;const e=S(),o=I();setTimeout(()=>{o.initiator=t==null?void 0:t.initiator,(!o.initiator||!o.initiator.slug)&&o.resetInitiator(),e.isModalOpened="image-generator",r.classList.remove("is-busy"),r.disabled=!1},500)},Eo=()=>{w||(h("editor.BlockEdit","aioseo/extend-image-block-toolbar",k(r=>t=>{if(t.name!=="core/image"||!t.attributes.url)return a`<${r} ...${t} />`;const e=A(o=>o("core").getMedia(t.attributes.id)||null,[`media-${t.attributes.id}`]);return a`
+				<${b}>
+					<${g}>
+						<${f}>
+							<${x}
+								icon=${s}
+								iconSize=${24}
+								label=${l.editWithAI}
+								onClick=${o=>{u(o.currentTarget,{initiator:{slug:"image-block-toolbar",wpMedia:e}})}}
+								style=${{maxHeight:"90%",alignSelf:"center",padding:"0"}}
+							/>
+						</${f}>
+					</${g}>
+
+					<${r} ...${t} />
+				</${b}>`},"extendImageBlockToolbar")),w=!0)},To=()=>{var n,m;const r=c("core/block-editor").getSelectedBlock();if(!r||r.name!=="core/image"||(n=r.attributes)!=null&&n.url)return;const t=document.getElementById(`block-${r.clientId}`),e=t==null?void 0:t.querySelector(".components-form-file-upload");if(!e||t!=null&&t.querySelector(".aioseo-ai-image-generator-btn"))return;const o=document.createElement("div");y(a`
+			<${p}
+				className=${"aioseo-ai-image-generator-btn"}
+				variant=${"secondary"}
+				icon=${s}
+				iconSize=${"20"}
+				__next40pxDefaultSize=${!0}
+			>
+				${l.generateWithAI}
+			</${p}>`,o);const i=(m=o.firstChild)==null?void 0:m.cloneNode(!0);i&&(e.after(i),i.addEventListener("click",()=>{u(i,{initiator:{slug:"image-block-placeholder"}})})),_(o),o.remove()},qo=()=>{var t;if(c("core/edit-post").getActiveGeneralSidebarName()!=="edit-post/document")return;if(c("core/editor").getEditedPostAttribute("featured_media")){(t=document.querySelector(".aioseo-ai-image-generator-btn-featured-image"))==null||t.remove();return}setTimeout(()=>{var m;const e=document.querySelector(".editor-post-featured-image__container"),o=e==null?void 0:e.querySelector("button");if(!o||e!=null&&e.querySelector(".aioseo-ai-image-generator-btn-featured-image"))return;e.style.display="flex",e.style.gap="8px";const i=document.createElement("div");y(a`
+				<${p}
+					className=${"aioseo-ai-image-generator-btn-featured-image"}
+					variant=${"secondary"}
+					icon=${s}
+					iconSize=${"20"}
+					__next40pxDefaultSize=${!0}
+					title=${l.generateWithAI}
+				/>`,i);const n=(m=i.firstChild)==null?void 0:m.cloneNode(!0);n&&(o.after(n),n.addEventListener("click",()=>{u(n,{initiator:{slug:"featured-image-btn"}})})),_(i),i.remove()})};export{qo as extendFeaturedImageButton,To as extendImageBlockPlaceholder,Eo as extendImageBlockToolbar};
