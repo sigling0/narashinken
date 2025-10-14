@@ -19,7 +19,7 @@ class HeadlessAPIConfig {
         $this->allowed_origins = [
             'http://localhost:3000',
             'http://localhost:3001',
-            'https://sigling-pg.com', // 本番環境のドメインを追加
+            'https://narashinken.com', // 本番環境のドメインを追加
             // 必要に応じてステージング環境なども追加
         ];
         
