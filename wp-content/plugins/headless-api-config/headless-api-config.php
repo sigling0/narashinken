@@ -250,7 +250,7 @@ class HeadlessAPIConfig {
         register_rest_field('post', 'acf_fields', [
             'get_callback' => function($post) {
                 // ACF（Advanced Custom Fields）が有効な場合
-                if (function_exists('get_fields')) {
+                if (class_exists('ACF') && function_exists('get_fields')) {
                     return get_fields($post['id']);
                 }
                 return null;
