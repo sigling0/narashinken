@@ -113,7 +113,7 @@ cp .env.local.example .env.local
 NEXT_PUBLIC_WORDPRESS_API_URL=https://your-wordpress-site.com/wp-json
 
 # サイト名
-NEXT_PUBLIC_SITE_NAME=奈良新聞
+NEXT_PUBLIC_SITE_NAME=奈良心剣道場
 
 # サイトURL（フロントエンドのURL）
 NEXT_PUBLIC_SITE_URL=https://narashinken.com

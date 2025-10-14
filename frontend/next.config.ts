@@ -9,11 +9,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'narashinken.com',
+        hostname: 'sigling-pg',
       },
       {
         protocol: 'https',
-        hostname: '**.narashinken.com',
+        hostname: '**.sigling-pg.com',
       },
     ],
     formats: ['image/webp', 'image/avif'],
