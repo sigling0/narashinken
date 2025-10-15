@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'sigling-pg',
+        hostname: 'sigling-pg.com',
       },
       {
         protocol: 'https',
