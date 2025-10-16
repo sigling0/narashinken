@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { MenuItem } from '@/lib/wordpress';
 
 interface HeaderProps {
@@ -11,93 +11,148 @@ interface HeaderProps {
 
 export default function Header({ menuItems = [] }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
-    <header 
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white shadow-md' : 'bg-white'
-      }`}
-    >
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between py-4">
+    <header className="sticky top-0 z-50 backdrop-blur-md" style={{backgroundColor: 'var(--color-header-bg)'}}>
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="flex items-center justify-between h-24 md:h-24">
           {/* ロゴ */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-bold text-gray-800">
-              {process.env.NEXT_PUBLIC_SITE_NAME || '奈良新聞'}
+          <Link href="/" className="flex items-center">
+            <div className="w-64 md:w-72">
+              <Image 
+                src="/logo_header.png" 
+                alt="奈良心剣道場" 
+                width={288}
+                height={80}
+                className="w-full h-auto"
+                priority
+              />
             </div>
           </Link>
 
           {/* デスクトップメニュー */}
-          <nav className="hidden md:flex items-center space-x-8">
-            {menuItems.map((item) => (
-              <Link
-                key={item.id}
-                href={item.url}
-                className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
-                target={item.target || '_self'}
-              >
-                {item.title}
-              </Link>
-            ))}
+          <nav className="hidden md:flex items-center space-x-4 lg:space-x-6">
+            <Link
+              href="/"
+              className="px-4 py-1.5 text-base font-medium transition-all hover:font-extrabold"
+              style={{color: 'var(--color-text-primary)'}}
+            >
+              ホーム
+            </Link>
+            <Link
+              href="/about"
+              className="px-4 py-1.5 text-base font-medium transition-all hover:font-extrabold"
+              style={{color: 'var(--color-text-primary)'}}
+            >
+              道場紹介
+            </Link>
+            <Link
+              href="/recruit"
+              className="px-4 py-1.5 text-base font-medium transition-all hover:font-extrabold"
+              style={{color: 'var(--color-text-primary)'}}
+            >
+              道場生募集
+            </Link>
+            <Link
+              href="/album"
+              className="px-4 py-1.5 text-base font-medium transition-all hover:font-extrabold"
+              style={{color: 'var(--color-text-primary)'}}
+            >
+              稽古風景
+            </Link>
+            <Link
+              href="/category/result"
+              className="px-4 py-1.5 text-base font-medium transition-all hover:font-extrabold"
+              style={{color: 'var(--color-text-primary)'}}
+            >
+              大会記録
+            </Link>
+            <Link
+              href="/posts"
+              className="px-4 py-1.5 text-base font-medium transition-all hover:font-extrabold"
+              style={{color: 'var(--color-text-primary)'}}
+            >
+              記事一覧
+            </Link>
           </nav>
 
-          {/* モバイルメニューボタン */}
+          {/* モバイルハンバーガーボタン */}
           <button
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+            className="md:hidden relative w-7 h-5.5"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="メニューを開く"
+            aria-label={isMenuOpen ? 'メニューを閉じる' : 'メニューを開く'}
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              {isMenuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
+            <span 
+              className={`absolute block w-full h-0.5 bg-current transition-all duration-200 ${
+                isMenuOpen ? 'top-1/2 rotate-45' : 'top-0'
+              }`}
+              style={{backgroundColor: 'var(--color-text-primary)'}}
+            />
+            <span 
+              className={`absolute block w-full h-0.5 bg-current transition-all duration-200 top-1/2 -translate-y-1/2 ${
+                isMenuOpen ? 'opacity-0' : 'opacity-100'
+              }`}
+              style={{backgroundColor: 'var(--color-text-primary)'}}
+            />
+            <span 
+              className={`absolute block w-full h-0.5 bg-current transition-all duration-200 ${
+                isMenuOpen ? 'top-1/2 -rotate-45' : 'bottom-0'
+              }`}
+              style={{backgroundColor: 'var(--color-text-primary)'}}
+            />
           </button>
         </div>
 
         {/* モバイルメニュー */}
-        {isMenuOpen && (
-          <nav className="md:hidden py-4 border-t">
-            {menuItems.map((item) => (
-              <Link
-                key={item.id}
-                href={item.url}
-                className="block py-2 text-gray-700 hover:text-blue-600 transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-                target={item.target || '_self'}
-              >
-                {item.title}
-              </Link>
-            ))}
-          </nav>
-        )}
+        <nav 
+          className={`md:hidden backdrop-blur-md transition-all duration-200 origin-top ${
+            isMenuOpen ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0 h-0'
+          }`}
+          style={{backgroundColor: 'var(--color-header-bg)'}}
+        >
+          <div className="py-6 space-y-2.5">
+            <Link
+              href="/about"
+              className="block py-2 text-base font-medium"
+              style={{color: 'var(--color-text-primary)'}}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              道場紹介
+            </Link>
+            <Link
+              href="/member"
+              className="block py-2 text-base font-medium"
+              style={{color: 'var(--color-text-primary)'}}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              指導者紹介
+            </Link>
+            <Link
+              href="/album"
+              className="block py-2 text-base font-medium"
+              style={{color: 'var(--color-text-primary)'}}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              稽古風景
+            </Link>
+            <Link
+              href="/category/result"
+              className="block py-2 text-base font-medium"
+              style={{color: 'var(--color-text-primary)'}}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              大会記録
+            </Link>
+            <Link
+              href="/posts"
+              className="block py-2 text-base font-medium"
+              style={{color: 'var(--color-text-primary)'}}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              記事一覧
+            </Link>
+          </div>
+        </nav>
       </div>
     </header>
   );

@@ -1,6 +1,20 @@
 @import "tailwindcss";
 @import "tailwindcss/theme" layer(theme);
 
+@theme {
+  /* 奈良心剣道場カラースキーム */
+  --color-dojo-green-light: #77aa77;
+  --color-dojo-green-dark: #006400;
+  --color-dojo-beige: #eef8ea;
+  --color-dojo-beige-active: #e0dace;
+  --color-dojo-tag: #cbc5ba;
+  --color-dojo-title: #999286;
+  --color-text-primary: #1a1a1c;
+  --color-text-secondary: #4d4d4d;
+  --color-text-tertiary: #6e6e6e;
+  --color-header-bg: rgba(243, 259, 239, 0.88);
+}
+
 /* プロースタイリング（記事本文用） */
 @layer base {
   .prose {
