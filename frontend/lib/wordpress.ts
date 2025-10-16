@@ -176,7 +176,7 @@ export async function getPostById(id: number): Promise<any> {
   }
 }
 
-// カテゴリー別投稿の取得
+// カテゴリー別投稿の取得（カスタムエンドポイント）
 export async function getPostsByCategory(slug: string): Promise<Post[]> {
   try {
     const response = await wpAPI.get(`/headless/v1/posts-by-category/${slug}`);
@@ -184,6 +184,51 @@ export async function getPostsByCategory(slug: string): Promise<Post[]> {
   } catch (error) {
     console.error('Error fetching posts by category:', error);
     throw error;
+  }
+}
+
+// カテゴリー別投稿の取得（標準API、件数指定可能）
+export async function getPostsByCategorySlug(slug: string, perPage: number = 10): Promise<any[]> {
+  try {
+    // まずカテゴリーIDを取得
+    const categoriesResponse = await wpAPI.get('/wp/v2/categories', {
+      params: { slug }
+    });
+    
+    if (categoriesResponse.data.length === 0) {
+      return [];
+    }
+    
+    const categoryId = categoriesResponse.data[0].id;
+    
+    // カテゴリーIDで投稿を取得
+    const postsResponse = await wpAPI.get('/wp/v2/posts', {
+      params: {
+        categories: categoryId,
+        per_page: perPage,
+        _embed: true,
+      },
+    });
+    
+    return postsResponse.data;
+  } catch (error) {
+    console.error('Error fetching posts by category slug:', error);
+    return [];
+  }
+}
+
+// タグの取得
+export async function getTags(): Promise<any[]> {
+  try {
+    const response = await wpAPI.get('/wp/v2/tags', {
+      params: {
+        per_page: 100,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching tags:', error);
+    return [];
   }
 }
 
