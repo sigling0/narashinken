@@ -76,7 +76,7 @@ export default async function Home() {
         {/* 3カラムレイアウト */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* 左カラム */}
-          <aside className="lg:col-span-3 space-y-8">
+          <aside className="hidden lg:block lg:col-span-3 space-y-8">
             {/* 道場紹介セクション */}
             <section className="lg:mb-6">
               <SmallSectionHeader title="奈良心剣道場" />
@@ -242,7 +242,7 @@ export default async function Home() {
           </main>
 
           {/* 右カラム */}
-          <aside className="lg:col-span-3 space-y-8">
+          <aside className="hidden lg:block lg:col-span-3 space-y-8">
             {/* インスタグラムセクション */}
             <section>
               <SmallSectionHeader title="Instagram" />

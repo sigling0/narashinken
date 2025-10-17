@@ -36,7 +36,7 @@ export default function Slideshow() {
   };
 
   return (
-    <div className="relative w-full h-96 md:h-[500px] overflow-hidden bg-gray-900">
+    <div className="relative w-full h-64 md:h-96 lg:h-[500px] overflow-hidden bg-gray-900">
       {/* スライド画像 */}
       {images.map((image, index) => (
         <div
