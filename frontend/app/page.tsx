@@ -1,5 +1,6 @@
 import { getPostsByCategorySlug, getCategories, getTags } from '@/lib/wordpress';
 import PostCard from '@/components/PostCard';
+import Slideshow from '@/components/Slideshow';
 import Link from 'next/link';
 
 export const revalidate = 3600; // 1時間ごとに再生成
@@ -68,6 +69,9 @@ export default async function Home() {
 
   return (
     <div style={{backgroundColor: 'var(--color-dojo-beige)'}}>
+      {/* スライドショー */}
+      <Slideshow />
+      
       <div className="container mx-auto px-4 md:px-6 py-8">
         {/* 3カラムレイアウト */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
