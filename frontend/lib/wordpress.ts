@@ -90,6 +90,22 @@ export interface SiteInfo {
   charset: string;
 }
 
+export interface InstagramPost {
+  id: string;
+  media_url: string;
+  permalink: string;
+  caption: string;
+  media_type: string;
+  timestamp: string;
+  username: string;
+}
+
+export interface InstagramFeed {
+  count: number;
+  posts: InstagramPost[];
+  message?: string;
+}
+
 // サイト情報の取得
 export async function getSiteInfo(): Promise<SiteInfo> {
   try {
@@ -365,6 +381,24 @@ export async function searchPosts(query: string, page: number = 1, perPage: numb
   } catch (error) {
     console.error('Error searching posts:', error);
     throw error;
+  }
+}
+
+// Instagram Feedの取得
+export async function getInstagramFeed(limit: number = 6): Promise<InstagramFeed> {
+  try {
+    const response = await wpAPI.get('/headless/v1/instagram-feed', {
+      params: { limit },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching Instagram feed:', error);
+    // エラーの場合は空のフィードを返す
+    return {
+      count: 0,
+      posts: [],
+      message: 'Instagram feed is currently unavailable',
+    };
   }
 }
 

@@ -87,6 +87,19 @@ class HeadlessAPIConfig {
             'callback' => [$this, 'get_posts_by_category'],
             'permission_callback' => '__return_true',
         ]);
+        
+        // Instagram Feed取得エンドポイント
+        register_rest_route('headless/v1', '/instagram-feed', [
+            'methods' => 'GET',
+            'callback' => [$this, 'get_instagram_feed'],
+            'permission_callback' => '__return_true',
+            'args' => [
+                'limit' => [
+                    'default' => 6,
+                    'sanitize_callback' => 'absint',
+                ],
+            ],
+        ]);
     }
     
     /**
@@ -134,6 +147,60 @@ class HeadlessAPIConfig {
         ]);
         
         return array_map([$this, 'format_post'], $posts);
+    }
+    
+    /**
+     * Instagram Feedを取得
+     */
+    public function get_instagram_feed($request) {
+        global $wpdb;
+        
+        $limit = $request->get_param('limit');
+        $posts_table = $wpdb->prefix . 'sbi_instagram_posts';
+        
+        // テーブルが存在するか確認
+        $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$posts_table'") === $posts_table;
+        
+        if (!$table_exists) {
+            return new WP_Error('no_instagram_data', 'Instagram Feed plugin data not found', ['status' => 404]);
+        }
+        
+        // Instagram投稿を取得
+        $results = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT instagram_id, media_url, permalink, caption, media_type, timestamp, username
+                FROM $posts_table
+                WHERE media_url IS NOT NULL
+                ORDER BY timestamp DESC
+                LIMIT %d",
+                $limit
+            ),
+            ARRAY_A
+        );
+        
+        if (empty($results)) {
+            // データがない場合はダミーデータを返す（開発用）
+            return [
+                'count' => 0,
+                'posts' => [],
+                'message' => 'No Instagram posts found. Please configure Instagram Feed plugin.',
+            ];
+        }
+        
+        return [
+            'count' => count($results),
+            'posts' => array_map(function($post) {
+                return [
+                    'id' => $post['instagram_id'],
+                    'media_url' => $post['media_url'],
+                    'permalink' => $post['permalink'],
+                    'caption' => $post['caption'] ?? '',
+                    'media_type' => $post['media_type'] ?? 'IMAGE',
+                    'timestamp' => $post['timestamp'],
+                    'username' => $post['username'] ?? '',
+                ];
+            }, $results),
+        ];
     }
     
     /**
