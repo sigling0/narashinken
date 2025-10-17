@@ -58,7 +58,7 @@ export default function Slideshow() {
       {/* 左ボタン */}
       <button
         onClick={handlePrev}
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-3 rounded-full transition-all z-10"
+        className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-20 md:bg-opacity-50 hover:bg-opacity-75 text-white p-1.5 md:p-3 rounded-full transition-all z-10"
         aria-label="前の画像"
       >
         <svg
@@ -67,7 +67,7 @@ export default function Slideshow() {
           viewBox="0 0 24 24"
           strokeWidth={2}
           stroke="currentColor"
-          className="w-6 h-6"
+          className="w-4 h-4 md:w-6 md:h-6"
         >
           <path
             strokeLinecap="round"
@@ -80,7 +80,7 @@ export default function Slideshow() {
       {/* 右ボタン */}
       <button
         onClick={handleNext}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-3 rounded-full transition-all z-10"
+        className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-20 md:bg-opacity-50 hover:bg-opacity-75 text-white p-1.5 md:p-3 rounded-full transition-all z-10"
         aria-label="次の画像"
       >
         <svg
@@ -89,7 +89,7 @@ export default function Slideshow() {
           viewBox="0 0 24 24"
           strokeWidth={2}
           stroke="currentColor"
-          className="w-6 h-6"
+          className="w-4 h-4 md:w-6 md:h-6"
         >
           <path
             strokeLinecap="round"
