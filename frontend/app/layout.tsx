@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Noto_Sans_JP } from "next/font/google";
+import { Shippori_Mincho_B1 } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getMenuByLocation } from "@/lib/wordpress";
 
-const notoSansJP = Noto_Sans_JP({ 
+const shipporiMincho = Shippori_Mincho_B1({ 
   subsets: ["latin"],
   weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
@@ -36,7 +36,7 @@ export default async function RootLayout({
       <head>
         <link rel="icon" href="/favicon.png" />
       </head>
-      <body className={notoSansJP.className} style={{backgroundColor: 'var(--color-dojo-beige)'}}>
+      <body className={shipporiMincho.className} style={{backgroundColor: 'var(--color-dojo-beige)'}}>
         <div className="flex flex-col min-h-screen">
           <Header menuItems={menuItems} />
           <main className="flex-grow">
