@@ -100,6 +100,13 @@ class HeadlessAPIConfig {
                 ],
             ],
         ]);
+        
+        // Instagram Feed デバッグエンドポイント（開発用）
+        register_rest_route('headless/v1', '/instagram-debug', [
+            'methods' => 'GET',
+            'callback' => [$this, 'debug_instagram_feed'],
+            'permission_callback' => '__return_true',
+        ]);
     }
     
     /**
@@ -165,13 +172,13 @@ class HeadlessAPIConfig {
             return new WP_Error('no_instagram_data', 'Instagram Feed plugin data not found', ['status' => 404]);
         }
         
-        // Instagram投稿を取得
+        // Instagram投稿を取得（json_dataから情報を抽出）
         $results = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT instagram_id, media_url, permalink, caption, media_type, timestamp, username
+                "SELECT instagram_id, json_data, time_stamp
                 FROM $posts_table
-                WHERE media_url IS NOT NULL
-                ORDER BY timestamp DESC
+                WHERE json_data != ''
+                ORDER BY time_stamp DESC
                 LIMIT %d",
                 $limit
             ),
@@ -179,7 +186,7 @@ class HeadlessAPIConfig {
         );
         
         if (empty($results)) {
-            // データがない場合はダミーデータを返す（開発用）
+            // データがない場合
             return [
                 'count' => 0,
                 'posts' => [],
@@ -187,20 +194,101 @@ class HeadlessAPIConfig {
             ];
         }
         
+        $posts = [];
+        foreach ($results as $row) {
+            $data = json_decode($row['json_data'], true);
+            if (!$data) {
+                continue;
+            }
+            
+            // メディアURLを取得（画像または動画）
+            $media_url = '';
+            if (isset($data['media_url'])) {
+                $media_url = $data['media_url'];
+            } elseif (isset($data['thumbnail_url'])) {
+                $media_url = $data['thumbnail_url'];
+            }
+            
+            if (empty($media_url)) {
+                continue;
+            }
+            
+            $posts[] = [
+                'id' => $row['instagram_id'],
+                'media_url' => $media_url,
+                'permalink' => $data['permalink'] ?? '',
+                'caption' => $data['caption'] ?? '',
+                'media_type' => $data['media_type'] ?? 'IMAGE',
+                'timestamp' => $row['time_stamp'],
+                'username' => $data['username'] ?? '',
+            ];
+        }
+        
         return [
-            'count' => count($results),
-            'posts' => array_map(function($post) {
-                return [
-                    'id' => $post['instagram_id'],
-                    'media_url' => $post['media_url'],
-                    'permalink' => $post['permalink'],
-                    'caption' => $post['caption'] ?? '',
-                    'media_type' => $post['media_type'] ?? 'IMAGE',
-                    'timestamp' => $post['timestamp'],
-                    'username' => $post['username'] ?? '',
-                ];
-            }, $results),
+            'count' => count($posts),
+            'posts' => $posts,
         ];
+    }
+    
+    /**
+     * Instagram Feed デバッグ情報を取得
+     */
+    public function debug_instagram_feed($request) {
+        global $wpdb;
+        
+        $posts_table = $wpdb->prefix . 'sbi_instagram_posts';
+        $sources_table = $wpdb->prefix . 'sbi_sources';
+        $feeds_table = $wpdb->prefix . 'sbi_feeds';
+        
+        $debug_info = [
+            'tables' => [],
+            'plugin_options' => [],
+            'sample_data' => [],
+        ];
+        
+        // テーブルの存在確認
+        $debug_info['tables']['sbi_instagram_posts'] = $wpdb->get_var("SHOW TABLES LIKE '$posts_table'") === $posts_table;
+        $debug_info['tables']['sbi_sources'] = $wpdb->get_var("SHOW TABLES LIKE '$sources_table'") === $sources_table;
+        $debug_info['tables']['sbi_feeds'] = $wpdb->get_var("SHOW TABLES LIKE '$feeds_table'") === $feeds_table;
+        
+        // 投稿数カウント
+        if ($debug_info['tables']['sbi_instagram_posts']) {
+            $debug_info['posts_count'] = (int) $wpdb->get_var("SELECT COUNT(*) FROM $posts_table");
+            
+            // サンプルデータ取得
+            if ($debug_info['posts_count'] > 0) {
+                $sample = $wpdb->get_row(
+                    "SELECT instagram_id, time_stamp, LENGTH(json_data) as json_length FROM $posts_table ORDER BY time_stamp DESC LIMIT 1",
+                    ARRAY_A
+                );
+                $debug_info['sample_data'] = $sample;
+                
+                // json_dataの内容を確認
+                $full_data = $wpdb->get_var(
+                    "SELECT json_data FROM $posts_table ORDER BY time_stamp DESC LIMIT 1"
+                );
+                if ($full_data) {
+                    $decoded = json_decode($full_data, true);
+                    $debug_info['json_keys'] = $decoded ? array_keys($decoded) : [];
+                }
+            }
+        }
+        
+        // ソース数カウント
+        if ($debug_info['tables']['sbi_sources']) {
+            $debug_info['sources_count'] = (int) $wpdb->get_var("SELECT COUNT(*) FROM $sources_table");
+        }
+        
+        // フィード数カウント
+        if ($debug_info['tables']['sbi_feeds']) {
+            $debug_info['feeds_count'] = (int) $wpdb->get_var("SELECT COUNT(*) FROM $feeds_table");
+        }
+        
+        // プラグイン設定
+        $debug_info['plugin_options']['sb_instagram_settings'] = get_option('sb_instagram_settings', 'not_found');
+        $debug_info['plugin_options']['sbi_ver'] = get_option('sbi_ver', 'not_found');
+        
+        return $debug_info;
     }
     
     /**
