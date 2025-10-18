@@ -1,28 +1,34 @@
-import { getPosts, getCategories, getTags } from '@/lib/wordpress';
+import { getPostsByTagSlug, getTagBySlug, getCategories, getTags } from '@/lib/wordpress';
 import PostCard from '@/components/PostCard';
 import Sidebar from '@/components/Sidebar';
 import Pagination from '@/components/Pagination';
 import Link from 'next/link';
 
-export const revalidate = 3600; // 1時間ごとに再生成
-
-export const metadata = {
-  title: '記事一覧 - 奈良心剣道場',
-  description: '奈良心剣道場の記事一覧ページです',
-};
+export const revalidate = 3600;
 
 interface Props {
+  params: Promise<{ slug: string }>;
   searchParams: Promise<{ page?: string }>;
 }
 
-export default async function PostsPage({ searchParams }: Props) {
-  const params = await searchParams;
-  const currentPage = Number(params.page) || 1;
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+  const tag = await getTagBySlug(slug);
+  
+  return {
+    title: `タグ: ${tag?.name || slug} - 奈良心剣道場`,
+    description: `${tag?.name || slug}タグの記事一覧`,
+  };
+}
+
+export default async function TagPage({ params, searchParams }: Props) {
+  const { slug } = await params;
+  const search = await searchParams;
+  const currentPage = Number(search.page) || 1;
   const perPage = 12;
   
-  let posts = [];
-  let totalPages = 1;
-  let total = 0;
+  let allPosts = [];
+  let tag = null;
   let categories = [];
   let tags = [];
   let error = null;
@@ -35,21 +41,25 @@ export default async function PostsPage({ searchParams }: Props) {
       return Promise.race([promise, timeoutPromise]);
     };
 
-    const [postsData, categoriesData, tagsData] = await Promise.all([
-      fetchWithTimeout(getPosts(currentPage, perPage)).catch(() => ({ posts: [], totalPages: 1, total: 0 })),
+    [allPosts, tag, categories, tags] = await Promise.all([
+      fetchWithTimeout(getPostsByTagSlug(slug, 100)).catch(() => []),
+      fetchWithTimeout(getTagBySlug(slug)).catch(() => null),
       fetchWithTimeout(getCategories()).catch(() => []),
       fetchWithTimeout(getTags()).catch(() => []),
     ]);
-
-    posts = postsData.posts;
-    totalPages = postsData.totalPages;
-    total = postsData.total;
-    categories = categoriesData;
-    tags = tagsData;
   } catch (e) {
     error = 'データの取得に失敗しました';
-    console.error('Error fetching posts:', e);
+    console.error('Error fetching posts by tag:', e);
   }
+
+  const tagName = tag?.name || slug;
+  
+  // ページネーション用の計算
+  const totalPosts = allPosts.length;
+  const totalPages = Math.ceil(totalPosts / perPage);
+  const startIndex = (currentPage - 1) * perPage;
+  const endIndex = startIndex + perPage;
+  const posts = allPosts.slice(startIndex, endIndex);
 
   return (
     <div style={{backgroundColor: 'var(--color-dojo-beige)'}}>
@@ -58,7 +68,7 @@ export default async function PostsPage({ searchParams }: Props) {
         <nav className="mb-6 text-sm" style={{color: 'var(--color-text-tertiary)'}}>
           <Link href="/" className="hover:underline">ホーム</Link>
           <span className="mx-2">/</span>
-          <span style={{color: 'var(--color-text-primary)'}}>記事一覧</span>
+          <span style={{color: 'var(--color-text-primary)'}}>タグ: {tagName}</span>
         </nav>
 
         {/* ヘッダー */}
@@ -75,14 +85,13 @@ export default async function PostsPage({ searchParams }: Props) {
               className="text-3xl font-bold"
               style={{color: 'var(--color-text-title)'}}
             >
-              記事一覧
+              タグ: {tagName}
             </h1>
             <p 
               className="text-sm mt-2"
               style={{color: 'var(--color-text-tertiary)'}}
             >
-              {total > 0 ? `全${total}件の記事` : '記事がありません'}
-              {currentPage > 1 && ` (${currentPage}ページ目)`}
+              {posts.length > 0 ? `${posts.length}件の記事` : '記事がありません'}
             </p>
           </div>
         </header>
@@ -111,7 +120,7 @@ export default async function PostsPage({ searchParams }: Props) {
                   color: 'var(--color-text-tertiary)'
                 }}
               >
-                <p>記事がまだ投稿されていません</p>
+                <p>このタグの記事がまだ投稿されていません</p>
               </div>
             ) : (
               <>
@@ -125,7 +134,7 @@ export default async function PostsPage({ searchParams }: Props) {
                 <Pagination 
                   currentPage={currentPage}
                   totalPages={totalPages}
-                  basePath="/posts"
+                  basePath={`/tag/${slug}`}
                 />
               </>
             )}

@@ -8,6 +8,7 @@ const wpAPI = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 10000, // 10秒タイムアウト
 });
 
 // 型定義
@@ -230,6 +231,72 @@ export async function getPostsByCategorySlug(slug: string, perPage: number = 10)
   } catch (error) {
     console.error('Error fetching posts by category slug:', error);
     return [];
+  }
+}
+
+// タグ別投稿の取得
+export async function getPostsByTagSlug(slug: string, perPage: number = 10): Promise<any[]> {
+  try {
+    // まずタグIDを取得
+    const tagsResponse = await wpAPI.get('/wp/v2/tags', {
+      params: { slug }
+    });
+    
+    if (tagsResponse.data.length === 0) {
+      return [];
+    }
+    
+    const tagId = tagsResponse.data[0].id;
+    
+    // タグIDで投稿を取得
+    const postsResponse = await wpAPI.get('/wp/v2/posts', {
+      params: {
+        tags: tagId,
+        per_page: perPage,
+        _embed: true,
+      },
+    });
+    
+    return postsResponse.data;
+  } catch (error) {
+    console.error('Error fetching posts by tag slug:', error);
+    return [];
+  }
+}
+
+// タグ情報の取得
+export async function getTagBySlug(slug: string): Promise<any> {
+  try {
+    const response = await wpAPI.get('/wp/v2/tags', {
+      params: { slug }
+    });
+    
+    if (response.data.length === 0) {
+      return null;
+    }
+    
+    return response.data[0];
+  } catch (error) {
+    console.error('Error fetching tag by slug:', error);
+    return null;
+  }
+}
+
+// カテゴリー情報の取得
+export async function getCategoryBySlug(slug: string): Promise<any> {
+  try {
+    const response = await wpAPI.get('/wp/v2/categories', {
+      params: { slug }
+    });
+    
+    if (response.data.length === 0) {
+      return null;
+    }
+    
+    return response.data[0];
+  } catch (error) {
+    console.error('Error fetching category by slug:', error);
+    return null;
   }
 }
 

@@ -59,14 +59,21 @@ function SmallSectionHeader({ title }: { title: string }) {
 }
 
 export default async function Home() {
-  // 各カテゴリーの記事を並行して取得
+  // 各カテゴリーの記事を並行して取得（タイムアウト付き）
+  const fetchWithTimeout = async <T,>(promise: Promise<T>, timeoutMs: number = 8000): Promise<T> => {
+    const timeoutPromise = new Promise<never>((_, reject) => 
+      setTimeout(() => reject(new Error('Fetch timeout')), timeoutMs)
+    );
+    return Promise.race([promise, timeoutPromise]);
+  };
+
   const [announcementPosts, resultPosts, blogPosts, categories, tags, instagramFeed] = await Promise.all([
-    getPostsByCategorySlug('announcement', 3),
-    getPostsByCategorySlug('result', 6),
-    getPostsByCategorySlug('blog', 6),
-    getCategories(),
-    getTags(),
-    getInstagramFeed(6),
+    fetchWithTimeout(getPostsByCategorySlug('announcement', 3)).catch(() => []),
+    fetchWithTimeout(getPostsByCategorySlug('result', 6)).catch(() => []),
+    fetchWithTimeout(getPostsByCategorySlug('blog', 6)).catch(() => []),
+    fetchWithTimeout(getCategories()).catch(() => []),
+    fetchWithTimeout(getTags()).catch(() => []),
+    fetchWithTimeout(getInstagramFeed(6)).catch(() => ({ count: 0, posts: [] })),
   ]);
 
   return (

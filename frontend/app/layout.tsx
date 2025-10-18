@@ -7,7 +7,7 @@ import { getMenuByLocation } from "@/lib/wordpress";
 
 const shipporiMincho = Shippori_Mincho_B1({ 
   subsets: ["latin"],
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 });
 
@@ -24,8 +24,11 @@ export default async function RootLayout({
   // メニューの取得（エラーハンドリング付き）
   let menuItems = [];
   try {
-    const menu = await getMenuByLocation('primary');
-    menuItems = menu.items;
+    const menu = await Promise.race([
+      getMenuByLocation('primary'),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Menu timeout')), 5000))
+    ]);
+    menuItems = (menu as any).items || [];
   } catch (error) {
     console.error('Menu fetch error:', error);
     // メニューが取得できなくても続行
