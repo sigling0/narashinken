@@ -36,24 +36,26 @@ export default function Slideshow() {
   };
 
   return (
-    <div className="relative w-full h-64 md:h-96 lg:h-[500px] overflow-hidden bg-gray-900">
-      {/* スライド画像 */}
-      {images.map((image, index) => (
-        <div
-          key={image}
-          className={`absolute inset-0 transition-opacity duration-700 ${
-            index === currentIndex ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
-          <Image
-            src={image}
-            alt={`スライド ${index + 1}`}
-            fill
-            className="object-cover"
-            priority={index === 0}
-          />
-        </div>
-      ))}
+    <div className="relative w-full overflow-hidden" style={{backgroundColor: 'var(--color-dojo-beige)'}}>
+      {/* スライドコンテナ - 画像の元のアスペクト比（7:3）を保持 */}
+      <div className="relative w-full aspect-[7/3] max-h-[800px]">
+        {/* スライド画像 */}
+        {images.map((image, index) => (
+          <div
+            key={image}
+            className={`absolute inset-0 transition-opacity duration-700 ${
+              index === currentIndex ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <Image
+              src={image}
+              alt={`スライド ${index + 1}`}
+              fill
+              className="object-contain"
+              priority={index === 0}
+            />
+          </div>
+        ))}
 
       {/* 左ボタン */}
       <button
@@ -99,20 +101,21 @@ export default function Slideshow() {
         </svg>
       </button>
 
-      {/* インジケーター */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-        {images.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentIndex(index)}
-            className={`w-3 h-3 rounded-full transition-all ${
-              index === currentIndex
-                ? 'bg-white scale-110'
-                : 'bg-white bg-opacity-50 hover:bg-opacity-75'
-            }`}
-            aria-label={`画像 ${index + 1} に移動`}
-          />
-        ))}
+        {/* インジケーター */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+          {images.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-3 h-3 rounded-full transition-all ${
+                index === currentIndex
+                  ? 'bg-white scale-110'
+                  : 'bg-white bg-opacity-50 hover:bg-opacity-75'
+              }`}
+              aria-label={`画像 ${index + 1} に移動`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
