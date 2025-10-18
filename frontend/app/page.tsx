@@ -68,7 +68,7 @@ export default async function Home() {
   };
 
   const [announcementPosts, resultPosts, blogPosts, categories, tags, instagramFeed] = await Promise.all([
-    fetchWithTimeout(getPostsByCategorySlug('announcement', 3)).catch(() => []),
+    fetchWithTimeout(getPostsByCategorySlug('announcement', 1)).catch(() => []),
     fetchWithTimeout(getPostsByCategorySlug('result', 6)).catch(() => []),
     fetchWithTimeout(getPostsByCategorySlug('blog', 6)).catch(() => []),
     fetchWithTimeout(getCategories()).catch(() => []),
@@ -182,40 +182,35 @@ export default async function Home() {
             <section>
               <SectionHeader title="重要なお知らせ" link="/category/announcement" />
               {announcementPosts.length > 0 ? (
-                <div className="space-y-4">
-                  {announcementPosts.map((post: any) => (
-                    <Link 
-                      key={post.id}
-                      href={`/posts/${post.slug}`}
-                      className="block rounded-lg overflow-hidden"
-                      style={{
-                        boxShadow: 'rgba(0,0,0,0.16) 1px 1px 4px 2px',
-                        backgroundColor: 'white'
+                <Link 
+                  href={`/posts/${announcementPosts[0].slug}`}
+                  className="block rounded-lg overflow-hidden"
+                  style={{
+                    boxShadow: 'rgba(0,0,0,0.16) 1px 1px 4px 2px',
+                    backgroundColor: 'white'
+                  }}
+                >
+                  <div className="p-4">
+                    <h5 
+                      className="text-lg font-extrabold mb-3"
+                      style={{color: 'var(--color-text-primary)'}}
+                      dangerouslySetInnerHTML={{ __html: announcementPosts[0].title.rendered }}
+                    />
+                    <div 
+                      className="text-sm mb-3"
+                      style={{color: 'var(--color-text-secondary)'}}
+                      dangerouslySetInnerHTML={{ 
+                        __html: announcementPosts[0].excerpt?.rendered?.replace(/<[^>]*>/g, '').substring(0, 100) + '...' 
                       }}
-                    >
-                      <div className="p-4">
-                        <h5 
-                          className="text-lg font-extrabold mb-3"
-                          style={{color: 'var(--color-text-primary)'}}
-                          dangerouslySetInnerHTML={{ __html: post.title.rendered }}
-                        />
-                        <div 
-                          className="text-sm mb-3"
-                          style={{color: 'var(--color-text-secondary)'}}
-                          dangerouslySetInnerHTML={{ 
-                            __html: post.excerpt?.rendered?.replace(/<[^>]*>/g, '').substring(0, 100) + '...' 
-                          }}
-                        />
-                        <div className="flex items-center justify-between text-xs" style={{color: 'var(--color-text-tertiary)'}}>
-                          <time>{new Date(post.date).toLocaleDateString('ja-JP')}</time>
-                          <svg width="14px" height="16px" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
-                            <path fill="var(--color-text-secondary)" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
-                          </svg>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
+                    />
+                    <div className="flex items-center justify-between text-xs" style={{color: 'var(--color-text-tertiary)'}}>
+                      <time>{new Date(announcementPosts[0].date).toLocaleDateString('ja-JP')}</time>
+                      <svg width="14px" height="16px" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="var(--color-text-secondary)" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
+                      </svg>
+                    </div>
+                  </div>
+                </Link>
               ) : (
                 <p className="text-sm" style={{color: 'var(--color-text-secondary)'}}>お知らせはまだありません</p>
               )}
@@ -308,7 +303,7 @@ export default async function Home() {
                       <Link
                         key={category.id}
                         href={`/category/${category.slug}`}
-                        className="block text-sm underline transition-colors"
+                        className="block text-sm underline transition-all duration-200 hover:font-bold hover:translate-x-1"
                         style={{color: 'var(--color-text-tertiary)'}}
                       >
                         {category.name} ({category.count})
@@ -330,7 +325,7 @@ export default async function Home() {
                       <Link
                         key={tag.id}
                         href={`/tag/${tag.slug}`}
-                        className="inline-block px-2 py-1 text-xs rounded transition-colors"
+                        className="inline-block px-2 py-1 text-xs rounded transition-all duration-200 hover:scale-110 hover:shadow-md"
                         style={{
                           backgroundColor: 'var(--color-dojo-tag)',
                           color: 'var(--color-text-tertiary)'

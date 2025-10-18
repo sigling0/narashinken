@@ -81,14 +81,14 @@ export default async function PostPage({ params }: Props) {
   });
 
   return (
-    <article className="container mx-auto px-4 py-8 max-w-4xl">
+    <article className="container mx-auto px-4 py-8 max-w-4xl" style={{backgroundColor: 'var(--color-dojo-beige)'}}>
       {/* パンくずリスト */}
-      <nav className="mb-8 text-sm text-gray-600">
-        <Link href="/" className="hover:text-blue-600">ホーム</Link>
+      <nav className="mb-8 text-sm" style={{color: 'var(--color-text-tertiary)'}}>
+        <Link href="/" className="hover:underline">ホーム</Link>
         <span className="mx-2">/</span>
-        <Link href="/posts" className="hover:text-blue-600">記事一覧</Link>
+        <Link href="/posts" className="hover:underline">記事一覧</Link>
         <span className="mx-2">/</span>
-        <span className="text-gray-800">{post.title.rendered}</span>
+        <span style={{color: 'var(--color-text-primary)'}}>{post.title.rendered}</span>
       </nav>
 
       {/* アイキャッチ画像 */}
@@ -108,11 +108,12 @@ export default async function PostPage({ params }: Props) {
       {/* タイトルとメタ情報 */}
       <header className="mb-8">
         <h1 
-          className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+          className="text-4xl md:text-5xl font-bold mb-4"
+          style={{color: 'var(--color-text-primary)'}}
           dangerouslySetInnerHTML={{ __html: post.title.rendered }}
         />
         
-        <div className="flex items-center text-gray-600 space-x-4">
+        <div className="flex items-center space-x-4" style={{color: 'var(--color-text-tertiary)'}}>
           <time>{formattedDate}</time>
           {post._embedded?.author?.[0] && (
             <>
@@ -129,7 +130,11 @@ export default async function PostPage({ params }: Props) {
               <Link
                 key={category.id}
                 href={`/category/${category.slug}`}
-                className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm hover:bg-blue-200 transition-colors"
+                className="px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110 hover:shadow-md"
+                style={{
+                  backgroundColor: 'var(--color-dojo-tag)',
+                  color: 'var(--color-text-primary)'
+                }}
               >
                 {category.name}
               </Link>
@@ -146,14 +151,18 @@ export default async function PostPage({ params }: Props) {
 
       {/* タグ */}
       {post._embedded?.['wp:term']?.[1] && post._embedded['wp:term'][1].length > 0 && (
-        <div className="border-t pt-6">
-          <h3 className="text-sm font-semibold text-gray-600 mb-3">タグ:</h3>
+        <div className="border-t pt-6" style={{borderColor: 'var(--color-dojo-tag)'}}>
+          <h3 className="text-sm font-semibold mb-3" style={{color: 'var(--color-text-secondary)'}}>タグ:</h3>
           <div className="flex flex-wrap gap-2">
             {post._embedded['wp:term'][1].map((tag: any) => (
               <Link
                 key={tag.id}
                 href={`/tag/${tag.slug}`}
-                className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors"
+                className="px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110 hover:shadow-md"
+                style={{
+                  backgroundColor: 'var(--color-dojo-tag)',
+                  color: 'var(--color-text-tertiary)'
+                }}
               >
                 #{tag.name}
               </Link>
@@ -163,10 +172,11 @@ export default async function PostPage({ params }: Props) {
       )}
 
       {/* 戻るボタン */}
-      <div className="mt-12 pt-8 border-t">
+      <div className="mt-12 pt-8 border-t" style={{borderColor: 'var(--color-dojo-tag)'}}>
         <Link
           href="/posts"
-          className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
+          className="inline-flex items-center font-medium hover:underline transition-colors"
+          style={{color: 'var(--color-dojo-title)'}}
         >
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />

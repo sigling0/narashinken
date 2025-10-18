@@ -79,7 +79,7 @@ export default function Sidebar({ categories, tags }: SidebarProps) {
                 <Link
                   key={category.id}
                   href={`/category/${category.slug}`}
-                  className="block text-sm underline transition-colors"
+                  className="block text-sm underline transition-all duration-200 hover:font-bold hover:translate-x-1"
                   style={{color: 'var(--color-text-tertiary)'}}
                 >
                   {category.name} ({category.count})
@@ -101,7 +101,7 @@ export default function Sidebar({ categories, tags }: SidebarProps) {
                 <Link
                   key={tag.id}
                   href={`/tag/${tag.slug}`}
-                  className="inline-block px-2 py-1 text-xs rounded transition-colors"
+                  className="inline-block px-2 py-1 text-xs rounded transition-all duration-200 hover:scale-110 hover:shadow-md"
                   style={{
                     backgroundColor: 'var(--color-dojo-tag)',
                     color: 'var(--color-text-tertiary)'

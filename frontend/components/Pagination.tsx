@@ -31,7 +31,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
       {currentPage > 1 && (
         <Link
           href={`${basePath}?page=${currentPage - 1}`}
-          className="px-4 py-2 text-sm font-medium rounded transition-colors"
+          className="px-4 py-2 text-sm font-medium rounded transition-all duration-300 hover:shadow-md hover:-translate-x-1"
           style={{
             backgroundColor: 'white',
             color: 'var(--color-text-primary)',
@@ -47,7 +47,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
         <>
           <Link
             href={`${basePath}?page=1`}
-            className="px-4 py-2 text-sm font-medium rounded transition-colors"
+            className="px-4 py-2 text-sm font-medium rounded transition-all duration-300 hover:shadow-md hover:scale-105"
             style={{
               backgroundColor: 'white',
               color: 'var(--color-text-primary)',
@@ -67,7 +67,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
         <Link
           key={page}
           href={`${basePath}?page=${page}`}
-          className={`px-4 py-2 text-sm font-medium rounded transition-colors ${
+          className={`px-4 py-2 text-sm font-medium rounded transition-all duration-300 hover:shadow-md hover:scale-105 ${
             page === currentPage ? 'font-extrabold' : ''
           }`}
           style={{
@@ -88,7 +88,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
           )}
           <Link
             href={`${basePath}?page=${totalPages}`}
-            className="px-4 py-2 text-sm font-medium rounded transition-colors"
+            className="px-4 py-2 text-sm font-medium rounded transition-all duration-300 hover:shadow-md hover:scale-105"
             style={{
               backgroundColor: 'white',
               color: 'var(--color-text-primary)',
@@ -104,7 +104,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
       {currentPage < totalPages && (
         <Link
           href={`${basePath}?page=${currentPage + 1}`}
-          className="px-4 py-2 text-sm font-medium rounded transition-colors"
+          className="px-4 py-2 text-sm font-medium rounded transition-all duration-300 hover:shadow-md hover:translate-x-1"
           style={{
             backgroundColor: 'white',
             color: 'var(--color-text-primary)',

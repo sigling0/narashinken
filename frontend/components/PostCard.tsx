@@ -45,21 +45,22 @@ export default function PostCard({ post }: PostCardProps) {
   };
 
   return (
-    <Link href={`/posts/${post.slug}`}>
+    <Link href={`/posts/${post.slug}`} className="group">
       <article 
-        className="block rounded-lg overflow-hidden transition-shadow duration-200"
+        className="block rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
         style={{
-          boxShadow: 'rgba(0,0,0,0.16) 1px 1px 4px 2px'
+          boxShadow: 'rgba(0,0,0,0.16) 1px 1px 4px 2px',
+          backgroundColor: 'white'
         }}
       >
         {/* アイキャッチ画像 */}
-        <div className="relative w-full h-44">
+        <div className="relative w-full h-44 overflow-hidden">
           {featuredImage ? (
             <Image
               src={featuredImage.source_url}
               alt={featuredImage.alt_text || post.title.rendered}
               fill
-              className="object-cover"
+              className="object-cover transition-transform duration-300 group-hover:scale-110"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           ) : (
@@ -75,7 +76,7 @@ export default function PostCard({ post }: PostCardProps) {
         {/* コンテンツ */}
         <div className="px-4 py-3">
           <h5 
-            className="text-lg font-extrabold leading-normal mb-2 mr-4"
+            className="text-lg font-extrabold leading-normal mb-2 mr-4 transition-colors duration-300 group-hover:text-opacity-80"
             style={{color: 'var(--color-text-primary)'}}
             dangerouslySetInnerHTML={{ __html: post.title.rendered }}
           />

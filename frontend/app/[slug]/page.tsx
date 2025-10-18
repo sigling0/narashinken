@@ -76,12 +76,12 @@ export default async function PageSlug({ params }: Props) {
   const featuredImage = page._embedded?.['wp:featuredmedia']?.[0];
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-8 max-w-4xl" style={{backgroundColor: 'var(--color-dojo-beige)'}}>
       {/* パンくずリスト */}
-      <nav className="mb-8 text-sm text-gray-600">
-        <Link href="/" className="hover:text-blue-600">ホーム</Link>
+      <nav className="mb-8 text-sm" style={{color: 'var(--color-text-tertiary)'}}>
+        <Link href="/" className="hover:underline">ホーム</Link>
         <span className="mx-2">/</span>
-        <span className="text-gray-800">{page.title.rendered}</span>
+        <span style={{color: 'var(--color-text-primary)'}}>{page.title.rendered}</span>
       </nav>
 
       {/* アイキャッチ画像 */}
@@ -101,7 +101,8 @@ export default async function PageSlug({ params }: Props) {
       {/* タイトル */}
       <header className="mb-8">
         <h1 
-          className="text-4xl md:text-5xl font-bold text-gray-900"
+          className="text-4xl md:text-5xl font-bold"
+          style={{color: 'var(--color-text-primary)'}}
           dangerouslySetInnerHTML={{ __html: page.title.rendered }}
         />
       </header>
@@ -113,10 +114,11 @@ export default async function PageSlug({ params }: Props) {
       />
 
       {/* 戻るボタン */}
-      <div className="mt-12 pt-8 border-t">
+      <div className="mt-12 pt-8 border-t" style={{borderColor: 'var(--color-dojo-tag)'}}>
         <Link
           href="/"
-          className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
+          className="inline-flex items-center font-medium hover:underline transition-colors"
+          style={{color: 'var(--color-dojo-title)'}}
         >
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
