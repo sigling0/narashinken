@@ -15,6 +15,26 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: '**.sigling-pg.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'narashinken.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.narashinken.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdninstagram.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.cdninstagram.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'scontent.cdninstagram.com',
+      },
     ],
     formats: ['image/webp', 'image/avif'],
   },
