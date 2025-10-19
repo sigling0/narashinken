@@ -73,7 +73,7 @@ export default async function Home() {
     fetchWithTimeout(getPostsByCategorySlug('blog', 6)).catch(() => []),
     fetchWithTimeout(getCategories()).catch(() => []),
     fetchWithTimeout(getTags()).catch(() => []),
-    fetchWithTimeout(getInstagramFeed(6)).catch(() => ({ count: 0, posts: [], message: 'Instagram feed unavailable' })),
+    fetchWithTimeout(getInstagramFeed(18)).catch(() => ({ count: 0, posts: [], message: 'Instagram feed unavailable' })),
   ]);
 
   return (
