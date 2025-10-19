@@ -340,7 +340,7 @@ export default async function Home() {
                 {/* キーワード検索 */}
                 <div>
                   <label 
-                    htmlFor="keyword-search"
+                    htmlFor="keyword-search-home"
                     className="block text-sm font-semibold mb-2"
                     style={{color: 'var(--color-text-primary)'}}
                   >
@@ -349,16 +349,17 @@ export default async function Home() {
                   <div className="flex gap-2">
                     <input 
                       type="search"
-                      id="keyword-search"
+                      id="keyword-search-home"
                       placeholder="キーワードを入力"
-                      className="flex-1 px-3 py-2 text-sm border rounded"
+                      className="flex-1 px-3 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-offset-0"
                       style={{
                         borderColor: 'var(--color-dojo-tag)',
-                        color: 'var(--color-text-primary)'
-                      }}
+                        color: 'var(--color-text-primary)',
+                        '--tw-ring-color': 'var(--color-dojo-title)'
+                      } as React.CSSProperties}
                     />
                     <button 
-                      className="px-4 py-2 text-sm font-medium rounded"
+                      className="px-4 py-2 text-sm font-medium rounded transition-colors hover:opacity-90"
                       style={{
                         backgroundColor: 'var(--color-dojo-title)',
                         color: 'white'
@@ -379,16 +380,20 @@ export default async function Home() {
                     カテゴリー
                   </label>
                   <div className="space-y-1.5">
-                    {categories.slice(0, 10).map((category: any) => (
-                      <Link
-                        key={category.id}
-                        href={`/category/${category.slug}`}
-                        className="block text-sm underline transition-all duration-200 hover:font-bold hover:translate-x-1"
-                        style={{color: 'var(--color-text-tertiary)'}}
-                      >
-                        {category.name} ({category.count})
-                      </Link>
-                    ))}
+                    {categories
+                      .filter((cat: any) => cat.count > 0)
+                      .sort((a: any, b: any) => b.count - a.count)
+                      .slice(0, 10)
+                      .map((category: any) => (
+                        <Link
+                          key={category.id}
+                          href={`/category/${category.slug}`}
+                          className="block text-sm underline transition-all duration-200 hover:font-bold hover:translate-x-1"
+                          style={{color: 'var(--color-text-tertiary)'}}
+                        >
+                          {category.name} ({category.count})
+                        </Link>
+                      ))}
                   </div>
                 </div>
 
@@ -401,19 +406,23 @@ export default async function Home() {
                     タグ
                   </label>
                   <div className="flex flex-wrap gap-2">
-                    {tags.slice(0, 15).map((tag: any) => (
-                      <Link
-                        key={tag.id}
-                        href={`/tag/${tag.slug}`}
-                        className="inline-block px-2 py-1 text-xs rounded transition-all duration-200 hover:scale-110 hover:shadow-md"
-                        style={{
-                          backgroundColor: 'var(--color-dojo-tag)',
-                          color: 'var(--color-text-tertiary)'
-                        }}
-                      >
-                        {tag.name}
-                      </Link>
-                    ))}
+                    {tags
+                      .filter((tag: any) => tag.count > 0)
+                      .sort((a: any, b: any) => b.count - a.count)
+                      .slice(0, 15)
+                      .map((tag: any) => (
+                        <Link
+                          key={tag.id}
+                          href={`/tag/${tag.slug}`}
+                          className="inline-block px-2 py-1 text-xs rounded transition-all duration-200 hover:scale-110 hover:shadow-md"
+                          style={{
+                            backgroundColor: 'var(--color-dojo-tag)',
+                            color: 'var(--color-text-tertiary)'
+                          }}
+                        >
+                          {tag.name}
+                        </Link>
+                      ))}
                   </div>
                 </div>
               </div>

@@ -27,6 +27,18 @@ function SmallSectionHeader({ title }: { title: string }) {
 }
 
 export default function Sidebar({ categories, tags }: SidebarProps) {
+  // 使用されているカテゴリーのみをフィルタし、記事数の多い順にソート
+  const activeCategories = categories
+    .filter((cat: any) => cat.count > 0)
+    .sort((a: any, b: any) => b.count - a.count)
+    .slice(0, 10);
+  
+  // 使用されているタグのみをフィルタし、記事数の多い順にソート
+  const activeTags = tags
+    .filter((tag: any) => tag.count > 0)
+    .sort((a: any, b: any) => b.count - a.count)
+    .slice(0, 15);
+  
   return (
     <aside className="space-y-8">
       {/* 記事検索セクション */}
@@ -47,14 +59,15 @@ export default function Sidebar({ categories, tags }: SidebarProps) {
                 type="search"
                 id="keyword-search"
                 placeholder="キーワードを入力"
-                className="flex-1 px-3 py-2 text-sm border rounded"
+                className="flex-1 px-3 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-offset-0"
                 style={{
                   borderColor: 'var(--color-dojo-tag)',
-                  color: 'var(--color-text-primary)'
-                }}
+                  color: 'var(--color-text-primary)',
+                  '--tw-ring-color': 'var(--color-dojo-title)'
+                } as React.CSSProperties}
               />
               <button 
-                className="px-4 py-2 text-sm font-medium rounded"
+                className="px-4 py-2 text-sm font-medium rounded transition-colors hover:opacity-90"
                 style={{
                   backgroundColor: 'var(--color-dojo-title)',
                   color: 'white'
@@ -75,7 +88,7 @@ export default function Sidebar({ categories, tags }: SidebarProps) {
               カテゴリー
             </label>
             <div className="space-y-1.5">
-              {categories.slice(0, 10).map((category: any) => (
+              {activeCategories.map((category: any) => (
                 <Link
                   key={category.id}
                   href={`/category/${category.slug}`}
@@ -97,7 +110,7 @@ export default function Sidebar({ categories, tags }: SidebarProps) {
               タグ
             </label>
             <div className="flex flex-wrap gap-2">
-              {tags.slice(0, 15).map((tag: any) => (
+              {activeTags.map((tag: any) => (
                 <Link
                   key={tag.id}
                   href={`/tag/${tag.slug}`}
