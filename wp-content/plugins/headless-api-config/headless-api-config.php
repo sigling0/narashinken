@@ -160,73 +160,65 @@ class HeadlessAPIConfig {
      * Instagram Feedを取得
      */
     public function get_instagram_feed($request) {
-        global $wpdb;
-        
         $limit = $request->get_param('limit');
-        $posts_table = $wpdb->prefix . 'sbi_instagram_posts';
         
-        // テーブルが存在するか確認
-        $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$posts_table'") === $posts_table;
+        // Instagram Feedプラグインのキャッシュを使用
+        $feed_id = 1; // デフォルトフィードID
+        $transient_name = 'sbi_' . $feed_id;
         
-        if (!$table_exists) {
-            return new WP_Error('no_instagram_data', 'Instagram Feed plugin data not found', ['status' => 404]);
+        if (class_exists('SB_Instagram_Cache')) {
+            $cache = new SB_Instagram_Cache($transient_name, 1);
+            $cache->retrieve_and_set();
+            $post_data = $cache->get('posts');
+            
+            if (!empty($post_data)) {
+                $decoded_posts = json_decode($post_data, true);
+                
+                if (is_array($decoded_posts) && !empty($decoded_posts)) {
+                    $posts = [];
+                    $count = 0;
+                    
+                    foreach ($decoded_posts as $post) {
+                        if ($count >= $limit) break;
+                        
+                        // メディアURLを取得
+                        $media_url = '';
+                        if (isset($post['media_url'])) {
+                            $media_url = $post['media_url'];
+                        } elseif (isset($post['thumbnail_url'])) {
+                            $media_url = $post['thumbnail_url'];
+                        }
+                        
+                        if (empty($media_url)) {
+                            continue;
+                        }
+                        
+                        $posts[] = [
+                            'id' => $post['id'] ?? '',
+                            'media_url' => $media_url,
+                            'permalink' => $post['permalink'] ?? '',
+                            'caption' => $post['caption'] ?? '',
+                            'media_type' => $post['media_type'] ?? 'IMAGE',
+                            'timestamp' => $post['timestamp'] ?? '',
+                            'username' => $post['username'] ?? '',
+                        ];
+                        
+                        $count++;
+                    }
+                    
+                    return [
+                        'count' => count($posts),
+                        'posts' => $posts,
+                    ];
+                }
+            }
         }
         
-        // Instagram投稿を取得（json_dataから情報を抽出）
-        $results = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT instagram_id, json_data, time_stamp
-                FROM $posts_table
-                WHERE json_data != ''
-                ORDER BY time_stamp DESC
-                LIMIT %d",
-                $limit
-            ),
-            ARRAY_A
-        );
-        
-        if (empty($results)) {
-            // データがない場合
-            return [
-                'count' => 0,
-                'posts' => [],
-                'message' => 'No Instagram posts found. Please configure Instagram Feed plugin.',
-            ];
-        }
-        
-        $posts = [];
-        foreach ($results as $row) {
-            $data = json_decode($row['json_data'], true);
-            if (!$data) {
-                continue;
-            }
-            
-            // メディアURLを取得（画像または動画）
-            $media_url = '';
-            if (isset($data['media_url'])) {
-                $media_url = $data['media_url'];
-            } elseif (isset($data['thumbnail_url'])) {
-                $media_url = $data['thumbnail_url'];
-            }
-            
-            if (empty($media_url)) {
-                continue;
-            }
-            
-            $posts[] = [
-                'id' => $row['instagram_id'],
-                'media_url' => $media_url,
-                'permalink' => $data['permalink'] ?? '',
-                'caption' => $data['caption'] ?? '',
-                'media_type' => $data['media_type'] ?? 'IMAGE',
-                'timestamp' => $row['time_stamp'],
-                'username' => $data['username'] ?? '',
-            ];
-        }
-        
+        // フォールバック: データがない場合
         return [
-            'count' => count($posts),
-            'posts' => $posts,
+            'count' => 0,
+            'posts' => [],
+            'message' => 'No Instagram posts found. Please configure Instagram Feed plugin.',
         ];
     }
     
@@ -254,22 +246,67 @@ class HeadlessAPIConfig {
         // 投稿数カウント
         if ($debug_info['tables']['sbi_instagram_posts']) {
             $debug_info['posts_count'] = (int) $wpdb->get_var("SELECT COUNT(*) FROM $posts_table");
+            $debug_info['posts_with_json'] = (int) $wpdb->get_var("SELECT COUNT(*) FROM $posts_table WHERE json_data != ''");
             
-            // サンプルデータ取得
+            $feeds_posts_table = $wpdb->prefix . 'sbi_feeds_posts';
+            $debug_info['posts_in_feeds'] = (int) $wpdb->get_var(
+                "SELECT COUNT(DISTINCT p.id) 
+                FROM $posts_table AS p 
+                INNER JOIN $feeds_posts_table AS fp ON p.id = fp.id 
+                WHERE p.json_data != ''"
+            );
+            
+            // サンプルデータ取得（直接取得）
             if ($debug_info['posts_count'] > 0) {
                 $sample = $wpdb->get_row(
-                    "SELECT instagram_id, time_stamp, LENGTH(json_data) as json_length FROM $posts_table ORDER BY time_stamp DESC LIMIT 1",
+                    "SELECT instagram_id, time_stamp, LENGTH(json_data) as json_length 
+                    FROM $posts_table
+                    WHERE json_data != '' AND json_data != 'null'
+                    ORDER BY time_stamp DESC 
+                    LIMIT 1",
                     ARRAY_A
                 );
                 $debug_info['sample_data'] = $sample;
                 
                 // json_dataの内容を確認
                 $full_data = $wpdb->get_var(
-                    "SELECT json_data FROM $posts_table ORDER BY time_stamp DESC LIMIT 1"
+                    "SELECT json_data 
+                    FROM $posts_table
+                    WHERE json_data != '' AND json_data != 'null'
+                    ORDER BY time_stamp DESC 
+                    LIMIT 1"
                 );
                 if ($full_data) {
+                    // まずJSONとして試す
                     $decoded = json_decode($full_data, true);
-                    $debug_info['json_keys'] = $decoded ? array_keys($decoded) : [];
+                    $debug_info['json_decode_success'] = $decoded !== null;
+                    $debug_info['json_error'] = json_last_error_msg();
+                    
+                    // JSONでない場合、シリアライズデータとして試す
+                    if (!$decoded) {
+                        $decoded = @unserialize($full_data);
+                        $debug_info['unserialize_success'] = $decoded !== false;
+                        $debug_info['data_format'] = 'serialized';
+                    } else {
+                        $debug_info['data_format'] = 'json';
+                    }
+                    
+                    if ($decoded && is_array($decoded)) {
+                        $debug_info['json_keys'] = array_keys($decoded);
+                        
+                        // 実際のAPIと同じ処理をテスト
+                        $media_url = '';
+                        if (isset($decoded['media_url'])) {
+                            $media_url = $decoded['media_url'];
+                        } elseif (isset($decoded['thumbnail_url'])) {
+                            $media_url = $decoded['thumbnail_url'];
+                        }
+                        $debug_info['test_media_url'] = $media_url;
+                        $debug_info['has_permalink'] = isset($decoded['permalink']);
+                        $debug_info['has_username'] = isset($decoded['username']);
+                    }
+                } else {
+                    $debug_info['json_data_empty'] = true;
                 }
             }
         }
