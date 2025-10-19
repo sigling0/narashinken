@@ -73,7 +73,7 @@ export default async function Home() {
     fetchWithTimeout(getPostsByCategorySlug('blog', 6)).catch(() => []),
     fetchWithTimeout(getCategories()).catch(() => []),
     fetchWithTimeout(getTags()).catch(() => []),
-    fetchWithTimeout(getInstagramFeed(6)).catch(() => ({ count: 0, posts: [] })),
+    fetchWithTimeout(getInstagramFeed(6)).catch(() => ({ count: 0, posts: [], message: 'Instagram feed unavailable' })),
   ]);
 
   return (
@@ -192,6 +192,10 @@ export default async function Home() {
                       day: '2-digit',
                     }).replace(/\//g, '年').replace(/年(\d+)月/, '年$1月') + '日';
                   };
+                  const stripHtml = (html: string, maxLength: number) => {
+                    const text = html.replace(/<[^>]*>/g, '').trim();
+                    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+                  };
                   
                   return (
                     <Link 
@@ -208,13 +212,22 @@ export default async function Home() {
                           style={{color: 'var(--color-text-primary)'}}
                           dangerouslySetInnerHTML={{ __html: post.title.rendered }}
                         />
+                        
+                        {/* 抜粋 - スマートフォン用（短い） */}
                         <div 
-                          className="text-sm mb-3"
+                          className="md:hidden text-sm mb-3"
                           style={{color: 'var(--color-text-secondary)'}}
-                          dangerouslySetInnerHTML={{ 
-                            __html: post.excerpt?.rendered?.replace(/<[^>]*>/g, '').substring(0, 100) + '...' 
-                          }}
-                        />
+                        >
+                          {stripHtml(post.excerpt?.rendered || '', 50)}
+                        </div>
+                        
+                        {/* 抜粋 - PC用（長い） */}
+                        <div 
+                          className="hidden md:block text-sm mb-3"
+                          style={{color: 'var(--color-text-secondary)'}}
+                        >
+                          {stripHtml(post.excerpt?.rendered || '', 100)}
+                        </div>
                         
                         {/* タグ・日付 */}
                         <div>
@@ -267,11 +280,21 @@ export default async function Home() {
             <section>
               <SectionHeader title="大会結果" link="/category/result" />
               {resultPosts.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {resultPosts.map((post: any) => (
-                    <PostCard key={post.id} post={post} />
-                  ))}
-                </div>
+                <>
+                  {/* スマートフォン表示 - 3件 */}
+                  <div className="md:hidden grid grid-cols-1 gap-6">
+                    {resultPosts.slice(0, 3).map((post: any) => (
+                      <PostCard key={post.id} post={post} />
+                    ))}
+                  </div>
+                  
+                  {/* PC表示 - 6件 */}
+                  <div className="hidden md:grid grid-cols-2 gap-6">
+                    {resultPosts.map((post: any) => (
+                      <PostCard key={post.id} post={post} />
+                    ))}
+                  </div>
+                </>
               ) : (
                 <p className="text-sm" style={{color: 'var(--color-text-secondary)'}}>大会結果はまだありません</p>
               )}
@@ -281,11 +304,21 @@ export default async function Home() {
             <section>
               <SectionHeader title="ブログ" link="/category/blog" />
               {blogPosts.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {blogPosts.map((post: any) => (
-                    <PostCard key={post.id} post={post} />
-                  ))}
-                </div>
+                <>
+                  {/* スマートフォン表示 - 3件 */}
+                  <div className="md:hidden grid grid-cols-1 gap-6">
+                    {blogPosts.slice(0, 3).map((post: any) => (
+                      <PostCard key={post.id} post={post} />
+                    ))}
+                  </div>
+                  
+                  {/* PC表示 - 6件 */}
+                  <div className="hidden md:grid grid-cols-2 gap-6">
+                    {blogPosts.map((post: any) => (
+                      <PostCard key={post.id} post={post} />
+                    ))}
+                  </div>
+                </>
               ) : (
                 <p className="text-sm" style={{color: 'var(--color-text-secondary)'}}>ブログ記事はまだありません</p>
               )}

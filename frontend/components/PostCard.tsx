@@ -40,8 +40,9 @@ export default function PostCard({ post }: PostCardProps) {
   };
 
   // HTMLタグを除去してテキストのみを取得
-  const stripHtml = (html: string) => {
-    return html.replace(/<[^>]*>/g, '').trim().substring(0, 80) + '...';
+  const stripHtml = (html: string, maxLength: number = 80) => {
+    const text = html.replace(/<[^>]*>/g, '').trim();
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
   };
 
   return (
@@ -81,12 +82,20 @@ export default function PostCard({ post }: PostCardProps) {
             dangerouslySetInnerHTML={{ __html: post.title.rendered }}
           />
           
-          {/* 抜粋 */}
+          {/* 抜粋 - スマートフォン用（短い） */}
           <div 
-            className="text-sm mb-3 leading-relaxed"
+            className="md:hidden text-sm mb-3 leading-relaxed"
             style={{color: 'var(--color-text-secondary)'}}
           >
-            {stripHtml(post.excerpt.rendered)}
+            {stripHtml(post.excerpt.rendered, 45)}
+          </div>
+          
+          {/* 抜粋 - PC用（長い） */}
+          <div 
+            className="hidden md:block text-sm mb-3 leading-relaxed"
+            style={{color: 'var(--color-text-secondary)'}}
+          >
+            {stripHtml(post.excerpt.rendered, 80)}
           </div>
           
           {/* タグ・投稿日付 */}
