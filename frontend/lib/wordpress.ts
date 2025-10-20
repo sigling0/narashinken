@@ -469,5 +469,23 @@ export async function getInstagramFeed(limit: number = 6): Promise<InstagramFeed
   }
 }
 
+// Instagram Graph APIから投稿を取得
+export async function getInstagramFromGraphAPI(limit: number = 18): Promise<InstagramFeed> {
+  try {
+    const response = await wpAPI.get('/headless/v1/instagram-graph', {
+      params: { limit },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching Instagram from Graph API:', error);
+    // エラーの場合は空のフィードを返す
+    return {
+      count: 0,
+      posts: [],
+      message: 'Instagram feed is currently unavailable',
+    };
+  }
+}
+
 export default wpAPI;
 

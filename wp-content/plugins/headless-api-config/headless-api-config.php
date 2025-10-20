@@ -107,6 +107,19 @@ class HeadlessAPIConfig {
             'callback' => [$this, 'debug_instagram_feed'],
             'permission_callback' => '__return_true',
         ]);
+        
+        // Instagram Graph API経由で投稿を取得
+        register_rest_route('headless/v1', '/instagram-graph', [
+            'methods' => 'GET',
+            'callback' => [$this, 'get_instagram_from_graph_api'],
+            'permission_callback' => '__return_true',
+            'args' => [
+                'limit' => [
+                    'default' => 18,
+                    'sanitize_callback' => 'absint',
+                ],
+            ],
+        ]);
     }
     
     /**
@@ -219,6 +232,86 @@ class HeadlessAPIConfig {
             'count' => 0,
             'posts' => [],
             'message' => 'No Instagram posts found. Please configure Instagram Feed plugin.',
+        ];
+    }
+    
+    /**
+     * Instagram Graph APIから投稿を取得
+     */
+    public function get_instagram_from_graph_api($request) {
+        $limit = $request->get_param('limit');
+        
+        // アクセストークン（定数またはオプションから取得）
+        $access_token = defined('INSTAGRAM_GRAPH_ACCESS_TOKEN') 
+            ? INSTAGRAM_GRAPH_ACCESS_TOKEN 
+            : get_option('instagram_graph_access_token', '');
+        
+        if (empty($access_token)) {
+            return [
+                'count' => 0,
+                'posts' => [],
+                'message' => 'Instagram access token not configured.',
+            ];
+        }
+        
+        // Instagram Graph APIのエンドポイント
+        $user_id = 'me';
+        $fields = 'id,media_type,media_url,thumbnail_url,permalink,caption,timestamp,username';
+        $api_url = "https://graph.instagram.com/{$user_id}/media?fields={$fields}&limit={$limit}&access_token={$access_token}";
+        
+        // APIリクエスト
+        $response = wp_remote_get($api_url, [
+            'timeout' => 15,
+        ]);
+        
+        if (is_wp_error($response)) {
+            return [
+                'count' => 0,
+                'posts' => [],
+                'message' => 'Failed to fetch Instagram data: ' . $response->get_error_message(),
+            ];
+        }
+        
+        $body = wp_remote_retrieve_body($response);
+        $data = json_decode($body, true);
+        
+        if (!isset($data['data']) || empty($data['data'])) {
+            return [
+                'count' => 0,
+                'posts' => [],
+                'message' => 'No Instagram posts found in API response.',
+            ];
+        }
+        
+        $posts = [];
+        foreach ($data['data'] as $post) {
+            // メディアURLを取得
+            $media_url = '';
+            if (isset($post['media_url'])) {
+                $media_url = $post['media_url'];
+            } elseif (isset($post['thumbnail_url'])) {
+                $media_url = $post['thumbnail_url'];
+            }
+            
+            if (empty($media_url)) {
+                continue;
+            }
+            
+            $posts[] = [
+                'id' => $post['id'],
+                'media_url' => $media_url,
+                'permalink' => $post['permalink'] ?? '',
+                'caption' => $post['caption'] ?? '',
+                'media_type' => $post['media_type'] ?? 'IMAGE',
+                'timestamp' => $post['timestamp'] ?? '',
+                'username' => $post['username'] ?? '',
+            ];
+        }
+        
+        return [
+            'count' => count($posts),
+            'posts' => $posts,
+            'username' => $posts[0]['username'] ?? '',
         ];
     }
     

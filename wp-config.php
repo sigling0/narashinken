@@ -79,7 +79,8 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
 
 /* Add any custom values between this line and the "stop editing" line. */
 
-
+// Instagram Graph API アクセストークン
+define( 'INSTAGRAM_GRAPH_ACCESS_TOKEN', 'IGAASZCAZANbwHZABZAFRnMTBtcHZABUHIya2hqUHR0WGJyZAHpOZAmhPdk1ucU1Ud0dYb2RLWTFPQmhqdUpXVUNwWXJxT2s1TldYRG0yeHFVNWNrVDVxQkRSUHVqVnRYdkotTjlOcFE3c0d1QU5sWlR1aTF3elFuVGxhRU03RGFVakQzWQZDZD' );
 
 /**
  * For developers: WordPress debugging mode.

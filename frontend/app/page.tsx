@@ -1,4 +1,4 @@
-import { getPostsByCategorySlug, getCategories, getTags, getInstagramFeed } from '@/lib/wordpress';
+import { getPostsByCategorySlug, getCategories, getTags, getInstagramFromGraphAPI } from '@/lib/wordpress';
 import PostCard from '@/components/PostCard';
 import Slideshow from '@/components/Slideshow';
 import InstagramFeed from '@/components/InstagramFeed';
@@ -73,7 +73,7 @@ export default async function Home() {
     fetchWithTimeout(getPostsByCategorySlug('blog', 6)).catch(() => []),
     fetchWithTimeout(getCategories()).catch(() => []),
     fetchWithTimeout(getTags()).catch(() => []),
-    fetchWithTimeout(getInstagramFeed(18)).catch(() => ({ count: 0, posts: [], message: 'Instagram feed unavailable' })),
+    fetchWithTimeout(getInstagramFromGraphAPI(18)).catch(() => ({ count: 0, posts: [], message: 'Instagram feed unavailable' })),
   ]);
 
   return (
