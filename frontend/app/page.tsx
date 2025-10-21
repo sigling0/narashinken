@@ -323,14 +323,28 @@ export default async function Home() {
                 <p className="text-sm" style={{color: 'var(--color-text-secondary)'}}>ブログ記事はまだありません</p>
               )}
             </section>
+            
+            {/* インスタグラムセクション - スマートフォン表示 */}
+            <section className="lg:hidden">
+              <InstagramFeed 
+                posts={instagramFeed.posts} 
+                message={instagramFeed.message}
+                username={instagramFeed.username}
+                profilePictureUrl={instagramFeed.profile_picture_url}
+              />
+            </section>
           </main>
 
           {/* 右カラム */}
           <aside className="hidden lg:block lg:col-span-3 space-y-8">
-            {/* インスタグラムセクション */}
+            {/* インスタグラムセクション - PC表示 */}
             <section>
-              <SmallSectionHeader title="Instagram" />
-              <InstagramFeed posts={instagramFeed.posts} message={instagramFeed.message} />
+              <InstagramFeed 
+                posts={instagramFeed.posts} 
+                message={instagramFeed.message}
+                username={instagramFeed.username}
+                profilePictureUrl={instagramFeed.profile_picture_url}
+              />
             </section>
 
             {/* 記事検索セクション */}

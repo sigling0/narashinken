@@ -254,7 +254,24 @@ class HeadlessAPIConfig {
             ];
         }
         
-        // Instagram Graph APIのエンドポイント
+        // ユーザー情報を取得（プロフィール写真を含む）
+        $user_fields = 'id,username,account_type,media_count';
+        $user_api_url = "https://graph.instagram.com/me?fields={$user_fields}&access_token={$access_token}";
+        
+        $user_response = wp_remote_get($user_api_url, [
+            'timeout' => 15,
+        ]);
+        
+        $profile_picture_url = '';
+        $account_username = '';
+        
+        if (!is_wp_error($user_response)) {
+            $user_body = wp_remote_retrieve_body($user_response);
+            $user_data = json_decode($user_body, true);
+            $account_username = $user_data['username'] ?? '';
+        }
+        
+        // Instagram Graph APIで投稿を取得
         $user_id = 'me';
         $fields = 'id,media_type,media_url,thumbnail_url,permalink,caption,timestamp,username';
         $api_url = "https://graph.instagram.com/{$user_id}/media?fields={$fields}&limit={$limit}&access_token={$access_token}";
@@ -281,6 +298,16 @@ class HeadlessAPIConfig {
                 'posts' => [],
                 'message' => 'No Instagram posts found in API response.',
             ];
+        }
+        
+        // 最初の投稿からプロフィール写真として使用する画像を取得
+        if (!empty($data['data'])) {
+            $first_post = $data['data'][0];
+            if (isset($first_post['media_url'])) {
+                $profile_picture_url = $first_post['media_url'];
+            } elseif (isset($first_post['thumbnail_url'])) {
+                $profile_picture_url = $first_post['thumbnail_url'];
+            }
         }
         
         $posts = [];
@@ -311,7 +338,8 @@ class HeadlessAPIConfig {
         return [
             'count' => count($posts),
             'posts' => $posts,
-            'username' => $posts[0]['username'] ?? '',
+            'username' => $account_username ?: ($posts[0]['username'] ?? ''),
+            'profile_picture_url' => $profile_picture_url,
         ];
     }
     

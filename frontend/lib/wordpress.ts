@@ -105,6 +105,8 @@ export interface InstagramFeed {
   count: number;
   posts: InstagramPost[];
   message?: string;
+  username?: string;
+  profile_picture_url?: string;
 }
 
 // サイト情報の取得
