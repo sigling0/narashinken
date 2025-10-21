@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { MenuItem } from '@/lib/wordpress';
 
@@ -12,8 +13,10 @@ interface HeaderProps {
 }
 
 export default function Header({ menuItems = [], categories = [], tags = [] }: HeaderProps) {
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
+  const [mobileKeyword, setMobileKeyword] = useState('');
   
   // カテゴリとタグをフィルタリング・ソート
   const activeCategories = categories
@@ -25,6 +28,16 @@ export default function Header({ menuItems = [], categories = [], tags = [] }: H
     .filter((tag: any) => tag.count > 0)
     .sort((a: any, b: any) => b.count - a.count)
     .slice(0, 15);
+  
+  // モバイルメニューからのキーワード検索
+  const handleMobileKeywordSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (mobileKeyword.trim()) {
+      router.push(`/posts?search=${encodeURIComponent(mobileKeyword.trim())}`);
+      setIsMenuOpen(false);
+      setMobileKeyword('');
+    }
+  };
 
   return (
     <>
@@ -263,10 +276,12 @@ export default function Header({ menuItems = [], categories = [], tags = [] }: H
               >
                 キーワード検索
               </label>
-              <div className="flex gap-2">
+              <form onSubmit={handleMobileKeywordSearch} className="flex gap-2">
                 <input 
                   type="search"
                   id="keyword-search-mobile"
+                  value={mobileKeyword}
+                  onChange={(e) => setMobileKeyword(e.target.value)}
                   placeholder="キーワードを入力"
                   className="flex-1 px-3 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-offset-0"
                   style={{
@@ -276,6 +291,7 @@ export default function Header({ menuItems = [], categories = [], tags = [] }: H
                   } as React.CSSProperties}
                 />
                 <button 
+                  type="submit"
                   className="px-4 py-2 text-sm font-medium rounded transition-colors hover:opacity-90"
                   style={{
                     backgroundColor: 'var(--color-dojoprimary-key)',
@@ -284,7 +300,7 @@ export default function Header({ menuItems = [], categories = [], tags = [] }: H
                 >
                   検索
                 </button>
-              </div>
+              </form>
             </div>
 
             {/* カテゴリー検索 */}

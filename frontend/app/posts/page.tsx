@@ -12,12 +12,13 @@ export const metadata = {
 };
 
 interface Props {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; search?: string }>;
 }
 
 export default async function PostsPage({ searchParams }: Props) {
   const params = await searchParams;
   const currentPage = Number(params.page) || 1;
+  const searchKeyword = params.search || '';
   const perPage = 12;
   
   let posts = [];
@@ -36,7 +37,7 @@ export default async function PostsPage({ searchParams }: Props) {
     };
 
     const [postsData, categoriesData, tagsData] = await Promise.all([
-      fetchWithTimeout(getPosts(currentPage, perPage)).catch(() => ({ posts: [], totalPages: 1, total: 0 })),
+      fetchWithTimeout(getPosts(currentPage, perPage, searchKeyword)).catch(() => ({ posts: [], totalPages: 1, total: 0 })),
       fetchWithTimeout(getCategories()).catch(() => []),
       fetchWithTimeout(getTags()).catch(() => []),
     ]);
@@ -59,6 +60,12 @@ export default async function PostsPage({ searchParams }: Props) {
           <Link href="/" className="hover:underline">ホーム</Link>
           <span className="mx-2">/</span>
           <span style={{color: 'var(--color-text-primary)'}}>記事一覧</span>
+          {searchKeyword && (
+            <>
+              <span className="mx-2">/</span>
+              <span style={{color: 'var(--color-text-primary)'}}>検索結果</span>
+            </>
+          )}
         </nav>
 
         {/* ヘッダー */}
@@ -75,14 +82,20 @@ export default async function PostsPage({ searchParams }: Props) {
               className="text-3xl font-bold"
               style={{color: 'var(--color-text-title)'}}
             >
-              記事一覧
+              {searchKeyword ? `「${searchKeyword}」の検索結果` : '記事一覧'}
             </h1>
             <p 
               className="text-sm mt-2"
               style={{color: 'var(--color-text-tertiary)'}}
             >
-              {total > 0 ? `全${total}件の記事` : '記事がありません'}
-              {currentPage > 1 && ` (${currentPage}ページ目)`}
+              {searchKeyword ? (
+                total > 0 ? `${total}件の記事が見つかりました` : '該当する記事がありません'
+              ) : (
+                <>
+                  {total > 0 ? `全${total}件の記事` : '記事がありません'}
+                  {currentPage > 1 && ` (${currentPage}ページ目)`}
+                </>
+              )}
             </p>
           </div>
         </header>

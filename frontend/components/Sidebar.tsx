@@ -1,4 +1,8 @@
+'use client';
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 interface SidebarProps {
   categories: any[];
@@ -27,6 +31,9 @@ function SmallSectionHeader({ title }: { title: string }) {
 }
 
 export default function Sidebar({ categories, tags }: SidebarProps) {
+  const router = useRouter();
+  const [keyword, setKeyword] = useState('');
+  
   // 使用されているカテゴリーのみをフィルタし、記事数の多い順にソート
   const activeCategories = categories
     .filter((cat: any) => cat.count > 0)
@@ -38,6 +45,14 @@ export default function Sidebar({ categories, tags }: SidebarProps) {
     .filter((tag: any) => tag.count > 0)
     .sort((a: any, b: any) => b.count - a.count)
     .slice(0, 15);
+  
+  // キーワード検索の実行
+  const handleKeywordSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (keyword.trim()) {
+      router.push(`/posts?search=${encodeURIComponent(keyword.trim())}`);
+    }
+  };
   
   return (
     <aside className="space-y-8">
@@ -54,10 +69,12 @@ export default function Sidebar({ categories, tags }: SidebarProps) {
             >
               キーワード検索
             </label>
-            <div className="flex gap-2">
+            <form onSubmit={handleKeywordSearch} className="flex gap-2">
               <input 
                 type="search"
                 id="keyword-search"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
                 placeholder="キーワードを入力"
                 className="flex-1 px-3 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-offset-0"
                 style={{
@@ -67,6 +84,7 @@ export default function Sidebar({ categories, tags }: SidebarProps) {
                 } as React.CSSProperties}
               />
               <button 
+                type="submit"
                 className="px-4 py-2 text-sm font-medium rounded transition-colors hover:opacity-90"
                 style={{
                   backgroundColor: 'var(--color-dojoprimary-key)',
@@ -75,7 +93,7 @@ export default function Sidebar({ categories, tags }: SidebarProps) {
               >
                 検索
               </button>
-            </div>
+            </form>
           </div>
 
           {/* カテゴリー検索 */}

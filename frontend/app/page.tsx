@@ -2,6 +2,7 @@ import { getPostsByCategorySlug, getCategories, getTags, getInstagramFromGraphAP
 import PostCard from '@/components/PostCard';
 import Slideshow from '@/components/Slideshow';
 import InstagramFeed from '@/components/InstagramFeed';
+import SearchSection from '@/components/SearchSection';
 import Link from 'next/link';
 
 export const revalidate = 3600; // 1時間ごとに再生成
@@ -73,7 +74,13 @@ export default async function Home() {
     fetchWithTimeout(getPostsByCategorySlug('blog', 6)).catch(() => []),
     fetchWithTimeout(getCategories()).catch(() => []),
     fetchWithTimeout(getTags()).catch(() => []),
-    fetchWithTimeout(getInstagramFromGraphAPI(18)).catch(() => ({ count: 0, posts: [], message: 'Instagram feed unavailable' })),
+    fetchWithTimeout(getInstagramFromGraphAPI(18)).catch(() => ({ 
+      count: 0, 
+      posts: [], 
+      message: 'Instagram feed unavailable',
+      username: undefined,
+      profile_picture_url: undefined 
+    })),
   ]);
 
   return (
@@ -347,101 +354,7 @@ export default async function Home() {
             />
 
             {/* 記事検索セクション */}
-            <section>
-              <SmallSectionHeader title="記事検索" />
-              <div className="space-y-4">
-                {/* キーワード検索 */}
-                <div>
-                  <label 
-                    htmlFor="keyword-search-home"
-                    className="block text-sm font-semibold mb-2"
-                    style={{color: 'var(--color-text-primary)'}}
-                  >
-                    キーワード検索
-                  </label>
-                  <div className="flex gap-2">
-                    <input 
-                      type="search"
-                      id="keyword-search-home"
-                      placeholder="キーワードを入力"
-                      className="flex-1 px-3 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-offset-0"
-                      style={{
-                        borderColor: 'var(--color-dojo-secondary-key)',
-                        color: 'var(--color-text-primary)',
-                        '--tw-ring-color': 'var(--color-dojoprimary-key)'
-                      } as React.CSSProperties}
-                    />
-                    <button 
-                      className="px-4 py-2 text-sm font-medium rounded transition-colors hover:opacity-90"
-                      style={{
-                        backgroundColor: 'var(--color-dojoprimary-key)',
-                        color: 'white'
-                      }}
-                    >
-                      検索
-                    </button>
-                  </div>
-                </div>
-
-                {/* カテゴリー検索 */}
-                <div>
-                  <label 
-                    htmlFor="category-search"
-                    className="block text-sm font-semibold mb-2"
-                    style={{color: 'var(--color-text-primary)'}}
-                  >
-                    カテゴリー
-                  </label>
-                  <div className="space-y-1.5">
-                    {categories
-                      .filter((cat: any) => cat.count > 0)
-                      .sort((a: any, b: any) => b.count - a.count)
-                      .slice(0, 10)
-                      .map((category: any) => (
-                        <div key={category.id}>
-                          <Link
-                            href={`/category/${category.slug}`}
-                            className="inline-block text-sm underline transition-all duration-200 hover:font-bold hover:translate-x-1"
-                            style={{color: 'var(--color-text-tertiary)'}}
-                          >
-                            {category.name} ({category.count})
-                          </Link>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-
-                {/* タグ検索 */}
-                <div>
-                  <label 
-                    className="block text-sm font-semibold mb-2"
-                    style={{color: 'var(--color-text-primary)'}}
-                  >
-                    タグ
-                  </label>
-                  <div className="flex flex-wrap gap-2">
-                    {tags
-                      .filter((tag: any) => tag.count > 0)
-                      .sort((a: any, b: any) => b.count - a.count)
-                      .slice(0, 15)
-                      .map((tag: any) => (
-                        <Link
-                          key={tag.id}
-                          href={`/tag/${tag.slug}`}
-                          className="inline-block px-2 py-1 text-xs rounded border transition-all duration-200 hover:scale-110 hover:shadow-md"
-                          style={{
-                            backgroundColor: 'var(--color-dojo-bg-accent)',
-                            borderColor: 'var(--color-dojo-tertiary-accent)',
-                            color: 'var(--color-text-tertiary)'
-                          }}
-                        >
-                          {tag.name}
-                        </Link>
-                      ))}
-                  </div>
-                </div>
-              </div>
-            </section>
+            <SearchSection categories={categories} tags={tags} />
           </aside>
         </div>
       </div>

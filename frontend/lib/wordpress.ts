@@ -133,19 +133,26 @@ export async function getRecentPosts(perPage: number = 10): Promise<Post[]> {
   }
 }
 
-// すべての投稿を取得（ページネーション対応）
-export async function getPosts(page: number = 1, perPage: number = 10): Promise<{
+// すべての投稿を取得（ページネーション対応、キーワード検索対応）
+export async function getPosts(page: number = 1, perPage: number = 10, search?: string): Promise<{
   posts: any[];
   totalPages: number;
   total: number;
 }> {
   try {
+    const params: any = {
+      page,
+      per_page: perPage,
+      _embed: true,
+    };
+    
+    // キーワード検索が指定されている場合
+    if (search && search.trim()) {
+      params.search = search.trim();
+    }
+    
     const response = await wpAPI.get('/wp/v2/posts', {
-      params: {
-        page,
-        per_page: perPage,
-        _embed: true,
-      },
+      params,
     });
     
     return {
