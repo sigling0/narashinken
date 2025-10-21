@@ -3,7 +3,7 @@ import { Shippori_Mincho_B1 } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { getMenuByLocation } from "@/lib/wordpress";
+import { getMenuByLocation, getCategories, getTags } from "@/lib/wordpress";
 
 const shipporiMincho = Shippori_Mincho_B1({ 
   subsets: ["latin"],
@@ -34,6 +34,18 @@ export default async function RootLayout({
     // メニューが取得できなくても続行
   }
 
+  // カテゴリとタグの取得
+  let categories = [];
+  let tags = [];
+  try {
+    [categories, tags] = await Promise.all([
+      getCategories(),
+      getTags()
+    ]);
+  } catch (error) {
+    console.error('Categories/Tags fetch error:', error);
+  }
+
   return (
     <html lang="ja" style={{scrollBehavior: 'smooth'}}>
       <head>
@@ -41,7 +53,7 @@ export default async function RootLayout({
       </head>
       <body className={shipporiMincho.className} style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
         <div className="flex flex-col min-h-screen">
-          <Header menuItems={menuItems} />
+          <Header menuItems={menuItems} categories={categories} tags={tags} />
           <main className="flex-grow">
             {children}
           </main>
