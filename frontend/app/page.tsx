@@ -11,11 +11,11 @@ function SectionHeader({ title, link }: { title: string; link?: string }) {
   return (
     <header 
       className="flex items-end justify-between mb-6 pb-0.5 relative border-b-2"
-      style={{borderColor: 'var(--color-dojo-title)'}}
+      style={{borderColor: 'var(--color-dojoprimary-key)'}}
     >
       <div 
         className="absolute left-0 top-0 w-2 h-full"
-        style={{backgroundColor: 'var(--color-dojo-title)'}}
+        style={{backgroundColor: 'var(--color-dojoprimary-key)'}}
       />
       <h4 
         className="text-2xl font-bold pl-4.5 py-0.5"
@@ -42,11 +42,11 @@ function SmallSectionHeader({ title }: { title: string }) {
   return (
     <header 
       className="flex items-end mb-4.5 pb-0.5 relative border-b-2"
-      style={{borderColor: 'var(--color-dojo-title)'}}
+      style={{borderColor: 'var(--color-dojoprimary-key)'}}
     >
       <div 
         className="absolute left-0 top-0 w-2 h-full"
-        style={{backgroundColor: 'var(--color-dojo-title)'}}
+        style={{backgroundColor: 'var(--color-dojoprimary-key)'}}
       />
       <h5 
         className="text-lg font-extrabold pl-4.5 py-0.5"
@@ -77,7 +77,7 @@ export default async function Home() {
   ]);
 
   return (
-    <div style={{backgroundColor: 'var(--color-dojo-beige)'}}>
+    <div style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
       {/* スライドショー */}
       <Slideshow />
       
@@ -237,9 +237,10 @@ export default async function Home() {
                               {tags.slice(0, 3).map((tag: any) => (
                                 <span 
                                   key={tag.id}
-                                  className="inline-block px-1.5 py-0.5 rounded text-xs"
+                                  className="inline-block px-1.5 py-0.5 rounded text-xs border"
                                   style={{
-                                    backgroundColor: 'var(--color-dojo-tag)',
+                                    backgroundColor: 'var(--color-dojo-bg-accent)',
+                                    borderColor: 'var(--color-dojo-tertiary-accent)',
                                     color: 'var(--color-text-tertiary)'
                                   }}
                                 >
@@ -338,14 +339,12 @@ export default async function Home() {
           {/* 右カラム */}
           <aside className="hidden lg:block lg:col-span-3 space-y-8">
             {/* インスタグラムセクション - PC表示 */}
-            <section>
-              <InstagramFeed 
-                posts={instagramFeed.posts} 
-                message={instagramFeed.message}
-                username={instagramFeed.username}
-                profilePictureUrl={instagramFeed.profile_picture_url}
-              />
-            </section>
+            <InstagramFeed 
+              posts={instagramFeed.posts} 
+              message={instagramFeed.message}
+              username={instagramFeed.username}
+              profilePictureUrl={instagramFeed.profile_picture_url}
+            />
 
             {/* 記事検索セクション */}
             <section>
@@ -367,15 +366,15 @@ export default async function Home() {
                       placeholder="キーワードを入力"
                       className="flex-1 px-3 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-offset-0"
                       style={{
-                        borderColor: 'var(--color-dojo-tag)',
+                        borderColor: 'var(--color-dojo-secondary-key)',
                         color: 'var(--color-text-primary)',
-                        '--tw-ring-color': 'var(--color-dojo-title)'
+                        '--tw-ring-color': 'var(--color-dojoprimary-key)'
                       } as React.CSSProperties}
                     />
                     <button 
                       className="px-4 py-2 text-sm font-medium rounded transition-colors hover:opacity-90"
                       style={{
-                        backgroundColor: 'var(--color-dojo-title)',
+                        backgroundColor: 'var(--color-dojoprimary-key)',
                         color: 'white'
                       }}
                     >
@@ -399,14 +398,15 @@ export default async function Home() {
                       .sort((a: any, b: any) => b.count - a.count)
                       .slice(0, 10)
                       .map((category: any) => (
-                        <Link
-                          key={category.id}
-                          href={`/category/${category.slug}`}
-                          className="block text-sm underline transition-all duration-200 hover:font-bold hover:translate-x-1"
-                          style={{color: 'var(--color-text-tertiary)'}}
-                        >
-                          {category.name} ({category.count})
-                        </Link>
+                        <div key={category.id}>
+                          <Link
+                            href={`/category/${category.slug}`}
+                            className="inline-block text-sm underline transition-all duration-200 hover:font-bold hover:translate-x-1"
+                            style={{color: 'var(--color-text-tertiary)'}}
+                          >
+                            {category.name} ({category.count})
+                          </Link>
+                        </div>
                       ))}
                   </div>
                 </div>
@@ -428,9 +428,10 @@ export default async function Home() {
                         <Link
                           key={tag.id}
                           href={`/tag/${tag.slug}`}
-                          className="inline-block px-2 py-1 text-xs rounded transition-all duration-200 hover:scale-110 hover:shadow-md"
+                          className="inline-block px-2 py-1 text-xs rounded border transition-all duration-200 hover:scale-110 hover:shadow-md"
                           style={{
-                            backgroundColor: 'var(--color-dojo-tag)',
+                            backgroundColor: 'var(--color-dojo-bg-accent)',
+                            borderColor: 'var(--color-dojo-tertiary-accent)',
                             color: 'var(--color-text-tertiary)'
                           }}
                         >

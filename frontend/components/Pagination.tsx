@@ -35,7 +35,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
           style={{
             backgroundColor: 'white',
             color: 'var(--color-text-primary)',
-            border: '1px solid var(--color-dojo-tag)'
+            border: '1px solid var(--color-dojo-secondary-key)'
           }}
         >
           ← 前へ
@@ -51,7 +51,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
             style={{
               backgroundColor: 'white',
               color: 'var(--color-text-primary)',
-              border: '1px solid var(--color-dojo-tag)'
+              border: '1px solid var(--color-dojo-secondary-key)'
             }}
           >
             1
@@ -71,9 +71,9 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
             page === currentPage ? 'font-extrabold' : ''
           }`}
           style={{
-            backgroundColor: page === currentPage ? 'var(--color-dojo-title)' : 'white',
+            backgroundColor: page === currentPage ? 'var(--color-dojoprimary-key)' : 'white',
             color: page === currentPage ? 'white' : 'var(--color-text-primary)',
-            border: `1px solid ${page === currentPage ? 'var(--color-dojo-title)' : 'var(--color-dojo-tag)'}`
+            border: `1px solid ${page === currentPage ? 'var(--color-dojoprimary-key)' : 'var(--color-dojo-secondary-key)'}`
           }}
         >
           {page}
@@ -92,7 +92,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
             style={{
               backgroundColor: 'white',
               color: 'var(--color-text-primary)',
-              border: '1px solid var(--color-dojo-tag)'
+              border: '1px solid var(--color-dojo-secondary-key)'
             }}
           >
             {totalPages}
@@ -108,7 +108,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
           style={{
             backgroundColor: 'white',
             color: 'var(--color-text-primary)',
-            border: '1px solid var(--color-dojo-tag)'
+            border: '1px solid var(--color-dojo-secondary-key)'
           }}
         >
           次へ →

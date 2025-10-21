@@ -10,11 +10,11 @@ function SmallSectionHeader({ title }: { title: string }) {
   return (
     <header 
       className="flex items-end mb-4.5 pb-0.5 relative border-b-2"
-      style={{borderColor: 'var(--color-dojo-title)'}}
+      style={{borderColor: 'var(--color-dojoprimary-key)'}}
     >
       <div 
         className="absolute left-0 top-0 w-2 h-full"
-        style={{backgroundColor: 'var(--color-dojo-title)'}}
+        style={{backgroundColor: 'var(--color-dojoprimary-key)'}}
       />
       <h5 
         className="text-lg font-extrabold pl-4.5 py-0.5"
@@ -61,15 +61,15 @@ export default function Sidebar({ categories, tags }: SidebarProps) {
                 placeholder="キーワードを入力"
                 className="flex-1 px-3 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-offset-0"
                 style={{
-                  borderColor: 'var(--color-dojo-tag)',
+                  borderColor: 'var(--color-dojo-secondary-key)',
                   color: 'var(--color-text-primary)',
-                  '--tw-ring-color': 'var(--color-dojo-title)'
+                  '--tw-ring-color': 'var(--color-dojoprimary-key)'
                 } as React.CSSProperties}
               />
               <button 
                 className="px-4 py-2 text-sm font-medium rounded transition-colors hover:opacity-90"
                 style={{
-                  backgroundColor: 'var(--color-dojo-title)',
+                  backgroundColor: 'var(--color-dojoprimary-key)',
                   color: 'white'
                 }}
               >
@@ -89,14 +89,15 @@ export default function Sidebar({ categories, tags }: SidebarProps) {
             </label>
             <div className="space-y-1.5">
               {activeCategories.map((category: any) => (
-                <Link
-                  key={category.id}
-                  href={`/category/${category.slug}`}
-                  className="block text-sm underline transition-all duration-200 hover:font-bold hover:translate-x-1"
-                  style={{color: 'var(--color-text-tertiary)'}}
-                >
-                  {category.name} ({category.count})
-                </Link>
+                <div key={category.id}>
+                  <Link
+                    href={`/category/${category.slug}`}
+                    className="inline-block text-sm underline transition-all duration-200 hover:font-bold hover:translate-x-1"
+                    style={{color: 'var(--color-text-tertiary)'}}
+                  >
+                    {category.name} ({category.count})
+                  </Link>
+                </div>
               ))}
             </div>
           </div>
@@ -114,9 +115,10 @@ export default function Sidebar({ categories, tags }: SidebarProps) {
                 <Link
                   key={tag.id}
                   href={`/tag/${tag.slug}`}
-                  className="inline-block px-2 py-1 text-xs rounded transition-all duration-200 hover:scale-110 hover:shadow-md"
+                  className="inline-block px-2 py-1 text-xs rounded border transition-all duration-200 hover:scale-110 hover:shadow-md"
                   style={{
-                    backgroundColor: 'var(--color-dojo-tag)',
+                    backgroundColor: 'var(--color-dojo-bg-accent)',
+                    borderColor: 'var(--color-dojo-tertiary-accent)',
                     color: 'var(--color-text-tertiary)'
                   }}
                 >

@@ -3,16 +3,23 @@
 
 @theme {
   /* 奈良心剣道場カラースキーム */
-  --color-dojo-green-light: #77aa77;
-  --color-dojo-green-dark: #006400;
-  --color-dojo-beige: #eef8ea;
-  --color-dojo-beige-active: #e0dace;
-  --color-dojo-tag: #cbc5ba;
-  --color-dojo-title: #999286;
-  --color-text-primary: #1a1a1c;
-  --color-text-secondary: #4d4d4d;
-  --color-text-tertiary: #6e6e6e;
-  --color-header-bg: rgba(243, 259, 239, 0.88);
+  /* キーカラー */
+--color-dojoprimary-key: #2d6a3e; /*ボタン・アクティブ要素*/
+--color-dojo-secondary-key: #4a8f5e; /*ボーダー・セカンダリーボタン*/
+--color-dojo-tertiary-key: #7ab88a; /*ホバー・ライト要素*/
+--color-dojo-bg-key: #eef8ea; /*ページ背景*/
+
+/* アクセントカラー */
+--color-dojo-primary-accent: #d85a4a; /*強調・CTA*/
+--color-dojo-secondary-accent: #e8826f; /*ハイライト*/
+--color-dojo-tertiary-accent: #f0a89a; /*ライト強調*/
+--color-dojo-bg-accent: #fef5f3; /*アクセント背景*/
+
+/* ニュートラル */
+--color-text-primary: #1a1a1c; /*テキスト*/
+--color-text-secondary: #4d4d4d;/*サブテキスト*/
+--color-text-tertiary: #6e6e6e;
+--color-header-bg: rgba(243, 259, 239, 0.88); /*ヘッダー背景*/
 }
 
 /* プロースタイリング（記事本文用） */

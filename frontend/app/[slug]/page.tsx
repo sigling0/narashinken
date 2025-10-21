@@ -76,7 +76,7 @@ export default async function PageSlug({ params }: Props) {
   const featuredImage = page._embedded?.['wp:featuredmedia']?.[0];
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl" style={{backgroundColor: 'var(--color-dojo-beige)'}}>
+    <div className="container mx-auto px-4 py-8 max-w-4xl" style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
       {/* パンくずリスト */}
       <nav className="mb-8 text-sm" style={{color: 'var(--color-text-tertiary)'}}>
         <Link href="/" className="hover:underline">ホーム</Link>
@@ -114,11 +114,11 @@ export default async function PageSlug({ params }: Props) {
       />
 
       {/* 戻るボタン */}
-      <div className="mt-12 pt-8 border-t" style={{borderColor: 'var(--color-dojo-tag)'}}>
+      <div className="mt-12 pt-8 border-t" style={{borderColor: 'var(--color-dojo-secondary-key)'}}>
         <Link
           href="/"
           className="inline-flex items-center font-medium hover:underline transition-colors"
-          style={{color: 'var(--color-dojo-title)'}}
+          style={{color: 'var(--color-dojoprimary-key)'}}
         >
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />

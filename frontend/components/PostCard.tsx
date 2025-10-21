@@ -67,7 +67,7 @@ export default function PostCard({ post }: PostCardProps) {
           ) : (
             <div 
               className="w-full h-full flex items-center justify-center"
-              style={{backgroundColor: 'var(--color-dojo-beige-active)'}}
+              style={{backgroundColor: 'var(--color-dojo-tertiary-key)'}}
             >
               <span className="text-sm" style={{color: 'var(--color-text-tertiary)'}}>No Image</span>
             </div>
@@ -106,9 +106,10 @@ export default function PostCard({ post }: PostCardProps) {
                 {tags.slice(0, 3).map((tag) => (
                   <span 
                     key={tag.id}
-                    className="inline-block px-1.5 py-0.5 rounded text-xs"
+                    className="inline-block px-1.5 py-0.5 rounded text-xs border"
                     style={{
-                      backgroundColor: 'var(--color-dojo-tag)',
+                      backgroundColor: 'var(--color-dojo-bg-accent)',
+                      borderColor: 'var(--color-dojo-tertiary-accent)',
                       color: 'var(--color-text-tertiary)'
                     }}
                   >

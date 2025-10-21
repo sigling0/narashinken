@@ -20,7 +20,7 @@ export default function InstagramFeed({ posts, message, accountName = 'narashink
       <div 
         className="rounded-lg p-8 text-center border-2 border-dashed"
         style={{
-          borderColor: 'var(--color-dojo-tag)',
+          borderColor: 'var(--color-dojo-secondary-key)',
           backgroundColor: 'rgba(255,255,255,0.5)'
         }}
       >
@@ -120,7 +120,7 @@ export default function InstagramFeed({ posts, message, accountName = 'narashink
         rel="noopener noreferrer"
         className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg font-medium text-sm transition-all duration-300 hover:opacity-90 hover:shadow-md"
         style={{
-          backgroundColor: 'var(--color-dojo-title)',
+          backgroundColor: 'var(--color-dojoprimary-key)',
           color: 'white'
         }}
       >

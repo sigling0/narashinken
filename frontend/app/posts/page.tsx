@@ -52,7 +52,7 @@ export default async function PostsPage({ searchParams }: Props) {
   }
 
   return (
-    <div style={{backgroundColor: 'var(--color-dojo-beige)'}}>
+    <div style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
       <div className="container mx-auto px-4 md:px-6 py-8">
         {/* パンくずリスト */}
         <nav className="mb-6 text-sm" style={{color: 'var(--color-text-tertiary)'}}>
@@ -64,11 +64,11 @@ export default async function PostsPage({ searchParams }: Props) {
         {/* ヘッダー */}
         <header 
           className="flex items-end justify-between mb-6 pb-0.5 relative border-b-2"
-          style={{borderColor: 'var(--color-dojo-title)'}}
+          style={{borderColor: 'var(--color-dojoprimary-key)'}}
         >
           <div 
             className="absolute left-0 top-0 w-2 h-full"
-            style={{backgroundColor: 'var(--color-dojo-title)'}}
+            style={{backgroundColor: 'var(--color-dojoprimary-key)'}}
           />
           <div className="pl-4.5 py-0.5">
             <h1 
@@ -106,7 +106,7 @@ export default async function PostsPage({ searchParams }: Props) {
               <div 
                 className="rounded-lg border-2 p-8 text-center"
                 style={{
-                  borderColor: 'var(--color-dojo-tag)',
+                  borderColor: 'var(--color-dojo-secondary-key)',
                   backgroundColor: 'rgba(255,255,255,0.5)',
                   color: 'var(--color-text-tertiary)'
                 }}

@@ -140,7 +140,7 @@ export default function Footer() {
       <div 
         className="w-full h-20"
         style={{
-          background: 'linear-gradient(var(--color-dojo-beige) 0%, var(--color-dojo-green-light) 60%, var(--color-dojo-green-dark) 100%)'
+          background: 'linear-gradient(var(--color-dojo-bg-key) 0%, var(--color-dojo-secondary-key) 60%, var(--color-dojoprimary-key) 100%)'
         }}
       />
     </footer>

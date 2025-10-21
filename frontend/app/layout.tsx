@@ -39,7 +39,7 @@ export default async function RootLayout({
       <head>
         <link rel="icon" href="/favicon.png" />
       </head>
-      <body className={shipporiMincho.className} style={{backgroundColor: 'var(--color-dojo-beige)'}}>
+      <body className={shipporiMincho.className} style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
         <div className="flex flex-col min-h-screen">
           <Header menuItems={menuItems} />
           <main className="flex-grow">

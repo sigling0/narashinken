@@ -81,7 +81,7 @@ export default async function PostPage({ params }: Props) {
   });
 
   return (
-    <article className="container mx-auto px-4 py-8 max-w-4xl" style={{backgroundColor: 'var(--color-dojo-beige)'}}>
+    <article className="container mx-auto px-4 py-8 max-w-4xl" style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
       {/* パンくずリスト */}
       <nav className="mb-8 text-sm" style={{color: 'var(--color-text-tertiary)'}}>
         <Link href="/" className="hover:underline">ホーム</Link>
@@ -130,9 +130,10 @@ export default async function PostPage({ params }: Props) {
               <Link
                 key={category.id}
                 href={`/category/${category.slug}`}
-                className="px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110 hover:shadow-md"
+                className="px-3 py-1 rounded-full text-sm border transition-all duration-300 hover:scale-110 hover:shadow-md"
                 style={{
-                  backgroundColor: 'var(--color-dojo-tag)',
+                  backgroundColor: 'var(--color-dojo-bg-accent)',
+                  borderColor: 'var(--color-dojo-tertiary-accent)',
                   color: 'var(--color-text-primary)'
                 }}
               >
@@ -151,16 +152,17 @@ export default async function PostPage({ params }: Props) {
 
       {/* タグ */}
       {post._embedded?.['wp:term']?.[1] && post._embedded['wp:term'][1].length > 0 && (
-        <div className="border-t pt-6" style={{borderColor: 'var(--color-dojo-tag)'}}>
+        <div className="border-t pt-6" style={{borderColor: 'var(--color-dojo-tertiary-accent)'}}>
           <h3 className="text-sm font-semibold mb-3" style={{color: 'var(--color-text-secondary)'}}>タグ:</h3>
           <div className="flex flex-wrap gap-2">
             {post._embedded['wp:term'][1].map((tag: any) => (
               <Link
                 key={tag.id}
                 href={`/tag/${tag.slug}`}
-                className="px-3 py-1 rounded-full text-sm transition-all duration-300 hover:scale-110 hover:shadow-md"
+                className="px-3 py-1 rounded-full text-sm border transition-all duration-300 hover:scale-110 hover:shadow-md"
                 style={{
-                  backgroundColor: 'var(--color-dojo-tag)',
+                  backgroundColor: 'var(--color-dojo-bg-accent)',
+                  borderColor: 'var(--color-dojo-tertiary-accent)',
                   color: 'var(--color-text-tertiary)'
                 }}
               >
@@ -172,11 +174,11 @@ export default async function PostPage({ params }: Props) {
       )}
 
       {/* 戻るボタン */}
-      <div className="mt-12 pt-8 border-t" style={{borderColor: 'var(--color-dojo-tag)'}}>
+      <div className="mt-12 pt-8 border-t" style={{borderColor: 'var(--color-dojo-secondary-key)'}}>
         <Link
           href="/posts"
           className="inline-flex items-center font-medium hover:underline transition-colors"
-          style={{color: 'var(--color-dojo-title)'}}
+          style={{color: 'var(--color-dojoprimary-key)'}}
         >
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
