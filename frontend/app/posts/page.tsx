@@ -21,12 +21,12 @@ export default async function PostsPage({ searchParams }: Props) {
   const searchKeyword = params.search || '';
   const perPage = 12;
   
-  let posts = [];
-  let totalPages = 1;
-  let total = 0;
-  let categories = [];
-  let tags = [];
-  let error = null;
+  let posts: any[] = [];
+  let totalPages: number = 1;
+  let total: number = 0;
+  let categories: any[] = [];
+  let tags: any[] = [];
+  let error: string | null = null;
 
   try {
     const fetchWithTimeout = async <T,>(promise: Promise<T>, timeoutMs: number = 8000): Promise<T> => {

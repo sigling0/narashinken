@@ -35,8 +35,8 @@ export default async function RootLayout({
   }
 
   // カテゴリとタグの取得
-  let categories = [];
-  let tags = [];
+  let categories: any[] = [];
+  let tags: any[] = [];
   try {
     [categories, tags] = await Promise.all([
       getCategories(),

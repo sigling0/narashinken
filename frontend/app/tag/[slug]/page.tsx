@@ -27,11 +27,11 @@ export default async function TagPage({ params, searchParams }: Props) {
   const currentPage = Number(search.page) || 1;
   const perPage = 12;
   
-  let allPosts = [];
-  let tag = null;
-  let categories = [];
-  let tags = [];
-  let error = null;
+  let allPosts: any[] = [];
+  let tag: any = null;
+  let categories: any[] = [];
+  let tags: any[] = [];
+  let error: string | null = null;
 
   try {
     const fetchWithTimeout = async <T,>(promise: Promise<T>, timeoutMs: number = 8000): Promise<T> => {
