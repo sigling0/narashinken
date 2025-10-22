@@ -20,6 +20,7 @@ class HeadlessAPIConfig {
             'http://localhost:3000',
             'http://localhost:3001',
             'https://narashinken.com', // 本番環境のドメインを追加
+            'https://sigling-pg.com',
             // 必要に応じてステージング環境なども追加
         ];
         
