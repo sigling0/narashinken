@@ -24,8 +24,8 @@ class HeadlessAPIConfig {
             // Vercelドメイン（*.vercel.app）は add_cors_headers() で動的に許可
         ];
         
-        // SiteGuardのREST API制限を回避（ヘッドレス用に必要なエンドポイントを許可）
-        add_filter('rest_pre_dispatch', [$this, 'bypass_siteguard_restriction'], 5, 3);
+        // SiteGuardのREST API制限を無効化（ヘッドレスCMS用）
+        add_action('plugins_loaded', [$this, 'disable_siteguard_rest_restriction'], 1);
         
         // CORSヘッダーの追加
         add_action('rest_api_init', [$this, 'add_cors_headers']);
@@ -44,27 +44,16 @@ class HeadlessAPIConfig {
     }
     
     /**
-     * SiteGuardのREST API制限を回避
-     * ヘッドレスCMSとして使用するために必要なエンドポイントへのアクセスを許可
+     * SiteGuardのREST API制限を無効化
+     * ヘッドレスCMSとして使用するためにREST APIへのアクセスを許可
      */
-    public function bypass_siteguard_restriction($result, $wp_rest_server, $request) {
-        $route = $request->get_route();
+    public function disable_siteguard_rest_restriction() {
+        global $siteguard_author_query;
         
-        // ヘッドレスCMSで必要なエンドポイントのリスト
-        $allowed_routes = [
-            '/wp/v2/',
-            '/headless/v1/',
-            '/oembed/',
-        ];
-        
-        foreach ($allowed_routes as $allowed_route) {
-            if (strpos($route, $allowed_route) === 0) {
-                // このルートへのアクセスを許可（SiteGuard制限をバイパス）
-                return $result;
-            }
+        // SiteGuardのREST API制限フィルターを削除
+        if (isset($siteguard_author_query) && is_object($siteguard_author_query)) {
+            remove_filter('rest_pre_dispatch', [$siteguard_author_query, 'handler_deny_rest_api'], 10);
         }
-        
-        return $result;
     }
     
     /**
