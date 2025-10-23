@@ -169,9 +169,12 @@ export async function getPosts(page: number = 1, perPage: number = 10, search?: 
 // スラッグで投稿を取得
 export async function getPostBySlug(slug: string): Promise<any> {
   try {
+    // スラッグがURLエンコードされている場合はデコード
+    const decodedSlug = decodeURIComponent(slug);
+    
     const response = await wpAPI.get('/wp/v2/posts', {
       params: {
-        slug,
+        slug: decodedSlug,
         _embed: true,
       },
     });
@@ -216,9 +219,12 @@ export async function getPostsByCategory(slug: string): Promise<Post[]> {
 // カテゴリー別投稿の取得（標準API、件数指定可能）
 export async function getPostsByCategorySlug(slug: string, perPage: number = 10): Promise<any[]> {
   try {
+    // スラッグがURLエンコードされている場合はデコード
+    const decodedSlug = decodeURIComponent(slug);
+    
     // まずカテゴリーIDを取得
     const categoriesResponse = await wpAPI.get('/wp/v2/categories', {
-      params: { slug }
+      params: { slug: decodedSlug }
     });
     
     if (categoriesResponse.data.length === 0) {
@@ -246,9 +252,12 @@ export async function getPostsByCategorySlug(slug: string, perPage: number = 10)
 // タグ別投稿の取得
 export async function getPostsByTagSlug(slug: string, perPage: number = 10): Promise<any[]> {
   try {
+    // スラッグがURLエンコードされている場合はデコード
+    const decodedSlug = decodeURIComponent(slug);
+    
     // まずタグIDを取得
     const tagsResponse = await wpAPI.get('/wp/v2/tags', {
-      params: { slug }
+      params: { slug: decodedSlug }
     });
     
     if (tagsResponse.data.length === 0) {
@@ -276,8 +285,11 @@ export async function getPostsByTagSlug(slug: string, perPage: number = 10): Pro
 // タグ情報の取得
 export async function getTagBySlug(slug: string): Promise<any> {
   try {
+    // スラッグがURLエンコードされている場合はデコード
+    const decodedSlug = decodeURIComponent(slug);
+    
     const response = await wpAPI.get('/wp/v2/tags', {
-      params: { slug }
+      params: { slug: decodedSlug }
     });
     
     if (response.data.length === 0) {
@@ -294,8 +306,11 @@ export async function getTagBySlug(slug: string): Promise<any> {
 // カテゴリー情報の取得
 export async function getCategoryBySlug(slug: string): Promise<any> {
   try {
+    // スラッグがURLエンコードされている場合はデコード
+    const decodedSlug = decodeURIComponent(slug);
+    
     const response = await wpAPI.get('/wp/v2/categories', {
-      params: { slug }
+      params: { slug: decodedSlug }
     });
     
     if (response.data.length === 0) {
@@ -342,9 +357,12 @@ export async function getCategories(): Promise<Category[]> {
 // 固定ページの取得
 export async function getPageBySlug(slug: string): Promise<Page | null> {
   try {
+    // スラッグがURLエンコードされている場合はデコード
+    const decodedSlug = decodeURIComponent(slug);
+    
     const response = await wpAPI.get('/wp/v2/pages', {
       params: {
-        slug,
+        slug: decodedSlug,
         _embed: true,
       },
     });
