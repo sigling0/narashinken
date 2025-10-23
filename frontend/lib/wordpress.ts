@@ -435,6 +435,22 @@ export async function getAllPostSlugs(): Promise<string[]> {
   }
 }
 
+// 投稿のID一覧を取得（静的生成用）
+export async function getAllPostIds(): Promise<number[]> {
+  try {
+    const response = await wpAPI.get('/wp/v2/posts', {
+      params: {
+        per_page: 100,
+        _fields: 'id',
+      },
+    });
+    return response.data.map((post: any) => post.id);
+  } catch (error) {
+    console.error('Error fetching post ids:', error);
+    throw error;
+  }
+}
+
 // 固定ページのスラッグ一覧を取得（静的生成用）
 export async function getAllPageSlugs(): Promise<string[]> {
   try {

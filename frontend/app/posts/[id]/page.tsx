@@ -1,4 +1,4 @@
-import { getPostBySlug, getAllPostSlugs } from '@/lib/wordpress';
+import { getPostById, getAllPostIds } from '@/lib/wordpress';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -6,15 +6,15 @@ import Link from 'next/link';
 export const revalidate = 3600; // 1時間ごとに再生成
 
 interface Props {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ id: string }>;
 }
 
 // 静的パスの生成
 export async function generateStaticParams() {
   try {
-    const slugs = await getAllPostSlugs();
-    return slugs.map((slug) => ({
-      slug: slug,
+    const ids = await getAllPostIds();
+    return ids.map((id) => ({
+      id: id.toString(),
     }));
   } catch (error) {
     console.error('Error generating static params:', error);
@@ -24,10 +24,10 @@ export async function generateStaticParams() {
 
 // メタデータの生成
 export async function generateMetadata({ params }: Props) {
-  const { slug } = await params;
+  const { id } = await params;
   
   try {
-    const post = await getPostBySlug(slug);
+    const post = await getPostById(parseInt(id));
     
     if (!post) {
       return {
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props) {
     }
 
     return {
-      title: `${post.title.rendered} - 奈良新聞`,
+      title: `${post.title.rendered} - 奈良心剣道場`,
       description: post.excerpt.rendered.replace(/<[^>]*>/g, '').substring(0, 160),
     };
   } catch (error) {
@@ -47,13 +47,13 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function PostPage({ params }: Props) {
-  const { slug } = await params;
+  const { id } = await params;
   
   let post = null;
   let error = null;
 
   try {
-    post = await getPostBySlug(slug);
+    post = await getPostById(parseInt(id));
     
     if (!post) {
       notFound();

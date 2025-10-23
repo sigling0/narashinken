@@ -206,7 +206,7 @@ export default async function Home() {
                   
                   return (
                     <Link 
-                      href={`/posts/${post.slug}`}
+                      href={`/posts/${post.id}`}
                       className="block rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group"
                       style={{
                         boxShadow: 'rgba(0,0,0,0.16) 1px 1px 4px 2px',
