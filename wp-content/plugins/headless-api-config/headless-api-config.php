@@ -21,7 +21,7 @@ class HeadlessAPIConfig {
             'http://localhost:3001',
             'https://narashinken.com', // 本番環境のドメインを追加
             'https://sigling-pg.com',
-            // 必要に応じてステージング環境なども追加
+            // Vercelドメイン（*.vercel.app）は add_cors_headers() で動的に許可
         ];
         
         // CORSヘッダーの追加
@@ -46,7 +46,11 @@ class HeadlessAPIConfig {
     public function add_cors_headers() {
         $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
         
-        if (in_array($origin, $this->allowed_origins)) {
+        // 完全一致またはVercelドメインをチェック
+        $is_allowed = in_array($origin, $this->allowed_origins) || 
+                      (strpos($origin, '.vercel.app') !== false && strpos($origin, 'https://') === 0);
+        
+        if ($is_allowed) {
             remove_filter('rest_pre_serve_request', 'rest_send_cors_headers');
             add_filter('rest_pre_serve_request', function($value) use ($origin) {
                 header('Access-Control-Allow-Origin: ' . $origin);
