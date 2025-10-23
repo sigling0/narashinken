@@ -554,8 +554,12 @@ class HeadlessAPIConfig {
         $location = $request->get_param('location');
         $locations = get_nav_menu_locations();
         
+        // メニューが設定されていない場合は空のメニューを返す（404エラーにしない）
         if (!isset($locations[$location])) {
-            return new WP_Error('invalid_location', 'Invalid menu location', ['status' => 404]);
+            return [
+                'location' => $location,
+                'items' => [],
+            ];
         }
         
         return [
