@@ -171,3 +171,4 @@ npm run build
 ## 📧 サポート
 
 質問や問題がある場合は、GitHubのissueを作成してください。
+# Force redeploy Thu Oct 23 17:07:17 JST 2025
