@@ -24,6 +24,9 @@ class HeadlessAPIConfig {
             // Vercelドメイン（*.vercel.app）は add_cors_headers() で動的に許可
         ];
         
+        // SiteGuardのREST API制限を回避（ヘッドレス用に必要なエンドポイントを許可）
+        add_filter('rest_pre_dispatch', [$this, 'bypass_siteguard_restriction'], 5, 3);
+        
         // CORSヘッダーの追加
         add_action('rest_api_init', [$this, 'add_cors_headers']);
         
@@ -38,6 +41,30 @@ class HeadlessAPIConfig {
         
         // アイキャッチ画像のサイズ情報を追加
         add_filter('rest_prepare_post', [$this, 'add_featured_image_sizes'], 10, 3);
+    }
+    
+    /**
+     * SiteGuardのREST API制限を回避
+     * ヘッドレスCMSとして使用するために必要なエンドポイントへのアクセスを許可
+     */
+    public function bypass_siteguard_restriction($result, $wp_rest_server, $request) {
+        $route = $request->get_route();
+        
+        // ヘッドレスCMSで必要なエンドポイントのリスト
+        $allowed_routes = [
+            '/wp/v2/',
+            '/headless/v1/',
+            '/oembed/',
+        ];
+        
+        foreach ($allowed_routes as $allowed_route) {
+            if (strpos($route, $allowed_route) === 0) {
+                // このルートへのアクセスを許可（SiteGuard制限をバイパス）
+                return $result;
+            }
+        }
+        
+        return $result;
     }
     
     /**
