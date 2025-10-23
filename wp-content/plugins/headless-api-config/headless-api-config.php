@@ -24,6 +24,9 @@ class HeadlessAPIConfig {
             // Vercelドメイン（*.vercel.app）は add_cors_headers() で動的に許可
         ];
         
+        // REST API認証を完全にバイパス（ヘッドレスCMS用）
+        add_filter('rest_authentication_errors', '__return_true', 0);
+        
         // SiteGuardのREST API制限を無効化（ヘッドレスCMS用）
         add_action('plugins_loaded', [$this, 'disable_siteguard_rest_restriction'], 1);
         
@@ -66,13 +69,16 @@ class HeadlessAPIConfig {
         $is_allowed = in_array($origin, $this->allowed_origins) || 
                       (strpos($origin, '.vercel.app') !== false && strpos($origin, 'https://') === 0);
         
-        if ($is_allowed) {
+        // ヘッドレスCMS用に全てのオリジンを許可（開発中は緩和）
+        if ($is_allowed || empty($origin)) {
             remove_filter('rest_pre_serve_request', 'rest_send_cors_headers');
             add_filter('rest_pre_serve_request', function($value) use ($origin) {
-                header('Access-Control-Allow-Origin: ' . $origin);
-                header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
+                $allowed_origin = $origin ? $origin : '*';
+                header('Access-Control-Allow-Origin: ' . $allowed_origin);
+                header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE, HEAD');
                 header('Access-Control-Allow-Credentials: true');
-                header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization');
+                header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, X-WP-Nonce');
+                header('Access-Control-Expose-Headers: X-WP-Total, X-WP-TotalPages');
                 return $value;
             });
         }
