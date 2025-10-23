@@ -100,6 +100,10 @@ if ( ! defined( 'WP_DEBUG' ) ) {
 
 define( 'RS_DASHBOARD_PLUGIN_SID', '3PxNE3F8Y8i4Z7SNoIAGmr-D1LqNzhVecjnhF9MBXKAuih0W89uFN4siTxczq_YGrwOh-X5e60f_AgBXp46H9nWw7Sjzbwecxgt-Xw___ng.' );
 define( 'RS_DASHBOARD_PLUGIN_DID', 'hH3dbynLIQRm8tH6kMvmORvFH-x1YfwD-Hhi5IjQeudJ6Fa2D59AdLUUt3YB0T4qxUD52eBv_XC_75I8a8q_JCEEvob3V9rCKOqNA5ZBljo.' );
+
+// ヘッドレスCMS用: REST APIを完全に有効化
+define( 'REST_API_ENABLED', true );
+
 /* That's all, stop editing! Happy publishing. */
 
 /** Absolute path to the WordPress directory. */
