@@ -41,7 +41,7 @@ export default function Header({ menuItems = [], categories = [], tags = [] }: H
 
   return (
     <>
-      <header className="sticky top-0 z-50" style={{backgroundColor: 'var(--color-header-bg)'}}>
+      <header className="sticky top-0 z-50" style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between h-16 md:h-24">
           {/* ロゴ */}
@@ -94,7 +94,7 @@ export default function Header({ menuItems = [], categories = [], tags = [] }: H
                 className={`absolute top-full left-0 mt-1 w-48 rounded-lg shadow-lg overflow-hidden transition-all duration-200 origin-top ${
                   isAboutDropdownOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'
                 }`}
-                style={{backgroundColor: 'var(--color-header-bg)'}}
+                style={{backgroundColor: 'var(--color-dojo-bg-key)'}}
               >
                 <Link
                   href="/about"
@@ -199,12 +199,12 @@ export default function Header({ menuItems = [], categories = [], tags = [] }: H
         <>
           <div 
             className="md:hidden fixed top-16 left-0 right-0 bottom-0 z-[60]"
-            style={{backgroundColor: 'var(--color-header-bg)'}}
+            style={{backgroundColor: 'var(--color-dojo-bg-key)'}}
             onClick={() => setIsMenuOpen(false)}
           />
           <nav 
             className="md:hidden fixed top-16 left-0 right-0 bottom-0 z-[70] overflow-y-auto"
-            style={{backgroundColor: 'var(--color-header-bg)'}}
+            style={{backgroundColor: 'var(--color-dojo-bg-key)'}}
           >
         <div className="container mx-auto px-4 py-6 space-y-6">
           {/* ナビゲーションメニュー */}
