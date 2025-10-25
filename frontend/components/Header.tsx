@@ -305,12 +305,12 @@ export default function Header({ menuItems = [], categories = [], tags = [] }: H
 
             {/* カテゴリー検索 */}
             <div>
-              <label 
+              <div 
                 className="block text-sm font-semibold mb-2"
                 style={{color: 'var(--color-text-primary)'}}
               >
                 カテゴリー
-              </label>
+              </div>
               <div className="space-y-1.5">
                 {activeCategories.map((category: any) => (
                   <div key={category.id}>
@@ -329,12 +329,12 @@ export default function Header({ menuItems = [], categories = [], tags = [] }: H
 
             {/* タグ検索 */}
             <div>
-              <label 
+              <div 
                 className="block text-sm font-semibold mb-2"
                 style={{color: 'var(--color-text-primary)'}}
               >
                 タグ
-              </label>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {activeTags.map((tag: any) => (
                   <Link
