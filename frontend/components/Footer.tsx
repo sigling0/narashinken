@@ -7,7 +7,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-20">
+    <footer className="mt-20" style={{ minHeight: '200px' }}>
       <div className="container mx-auto px-4 md:px-6 py-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           {/* ロゴ */}
@@ -18,6 +18,8 @@ export default function Footer() {
               width={224}
               height={80}
               className="w-full h-auto"
+              loading="lazy"
+              quality={75}
             />
           </div>
 

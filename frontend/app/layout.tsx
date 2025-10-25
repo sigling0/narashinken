@@ -7,8 +7,8 @@ import { getMenuByLocation, getCategories, getTags } from "@/lib/wordpress";
 
 const shipporiMincho = Shippori_Mincho_B1({ 
   subsets: ["latin"],
-  weight: ['400', '600'], // 使用するウェイトを削減（500, 700を削除）
-  display: 'swap',
+  weight: ['400', '600'],
+  display: 'optional', // swapからoptionalに変更（CLSを防ぐ）
   preload: true,
   fallback: ['serif'],
   adjustFontFallback: true,
