@@ -84,13 +84,12 @@ export default function SearchSection({ categories, tags }: SearchSectionProps) 
 
         {/* カテゴリー検索 */}
         <div>
-          <label 
-            htmlFor="category-search"
+          <div 
             className="block text-sm font-semibold mb-2"
             style={{color: 'var(--color-text-primary)'}}
           >
             カテゴリー
-          </label>
+          </div>
           <div className="space-y-1.5">
             {categories
               .filter((cat: any) => cat.count > 0)
@@ -112,12 +111,12 @@ export default function SearchSection({ categories, tags }: SearchSectionProps) 
 
         {/* タグ検索 */}
         <div>
-          <label 
+          <div 
             className="block text-sm font-semibold mb-2"
             style={{color: 'var(--color-text-primary)'}}
           >
             タグ
-          </label>
+          </div>
           <div className="flex flex-wrap gap-2">
             {tags
               .filter((tag: any) => tag.count > 0)
