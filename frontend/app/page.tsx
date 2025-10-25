@@ -3,22 +3,18 @@ import PostCard from '@/components/PostCard';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
-// 非クリティカルコンポーネントを遅延読み込み（バンドルサイズ削減）
-// Slideshowはページ上部でLCPに影響するため、SSRを維持しつつコード分割のみ実施
+// 非クリティカルコンポーネントを動的インポート（コード分割でバンドルサイズ削減）
+// Next.js 15 Server ComponentsではSSRを維持しつつコード分割のみ実施
 const Slideshow = dynamic(() => import('@/components/Slideshow'), {
   loading: () => <div className="w-full bg-gray-900 aspect-[7/3] max-h-[800px] animate-pulse" />,
-  ssr: true, // LCP要素のためSSR維持
 });
 
-// Instagram と SearchSection はスクロール位置にあるため完全遅延読み込み
 const InstagramFeed = dynamic(() => import('@/components/InstagramFeed'), {
   loading: () => <div className="min-h-[400px] animate-pulse bg-gray-100" />,
-  ssr: false, // 初期HTML削減
 });
 
 const SearchSection = dynamic(() => import('@/components/SearchSection'), {
   loading: () => <div className="min-h-[300px] animate-pulse bg-gray-50" />,
-  ssr: false, // 初期HTML削減
 });
 
 export const revalidate = 3600; // 1時間ごとに再生成
