@@ -23,6 +23,10 @@
 
 /* プロースタイリング（記事本文用） */
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   .prose {
     @apply text-gray-800;
   }

@@ -14,6 +14,9 @@ const shipporiMincho = Shippori_Mincho_B1({
 export const metadata: Metadata = {
   title: "奈良心剣道場 - Headless WordPress",
   description: "奈良心剣道場のホームページ。剣道を学び心と身体を鍛えよう",
+  icons: {
+    icon: '/favicon.png',
+  },
 };
 
 export default async function RootLayout({
@@ -47,10 +50,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="ja" style={{scrollBehavior: 'smooth'}}>
-      <head>
-        <link rel="icon" href="/favicon.png" />
-      </head>
+    <html lang="ja">
       <body className={shipporiMincho.className} style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
         <div className="flex flex-col min-h-screen">
           <Header menuItems={menuItems} categories={categories} tags={tags} />
