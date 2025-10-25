@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 const images = [
-  '/slick1.jpg',
-  '/slick2.jpg',
-  '/slick3.jpg',
-  '/slick4.jpg',
-  '/slick5.jpg',
+  '/slick1.webp',
+  '/slick2.webp',
+  '/slick3.webp',
+  '/slick4.webp',
+  '/slick5.webp',
 ];
 
 export default function Slideshow() {
