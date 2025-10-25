@@ -27,8 +27,18 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'scontent.cdninstagram.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'scontent-tpe1-1.cdninstagram.com',
+      },
     ],
     formats: ['image/webp', 'image/avif'],
+    // 画質最適化（PageSpeed対策）
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 30日キャッシュ
+    // デフォルト画質を60に設定（75から下げて圧縮強化）
+    // 個別にquality指定がない場合はこれが適用される
   },
   
   // 静的エクスポートを無効化（ISRを使用するため）
