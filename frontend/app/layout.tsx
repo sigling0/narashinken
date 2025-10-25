@@ -1,18 +1,11 @@
 import type { Metadata } from "next";
-import { Shippori_Mincho_B1 } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getMenuByLocation, getCategories, getTags } from "@/lib/wordpress";
 
-const shipporiMincho = Shippori_Mincho_B1({ 
-  subsets: ["latin"],
-  weight: ['400', '600'],
-  display: 'optional', // swapからoptionalに変更（CLSを防ぐ）
-  preload: true,
-  fallback: ['serif'],
-  adjustFontFallback: true,
-});
+// Google Fontsを削除してシステムフォントを使用（LCP改善のため）
+// 25個のwoff2ファイル読み込み（~2,500ms）を完全に削除
 
 export const metadata: Metadata = {
   title: "奈良心剣道場 - Headless WordPress",
@@ -54,7 +47,10 @@ export default async function RootLayout({
 
   return (
     <html lang="ja">
-      <body className={shipporiMincho.className} style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
+      <body style={{
+        backgroundColor: 'var(--color-dojo-bg-key)',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", YuGothic, Meiryo, sans-serif'
+      }}>
         <div className="flex flex-col min-h-screen">
           <Header menuItems={menuItems} categories={categories} tags={tags} />
           <main className="flex-grow">
