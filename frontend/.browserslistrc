@@ -1,0 +1,33 @@
+# Browserslist configuration for modern browsers
+# https://browsersl.ist/
+
+# Production browsers (modern browsers only)
+# This reduces polyfills and transpilation for better performance
+
+# Last 2 versions of major browsers
+last 2 Chrome versions
+last 2 Firefox versions
+last 2 Safari versions
+last 2 Edge versions
+
+# Browsers with >0.2% market share
+>0.2%
+
+# Exclude dead browsers
+not dead
+
+# Exclude IE 11 and older
+not IE 11
+not IE_Mob 11
+
+# Exclude Opera Mini (limited JS support)
+not op_mini all
+
+# Support modern ES features (ES2020+)
+# This prevents transpilation of:
+# - Array.prototype.at
+# - Array.prototype.flat/flatMap
+# - Object.fromEntries
+# - Object.hasOwn
+# - String.prototype.trimStart/trimEnd
+

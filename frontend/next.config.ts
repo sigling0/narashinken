@@ -49,6 +49,12 @@ const nextConfig: NextConfig = {
   // パフォーマンス最適化
   swcMinify: true, // SWCによるJavaScript圧縮
   
+  // モダンブラウザターゲット（レガシーポリフィル削減）
+  compiler: {
+    // SWC設定: ES2020+をターゲットに（不要なポリフィル削減）
+    // Array.at, Array.flat, Object.fromEntries などのネイティブ機能を使用
+  },
+  
   // コード分割最適化
   experimental: {
     optimizePackageImports: ['axios'], // axiosの最適化
