@@ -42,6 +42,12 @@ const nextConfig: NextConfig = {
   
   // 厳格モード
   reactStrictMode: true,
+  
+  // CSS最適化
+  optimizeFonts: true, // フォントの最適化を有効化
+  
+  // パフォーマンス最適化
+  swcMinify: true, // SWCによるJavaScript圧縮
 };
 
 export default nextConfig;

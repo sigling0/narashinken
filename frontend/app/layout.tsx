@@ -9,6 +9,9 @@ const shipporiMincho = Shippori_Mincho_B1({
   subsets: ["latin"],
   weight: ['400', '500', '600', '700'],
   display: 'swap',
+  preload: true, // フォントをプリロード
+  fallback: ['serif'], // フォールバックフォント
+  adjustFontFallback: true, // レイアウトシフトを防ぐ
 });
 
 export const metadata: Metadata = {

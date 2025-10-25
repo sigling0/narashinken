@@ -114,15 +114,10 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-}
 
-/* スムーズスクロール */
-html {
-  scroll-behavior: smooth;
-}
-
-/* フォーカススタイル */
-*:focus-visible {
-  @apply outline-2 outline-offset-2 outline-blue-600;
+  /* フォーカススタイル */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-blue-600;
+  }
 }
 
