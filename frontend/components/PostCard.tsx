@@ -55,7 +55,7 @@ export default function PostCard({ post }: PostCardProps) {
         }}
       >
         {/* アイキャッチ画像 */}
-        <div className="relative w-full h-44 overflow-hidden">
+        <div className="relative w-full h-44 overflow-hidden" style={{ minHeight: '176px' }}>
           {featuredImage ? (
             <Image
               src={featuredImage.source_url}

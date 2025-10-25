@@ -39,8 +39,8 @@ export default function Slideshow() {
     <div className="relative w-full overflow-hidden bg-gray-900">
       {/* 外側のコンテナ - 余白を作る */}
       <div className="w-full py-4 md:py-0 md:px-16 lg:px-24">
-        {/* 内側のコンテナ - 画像の元のアスペクト比（7:3）を保持 */}
-        <div className="relative w-full aspect-[7/3] max-h-[800px]">
+        {/* 内側のコンテナ - 画像の元のアスペクト比（7:3）を保持、最小高さを確保 */}
+        <div className="relative w-full aspect-[7/3] max-h-[800px]" style={{ minHeight: '171px' }}>
           {/* スライド画像 */}
           {images.map((image, index) => (
             <div

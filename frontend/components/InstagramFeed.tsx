@@ -93,7 +93,7 @@ export default function InstagramFeed({ posts, message, accountName = 'narashink
       </Link>
 
       {/* 投稿グリッド - 6行3列 */}
-      <div className="grid grid-cols-3 gap-1 mb-4">
+      <div className="grid grid-cols-3 gap-1 mb-4" style={{ minHeight: '600px' }}>
         {posts.slice(0, 18).map((post) => (
           <Link
             key={post.id}

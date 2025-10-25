@@ -27,6 +27,14 @@
     scroll-behavior: smooth;
   }
 
+  /* CLS対策: フォント切り替え時のサイズ調整 */
+  body {
+    font-feature-settings: "kern" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
   /* Prose基本スタイル - クリティカルのみ */
   .prose {
     color: #1f2937;
@@ -68,6 +76,12 @@
   /* フォーカススタイル */
   *:focus-visible {
     @apply outline-2 outline-offset-2 outline-blue-600;
+  }
+
+  /* CLS対策: 画面外コンテンツのレンダリング最適化 */
+  .content-visibility-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
   }
 }
 

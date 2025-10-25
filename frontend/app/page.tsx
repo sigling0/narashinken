@@ -10,11 +10,11 @@ const Slideshow = dynamic(() => import('@/components/Slideshow'), {
 });
 
 const InstagramFeed = dynamic(() => import('@/components/InstagramFeed'), {
-  loading: () => <div className="min-h-[400px] animate-pulse bg-gray-100" />,
+  loading: () => <div style={{ minHeight: '800px' }} className="animate-pulse bg-gray-100" />,
 });
 
 const SearchSection = dynamic(() => import('@/components/SearchSection'), {
-  loading: () => <div className="min-h-[300px] animate-pulse bg-gray-50" />,
+  loading: () => <div style={{ minHeight: '400px' }} className="animate-pulse bg-gray-50" />,
 });
 
 export const revalidate = 3600; // 1時間ごとに再生成
