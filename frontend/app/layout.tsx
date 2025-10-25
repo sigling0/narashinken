@@ -8,7 +8,7 @@ import { getMenuByLocation, getCategories, getTags } from "@/lib/wordpress";
 // 25個のwoff2ファイル読み込み（~2,500ms）を完全に削除
 
 export const metadata: Metadata = {
-  title: "奈良心剣道場 - Headless WordPress",
+  title: "奈良心剣道場",
   description: "奈良心剣道場のホームページ。剣道を学び心と身体を鍛えよう",
   icons: {
     icon: '/favicon.png',
