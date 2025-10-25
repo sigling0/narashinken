@@ -8,7 +8,7 @@ const wpAPI = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 10秒タイムアウト
+  timeout: 5000, // 5秒タイムアウト
 });
 
 // 型定義
@@ -422,13 +422,28 @@ export async function getAllMenus(): Promise<any[]> {
 // 投稿のスラッグ一覧を取得（静的生成用）
 export async function getAllPostSlugs(): Promise<string[]> {
   try {
-    const response = await wpAPI.get('/wp/v2/posts', {
-      params: {
-        per_page: 100,
-        _fields: 'slug',
-      },
-    });
-    return response.data.map((post: any) => post.slug);
+    let allSlugs: string[] = [];
+    let page = 1;
+    let hasMore = true;
+    
+    while (hasMore) {
+      const response = await wpAPI.get('/wp/v2/posts', {
+        params: {
+          per_page: 100,
+          page: page,
+          _fields: 'slug',
+        },
+      });
+      
+      const slugs = response.data.map((post: any) => post.slug);
+      allSlugs = [...allSlugs, ...slugs];
+      
+      const totalPages = parseInt(response.headers['x-wp-totalpages'] || '1', 10);
+      hasMore = page < totalPages;
+      page++;
+    }
+    
+    return allSlugs;
   } catch (error) {
     console.error('Error fetching post slugs:', error);
     throw error;
@@ -438,13 +453,28 @@ export async function getAllPostSlugs(): Promise<string[]> {
 // 投稿のID一覧を取得（静的生成用）
 export async function getAllPostIds(): Promise<number[]> {
   try {
-    const response = await wpAPI.get('/wp/v2/posts', {
-      params: {
-        per_page: 100,
-        _fields: 'id',
-      },
-    });
-    return response.data.map((post: any) => post.id);
+    let allIds: number[] = [];
+    let page = 1;
+    let hasMore = true;
+    
+    while (hasMore) {
+      const response = await wpAPI.get('/wp/v2/posts', {
+        params: {
+          per_page: 100,
+          page: page,
+          _fields: 'id',
+        },
+      });
+      
+      const ids = response.data.map((post: any) => post.id);
+      allIds = [...allIds, ...ids];
+      
+      const totalPages = parseInt(response.headers['x-wp-totalpages'] || '1', 10);
+      hasMore = page < totalPages;
+      page++;
+    }
+    
+    return allIds;
   } catch (error) {
     console.error('Error fetching post ids:', error);
     throw error;
@@ -454,13 +484,28 @@ export async function getAllPostIds(): Promise<number[]> {
 // 固定ページのスラッグ一覧を取得（静的生成用）
 export async function getAllPageSlugs(): Promise<string[]> {
   try {
-    const response = await wpAPI.get('/wp/v2/pages', {
-      params: {
-        per_page: 100,
-        _fields: 'slug',
-      },
-    });
-    return response.data.map((page: any) => page.slug);
+    let allSlugs: string[] = [];
+    let page = 1;
+    let hasMore = true;
+    
+    while (hasMore) {
+      const response = await wpAPI.get('/wp/v2/pages', {
+        params: {
+          per_page: 100,
+          page: page,
+          _fields: 'slug',
+        },
+      });
+      
+      const slugs = response.data.map((pageData: any) => pageData.slug);
+      allSlugs = [...allSlugs, ...slugs];
+      
+      const totalPages = parseInt(response.headers['x-wp-totalpages'] || '1', 10);
+      hasMore = page < totalPages;
+      page++;
+    }
+    
+    return allSlugs;
   } catch (error) {
     console.error('Error fetching page slugs:', error);
     throw error;

@@ -61,7 +61,7 @@ function SmallSectionHeader({ title }: { title: string }) {
 
 export default async function Home() {
   // 各カテゴリーの記事を並行して取得（タイムアウト付き）
-  const fetchWithTimeout = async <T,>(promise: Promise<T>, timeoutMs: number = 8000): Promise<T> => {
+  const fetchWithTimeout = async <T,>(promise: Promise<T>, timeoutMs: number = 5000): Promise<T> => {
     const timeoutPromise = new Promise<never>((_, reject) => 
       setTimeout(() => reject(new Error('Fetch timeout')), timeoutMs)
     );

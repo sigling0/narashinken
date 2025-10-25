@@ -64,6 +64,7 @@ export default function InstagramFeed({ posts, message, accountName = 'narashink
               width={56}
               height={56}
               className="object-cover w-full h-full"
+              loading="lazy"
             />
           </div>
         ) : (
@@ -106,6 +107,7 @@ export default function InstagramFeed({ posts, message, accountName = 'narashink
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-110"
               sizes="(max-width: 1024px) 33vw, 20vw"
+              loading="lazy"
             />
             {/* ホバー時のオーバーレイ */}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300" />

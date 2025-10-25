@@ -55,6 +55,7 @@ export default function Slideshow() {
                 fill
                 className="object-contain"
                 priority={index === 0}
+                sizes="(max-width: 768px) 100vw, (max-width: 1280px) calc(100vw - 128px), calc(100vw - 192px)"
               />
             </div>
           ))}
