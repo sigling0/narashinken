@@ -48,6 +48,11 @@ const nextConfig: NextConfig = {
   
   // パフォーマンス最適化
   swcMinify: true, // SWCによるJavaScript圧縮
+  
+  // コード分割最適化
+  experimental: {
+    optimizePackageImports: ['axios'], // axiosの最適化
+  },
 };
 
 export default nextConfig;
