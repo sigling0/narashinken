@@ -7,11 +7,11 @@ import { getMenuByLocation, getCategories, getTags } from "@/lib/wordpress";
 
 const shipporiMincho = Shippori_Mincho_B1({ 
   subsets: ["latin"],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '600'], // 使用するウェイトを削減（500, 700を削除）
   display: 'swap',
-  preload: true, // フォントをプリロード
-  fallback: ['serif'], // フォールバックフォント
-  adjustFontFallback: true, // レイアウトシフトを防ぐ
+  preload: true,
+  fallback: ['serif'],
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {

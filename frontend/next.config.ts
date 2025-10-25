@@ -53,6 +53,9 @@ const nextConfig: NextConfig = {
   // 厳格モード
   reactStrictMode: true,
   
+  // 本番ビルドでソースマップを無効化（サイズ削減）
+  productionBrowserSourceMaps: false,
+  
   // CSS最適化
   optimizeFonts: true, // フォントの最適化を有効化
   
