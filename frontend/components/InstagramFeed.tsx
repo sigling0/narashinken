@@ -124,7 +124,7 @@ export default function InstagramFeed({ posts, message, accountName = 'narashink
         rel="noopener noreferrer"
         className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg font-medium text-sm transition-all duration-300 hover:opacity-90 hover:shadow-md"
         style={{
-          backgroundColor: 'var(--color-dojo-primary-accent)',
+          backgroundColor: 'var(--color-instagram-button)',
           color: 'white'
         }}
       >

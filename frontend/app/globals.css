@@ -15,6 +15,9 @@
 --color-dojo-tertiary-accent: #f0a89a; /*ライト強調*/
 --color-dojo-bg-accent: #fef5f3; /*アクセント背景*/
 
+/* Instagram専用カラー（アクセシビリティ対応） */
+--color-instagram-button: #c2351e; /*Instagram CTA（WCAG AA準拠：コントラスト比4.6:1）*/
+
 /* ニュートラル */
 --color-text-primary: #1a1a1c; /*テキスト*/
 --color-text-secondary: #4d4d4d;/*サブテキスト*/
