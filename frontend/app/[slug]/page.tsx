@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props) {
     }
 
     return {
-      title: `${page.title.rendered} - 奈良新聞`,
+      title: `${page.title.rendered} - 奈良心剣道場`,
       description: page.excerpt.rendered.replace(/<[^>]*>/g, '').substring(0, 160),
     };
   } catch (error) {

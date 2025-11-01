@@ -48,7 +48,7 @@ git push -u origin main
 | キー | 値（例） |
 |------|---------|
 | `NEXT_PUBLIC_WORDPRESS_API_URL` | `https://your-wordpress-site.com/wp-json` |
-| `NEXT_PUBLIC_SITE_NAME` | `奈良新聞` |
+| `NEXT_PUBLIC_SITE_NAME` | `奈良心剣道場` |
 | `NEXT_PUBLIC_SITE_URL` | `https://narashinken.com` |
 | `REVALIDATE_TIME` | `3600` |
 

@@ -1,4 +1,4 @@
-# 奈良新聞 - Headless WordPress フロントエンド
+# 奈良心剣道場 - Headless WordPress フロントエンド
 
 このプロジェクトは、WordPressをヘッドレスCMSとして使用し、Next.js 15でフロントエンドを構築したモダンなWebサイトです。
 
@@ -31,7 +31,7 @@ cp .env.local.example .env.local
 
 ```env
 NEXT_PUBLIC_WORDPRESS_API_URL=https://your-wordpress-site.com/wp-json
-NEXT_PUBLIC_SITE_NAME=奈良新聞
+NEXT_PUBLIC_SITE_NAME=奈良心剣道場
 NEXT_PUBLIC_SITE_URL=https://narashinken.com
 REVALIDATE_TIME=3600
 ```
