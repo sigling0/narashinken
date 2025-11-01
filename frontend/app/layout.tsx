@@ -4,8 +4,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getMenuByLocation, getCategories, getTags } from "@/lib/wordpress";
 
-// Google Fontsを削除してシステムフォントを使用（LCP改善のため）
+// Google Fontsを削除してシステムフォント（明朝体）を使用（LCP改善のため）
 // 25個のwoff2ファイル読み込み（~2,500ms）を完全に削除
+// 明朝体スタック: macOS(Hiragino Mincho) → Windows(Yu Mincho, MS PMincho) → Android(Noto Serif JP)
 
 export const metadata: Metadata = {
   title: "奈良心剣道場",
@@ -49,7 +50,7 @@ export default async function RootLayout({
     <html lang="ja">
       <body style={{
         backgroundColor: 'var(--color-dojo-bg-key)',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", YuGothic, Meiryo, sans-serif'
+        fontFamily: '"Hiragino Mincho ProN", "HiraMinProN-W3", "Yu Mincho", YuMincho, "MS PMincho", "Noto Serif JP", "Noto Serif CJK JP", serif'
       }}>
         <div className="flex flex-col min-h-screen">
           <Header menuItems={menuItems} categories={categories} tags={tags} />
