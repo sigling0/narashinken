@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 
 interface PostImageGalleryProps {
@@ -17,22 +17,57 @@ export default function PostImageGallery({ images }: PostImageGalleryProps) {
   // スワイプの最小距離（px）
   const minSwipeDistance = 50;
 
-  // 画像がない場合は何も表示しない
-  if (!images || images.length === 0) {
-    return null;
-  }
-
-  // 前の画像へ
-  const handlePrev = () => {
+  // 前の画像へ（useCallbackでメモ化）
+  const handlePrev = useCallback(() => {
     setCurrentIndex((prevIndex) => 
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
     );
-  };
+  }, [images.length]);
 
-  // 次の画像へ
-  const handleNext = () => {
+  // 次の画像へ（useCallbackでメモ化）
+  const handleNext = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-  };
+  }, [images.length]);
+
+  // フルスクリーンを閉じる（useCallbackでメモ化）
+  const handleCloseFullscreen = useCallback(() => {
+    setIsFullscreen(false);
+  }, []);
+
+  // キーボードナビゲーション（フルスクリーン時）
+  useEffect(() => {
+    if (!isFullscreen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        handlePrev();
+      } else if (e.key === 'ArrowRight') {
+        handleNext();
+      } else if (e.key === 'Escape') {
+        handleCloseFullscreen();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isFullscreen, handlePrev, handleNext, handleCloseFullscreen]);
+
+  // フルスクリーン時のbodyスクロール防止
+  useEffect(() => {
+    if (isFullscreen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isFullscreen]);
+
+  // 画像がない場合は何も表示しない（useEffectの後に配置）
+  if (!images || images.length === 0) {
+    return null;
+  }
 
   // サムネイルクリックで画像を切り替え
   const handleThumbnailClick = (index: number) => {
@@ -42,11 +77,6 @@ export default function PostImageGallery({ images }: PostImageGalleryProps) {
   // 画像クリックでフルスクリーン表示
   const handleImageClick = () => {
     setIsFullscreen(true);
-  };
-
-  // フルスクリーンを閉じる
-  const handleCloseFullscreen = () => {
-    setIsFullscreen(false);
   };
 
   // タッチ開始
@@ -74,36 +104,6 @@ export default function PostImageGallery({ images }: PostImageGalleryProps) {
       handlePrev();
     }
   };
-
-  // キーボードナビゲーション（フルスクリーン時）
-  useEffect(() => {
-    if (!isFullscreen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') {
-        handlePrev();
-      } else if (e.key === 'ArrowRight') {
-        handleNext();
-      } else if (e.key === 'Escape') {
-        handleCloseFullscreen();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isFullscreen]);
-
-  // フルスクリーン時のbodyスクロール防止
-  useEffect(() => {
-    if (isFullscreen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isFullscreen]);
 
   return (
     <>
