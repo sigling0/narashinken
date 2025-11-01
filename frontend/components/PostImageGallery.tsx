@@ -304,7 +304,7 @@ export default function PostImageGallery({ images }: PostImageGalleryProps) {
                   e.stopPropagation();
                   handlePrev();
                 }}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full transition-all z-20 backdrop-blur-sm"
+                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-white/5 hover:bg-white/15 text-white p-2 md:p-4 rounded-full transition-all z-20 backdrop-blur-sm"
                 aria-label="前の画像"
               >
                 <svg
@@ -313,7 +313,7 @@ export default function PostImageGallery({ images }: PostImageGalleryProps) {
                   viewBox="0 0 24 24"
                   strokeWidth={2}
                   stroke="currentColor"
-                  className="w-8 h-8"
+                  className="w-5 h-5 md:w-8 md:h-8"
                 >
                   <path
                     strokeLinecap="round"
@@ -331,7 +331,7 @@ export default function PostImageGallery({ images }: PostImageGalleryProps) {
                   e.stopPropagation();
                   handleNext();
                 }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full transition-all z-20 backdrop-blur-sm"
+                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-white/5 hover:bg-white/15 text-white p-2 md:p-4 rounded-full transition-all z-20 backdrop-blur-sm"
                 aria-label="次の画像"
               >
                 <svg
@@ -340,7 +340,7 @@ export default function PostImageGallery({ images }: PostImageGalleryProps) {
                   viewBox="0 0 24 24"
                   strokeWidth={2}
                   stroke="currentColor"
-                  className="w-8 h-8"
+                  className="w-5 h-5 md:w-8 md:h-8"
                 >
                   <path
                     strokeLinecap="round"
