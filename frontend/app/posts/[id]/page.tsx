@@ -2,11 +2,40 @@ import { getPostById, getAllPostIds } from '@/lib/wordpress';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import PostImageGallery from '@/components/PostImageGallery';
 
 export const revalidate = 3600; // 1時間ごとに再生成
 
 interface Props {
   params: Promise<{ id: string }>;
+}
+
+// 本文HTMLから画像URLを抽出し、画像を削除した本文を返す
+function extractImagesFromContent(html: string): { images: string[], contentWithoutImages: string } {
+  const images: string[] = [];
+  
+  // <img>タグからsrc属性を抽出
+  const imgRegex = /<img[^>]+src="([^">]+)"/g;
+  let match;
+  
+  while ((match = imgRegex.exec(html)) !== null) {
+    images.push(match[1]);
+  }
+  
+  // 本文から画像タグを削除（画像を含む<figure>や<p>タグごと削除）
+  let contentWithoutImages = html;
+  
+  // <figure class="wp-block-image">...</figure> を削除
+  contentWithoutImages = contentWithoutImages.replace(/<figure[^>]*class="[^"]*wp-block-image[^"]*"[^>]*>[\s\S]*?<\/figure>/gi, '');
+  
+  // 残った<img>タグも削除（<p>タグで囲まれている場合は<p>タグも削除）
+  contentWithoutImages = contentWithoutImages.replace(/<p[^>]*>\s*<img[^>]*>\s*<\/p>/gi, '');
+  contentWithoutImages = contentWithoutImages.replace(/<img[^>]*>/gi, '');
+  
+  // 連続する空の<p>タグを削除
+  contentWithoutImages = contentWithoutImages.replace(/(<p[^>]*>\s*<\/p>\s*)+/gi, '');
+  
+  return { images, contentWithoutImages };
 }
 
 // 静的パスの生成
@@ -80,6 +109,9 @@ export default async function PostPage({ params }: Props) {
     day: 'numeric',
   });
 
+  // 本文から画像を抽出
+  const { images, contentWithoutImages } = extractImagesFromContent(post.content.rendered);
+
   return (
     <article className="container mx-auto px-4 py-8 max-w-4xl" style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
       {/* パンくずリスト */}
@@ -147,8 +179,11 @@ export default async function PostPage({ params }: Props) {
       {/* 記事本文 */}
       <div 
         className="prose prose-lg max-w-none mb-12"
-        dangerouslySetInnerHTML={{ __html: post.content.rendered }}
+        dangerouslySetInnerHTML={{ __html: contentWithoutImages }}
       />
+
+      {/* 画像ギャラリー */}
+      <PostImageGallery images={images} />
 
       {/* タグ */}
       {post._embedded?.['wp:term']?.[1] && post._embedded['wp:term'][1].length > 0 && (
