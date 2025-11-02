@@ -1,4 +1,5 @@
-import { getPostsByCategorySlug, getCategories, getTags, getInstagramFromGraphAPI } from '@/lib/wordpress';
+import { getPostsByCategorySlug, getCategories, getTags, getInstagramFromGraphAPI, getChildPages } from '@/lib/wordpress';
+import { parseHistoryContent } from '@/lib/parseHistoryContent';
 import PostCard from '@/components/PostCard';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -80,7 +81,7 @@ export default async function Home() {
     return Promise.race([promise, timeoutPromise]);
   };
 
-  const [announcementPosts, resultPosts, blogPosts, categories, tags, instagramFeed] = await Promise.all([
+  const [announcementPosts, resultPosts, blogPosts, categories, tags, instagramFeed, historyPages] = await Promise.all([
     fetchWithTimeout(getPostsByCategorySlug('announcement', 1)).catch(() => []),
     fetchWithTimeout(getPostsByCategorySlug('result', 6)).catch(() => []),
     fetchWithTimeout(getPostsByCategorySlug('blog', 6)).catch(() => []),
@@ -93,7 +94,22 @@ export default async function Home() {
       username: undefined,
       profile_picture_url: undefined 
     })),
+    fetchWithTimeout(getChildPages('history')).catch(() => []),
   ]);
+
+  // 歴代主将データを処理（エラーがないものだけを抽出し、新しい順にソート）
+  const captainList = historyPages
+    .map((page: any) => {
+      const parsed = parseHistoryContent(page.content.rendered, page.title.rendered);
+      return {
+        year: parsed.year,
+        captainName: parsed.captainName.replace(/<[^>]*>/g, '').trim(), // HTMLタグを削除
+        slug: page.slug,
+        hasError: parsed.errors.length > 0,
+      };
+    })
+    .filter((item: any) => !item.hasError && item.year && item.captainName) // エラーがなく、年度と主将名があるもののみ
+    .sort((a: any, b: any) => parseInt(b.year) - parseInt(a.year)); // 新しい順にソート
 
   return (
     <div style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
@@ -157,36 +173,32 @@ export default async function Home() {
               </Link>
             </section>
 
-            {/* 歴代主将一覧セクション */}
+            {/* 歴代主将一覧セクション（動的） */}
             <section>
               <SmallSectionHeader title="歴代主将一覧" />
               <div 
                 className="text-sm leading-relaxed"
                 style={{color: 'var(--color-text-secondary)'}}
               >
-                {[
-                  {year: 2024, name: '新田もも'},
-                  {year: 2023, name: '清谷恭史郎'},
-                  {year: 2022, name: '森本結咲'},
-                  {year: 2021, name: '橋本芽生'},
-                  {year: 2020, name: '柏木奏佑'},
-                  {year: 2019, name: '橋本青空'},
-                  {year: 2018, name: '吉田晃貴'},
-                  {year: 2017, name: '西田楓太'},
-                  {year: 2016, name: '内海遥太・吉田結生'},
-                  {year: 2015, name: '岡田悠希'},
-                ].map(({year, name}) => (
-                  <Link 
-                    key={year}
-                    href={`/history#member_${year}`}
-                    className="block mb-1.5 underline hover:font-bold transition-all"
-                  >
-                    {year}年度 {name}
-                  </Link>
-                ))}
+                {captainList.length > 0 ? (
+                  captainList.map(({ year, captainName, slug }: { year: string; captainName: string; slug: string }) => (
+                    <div key={slug} className="mb-1.5">
+                      <Link 
+                        href={`/history/${slug}`}
+                        className="inline-block underline hover:font-bold transition-all"
+                      >
+                        {year}年度 {captainName}
+                      </Link>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm" style={{color: 'var(--color-text-secondary)'}}>
+                    歴代主将のデータはまだありません
+                  </p>
+                )}
               </div>
               <Link 
-                href="/history#member_past" 
+                href="/history" 
                 className="text-sm underline transition-colors mt-4 inline-block"
                 style={{color: 'var(--color-text-link)'}}
               >

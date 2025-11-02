@@ -1,62 +1,15 @@
-import { getPageBySlug, getAllPageSlugs } from '@/lib/wordpress';
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
+import { getPageBySlug, getChildPages } from '@/lib/wordpress';
 import Image from 'next/image';
-import PostImageGallery from '@/components/PostImageGallery';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import HistoryAccordion from './HistoryAccordion';
 
-export const revalidate = 3600;
-
-// 本文HTMLから画像URLを抽出し、画像を削除した本文を返す
-function extractImagesFromContent(html: string): { images: string[], contentWithoutImages: string } {
-  const images: string[] = [];
-  
-  // <img>タグからsrc属性を抽出
-  const imgRegex = /<img[^>]+src="([^">]+)"/g;
-  let match;
-  
-  while ((match = imgRegex.exec(html)) !== null) {
-    images.push(match[1]);
-  }
-  
-  // 本文から画像タグを削除（画像を含む<figure>や<p>タグごと削除）
-  let contentWithoutImages = html;
-  
-  // <figure class="wp-block-image">...</figure> を削除
-  contentWithoutImages = contentWithoutImages.replace(/<figure[^>]*class="[^"]*wp-block-image[^"]*"[^>]*>[\s\S]*?<\/figure>/gi, '');
-  
-  // 残った<img>タグも削除（<p>タグで囲まれている場合は<p>タグも削除）
-  contentWithoutImages = contentWithoutImages.replace(/<p[^>]*>\s*<img[^>]*>\s*<\/p>/gi, '');
-  contentWithoutImages = contentWithoutImages.replace(/<img[^>]*>/gi, '');
-  
-  // 連続する空の<p>タグを削除
-  contentWithoutImages = contentWithoutImages.replace(/(<p[^>]*>\s*<\/p>\s*)+/gi, '');
-  
-  return { images, contentWithoutImages };
-}
-
-interface Props {
-  params: Promise<{ slug: string }>;
-}
-
-// 静的パスの生成
-export async function generateStaticParams() {
-  try {
-    const slugs = await getAllPageSlugs();
-    return slugs.map((slug) => ({
-      slug: slug,
-    }));
-  } catch (error) {
-    console.error('Error generating static params:', error);
-    return [];
-  }
-}
+export const revalidate = 3600; // 1時間ごとに再生成
 
 // メタデータの生成
-export async function generateMetadata({ params }: Props) {
-  const { slug } = await params;
-  
+export async function generateMetadata() {
   try {
-    const page = await getPageBySlug(slug);
+    const page = await getPageBySlug('history');
     
     if (!page) {
       return {
@@ -75,21 +28,29 @@ export async function generateMetadata({ params }: Props) {
   }
 }
 
-export default async function PageSlug({ params }: Props) {
-  const { slug } = await params;
-  
+export default async function HistoryPage() {
   let page = null;
+  let childPages: any[] = [];
   let error = null;
 
   try {
-    page = await getPageBySlug(slug);
+    // 親ページを取得
+    page = await getPageBySlug('history');
+    console.log('=== History Page Debug ===');
+    console.log('Parent page found:', !!page);
     
     if (!page) {
+      console.log('Parent page not found, returning 404');
       notFound();
     }
+
+    // 子ページ（歴代主将）を取得
+    childPages = await getChildPages('history');
+    console.log('Child pages count:', childPages.length);
+    console.log('Child pages:', childPages.map((p: any) => ({ slug: p.slug, title: p.title.rendered })));
   } catch (e) {
     error = 'データの取得に失敗しました';
-    console.error('Error fetching page:', e);
+    console.error('Error fetching history page:', e);
   }
 
   if (error || !page) {
@@ -103,12 +64,9 @@ export default async function PageSlug({ params }: Props) {
   }
 
   const featuredImage = page._embedded?.['wp:featuredmedia']?.[0];
-  
-  // 本文から画像を抽出
-  const { images, contentWithoutImages } = extractImagesFromContent(page.content.rendered);
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl" style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
+    <article className="container mx-auto px-4 py-8 max-w-4xl" style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
       {/* パンくずリスト */}
       <nav className="mb-8 text-sm" style={{color: 'var(--color-text-tertiary)'}}>
         <Link href="/" className="hover:underline">ホーム</Link>
@@ -146,20 +104,34 @@ export default async function PageSlug({ params }: Props) {
       {/* タイトル */}
       <header className="mb-8">
         <h1 
-          className="text-4xl md:text-5xl font-bold"
+          className="text-4xl md:text-5xl font-bold mb-4"
           style={{color: 'var(--color-text-primary)'}}
           dangerouslySetInnerHTML={{ __html: page.title.rendered }}
         />
       </header>
 
-      {/* コンテンツ */}
+      {/* ページ本文 */}
       <div 
         className="prose prose-lg max-w-none mb-12"
-        dangerouslySetInnerHTML={{ __html: contentWithoutImages }}
+        dangerouslySetInnerHTML={{ __html: page.content.rendered }}
       />
 
-      {/* 画像ギャラリー */}
-      <PostImageGallery images={images} />
+      {/* 歴代主将一覧（アコーディオン形式） */}
+      {childPages.length > 0 && (
+        <section className="mt-16">
+          <h2 
+            className="text-3xl font-bold mb-8 pb-4 border-b-2"
+            style={{
+              color: 'var(--color-text-primary)',
+              borderColor: 'var(--color-dojo-secondary-key)'
+            }}
+          >
+            歴代主将一覧
+          </h2>
+
+          <HistoryAccordion childPages={childPages} />
+        </section>
+      )}
 
       {/* 戻るボタン */}
       <div className="mt-12 pt-8 border-t" style={{borderColor: 'var(--color-dojo-secondary-key)'}}>
@@ -174,7 +146,6 @@ export default async function PageSlug({ params }: Props) {
           ホームに戻る
         </Link>
       </div>
-    </div>
+    </article>
   );
 }
-

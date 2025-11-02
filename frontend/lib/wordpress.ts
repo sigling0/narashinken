@@ -575,5 +575,77 @@ export async function getInstagramFromGraphAPI(limit: number = 18): Promise<Inst
   }
 }
 
+// 子ページを取得（親ページのスラッグから）
+export async function getChildPages(parentSlug: string) {
+  try {
+    // まず親ページを取得
+    const parentResponse = await wpAPI.get('/wp/v2/pages', {
+      params: {
+        slug: parentSlug,
+        _embed: true,
+      },
+    });
+
+    if (!parentResponse.data || parentResponse.data.length === 0) {
+      return [];
+    }
+
+    const parentId = parentResponse.data[0].id;
+
+    // 親ページのIDで子ページを取得
+    const childResponse = await wpAPI.get('/wp/v2/pages', {
+      params: {
+        parent: parentId,
+        per_page: 100,
+        orderby: 'slug',
+        order: 'asc',
+        _embed: true,
+      },
+    });
+
+    return childResponse.data;
+  } catch (error) {
+    console.error('Error fetching child pages:', error);
+    return [];
+  }
+}
+
+// 特定の子ページを取得（親スラッグ + 子スラッグ）
+export async function getChildPageBySlug(parentSlug: string, childSlug: string) {
+  try {
+    // まず親ページを取得
+    const parentResponse = await wpAPI.get('/wp/v2/pages', {
+      params: {
+        slug: parentSlug,
+        _embed: true,
+      },
+    });
+
+    if (!parentResponse.data || parentResponse.data.length === 0) {
+      return null;
+    }
+
+    const parentId = parentResponse.data[0].id;
+
+    // 子ページを取得
+    const childResponse = await wpAPI.get('/wp/v2/pages', {
+      params: {
+        parent: parentId,
+        slug: childSlug,
+        _embed: true,
+      },
+    });
+
+    if (!childResponse.data || childResponse.data.length === 0) {
+      return null;
+    }
+
+    return childResponse.data[0];
+  } catch (error) {
+    console.error(`Error fetching child page ${childSlug}:`, error);
+    return null;
+  }
+}
+
 export default wpAPI;
 

@@ -29,6 +29,10 @@ export default function Header({ menuItems = [], categories = [], tags = [] }: H
     .sort((a: any, b: any) => b.count - a.count)
     .slice(0, 15);
   
+  // モバイル用: 1ページまるまる使う表示数
+  const mobileCategories = activeCategories.slice(0, 6);
+  const mobileTags = activeTags.slice(0, 12);
+  
   // モバイルメニューからのキーワード検索
   const handleMobileKeywordSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -194,7 +198,7 @@ export default function Header({ menuItems = [], categories = [], tags = [] }: H
         </div>
       </header>
       
-      {/* モバイルメニュー - 全画面オーバーレイ */}
+      {/* モバイルメニュー - 1ページに収まる最適化レイアウト */}
       {isMenuOpen && (
         <>
           <div 
@@ -203,155 +207,138 @@ export default function Header({ menuItems = [], categories = [], tags = [] }: H
             onClick={() => setIsMenuOpen(false)}
           />
           <nav 
-            className="md:hidden fixed top-16 left-0 right-0 bottom-0 z-[70] overflow-y-auto"
-            style={{backgroundColor: 'var(--color-dojo-bg-key)'}}
+            className="md:hidden fixed top-16 left-0 right-0 z-[70] overflow-y-auto"
+            style={{
+              backgroundColor: 'var(--color-dojo-bg-key)',
+              maxHeight: 'calc(100vh - 4rem)'
+            }}
           >
-        <div className="container mx-auto px-4 py-6 space-y-6">
+        <div className="container mx-auto px-4 py-5 space-y-5">
           {/* ナビゲーションメニュー */}
-          <div className="space-y-2.5 pb-6 border-b" style={{borderColor: 'var(--color-dojoprimary-key)'}}>
-            <div>
-              <Link
-                href="/about"
-                className="inline-block py-2 text-base font-medium"
-                style={{color: 'var(--color-text-primary)'}}
-                onClick={() => setIsMenuOpen(false)}
+          <div className="grid grid-cols-2 gap-x-4 gap-y-2 pb-5 border-b-2" style={{borderColor: 'var(--color-dojoprimary-key)'}}>
+            <Link
+              href="/about"
+              className="py-2 text-base font-medium"
+              style={{color: 'var(--color-text-primary)'}}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              道場紹介
+            </Link>
+            <Link
+              href="/member"
+              className="py-2 text-base font-medium"
+              style={{color: 'var(--color-text-primary)'}}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              指導者紹介
+            </Link>
+            <Link
+              href="/history"
+              className="py-2 text-base font-medium"
+              style={{color: 'var(--color-text-primary)'}}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              道場の歴史
+            </Link>
+            <Link
+              href="/album"
+              className="py-2 text-base font-medium"
+              style={{color: 'var(--color-text-primary)'}}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              稽古風景
+            </Link>
+            <Link
+              href="/category/result"
+              className="py-2 text-base font-medium"
+              style={{color: 'var(--color-text-primary)'}}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              大会記録
+            </Link>
+            <Link
+              href="/posts"
+              className="py-2 text-base font-medium"
+              style={{color: 'var(--color-text-primary)'}}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              記事一覧
+            </Link>
+          </div>
+
+          {/* キーワード検索 */}
+          <div>
+            <h3 className="text-base font-semibold mb-3" style={{color: 'var(--color-text-primary)'}}>
+              キーワード検索
+            </h3>
+            <form onSubmit={handleMobileKeywordSearch} className="flex gap-2">
+              <input 
+                type="search"
+                id="keyword-search-mobile"
+                value={mobileKeyword}
+                onChange={(e) => setMobileKeyword(e.target.value)}
+                placeholder="検索キーワードを入力"
+                className="flex-1 px-3 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-offset-0"
+                style={{
+                  borderColor: 'var(--color-dojo-secondary-key)',
+                  color: 'var(--color-text-primary)',
+                  '--tw-ring-color': 'var(--color-dojoprimary-key)'
+                } as React.CSSProperties}
+              />
+              <button 
+                type="submit"
+                className="px-4 py-2 text-sm font-medium rounded transition-colors hover:opacity-90"
+                style={{
+                  backgroundColor: 'var(--color-dojoprimary-key)',
+                  color: 'white'
+                }}
               >
-                道場紹介
-              </Link>
-            </div>
-            <div>
-              <Link
-                href="/member"
-                className="inline-block py-2 text-base font-medium"
-                style={{color: 'var(--color-text-primary)'}}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                指導者紹介
-              </Link>
-            </div>
-            <div>
-              <Link
-                href="/album"
-                className="inline-block py-2 text-base font-medium"
-                style={{color: 'var(--color-text-primary)'}}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                稽古風景
-              </Link>
-            </div>
-            <div>
-              <Link
-                href="/category/result"
-                className="inline-block py-2 text-base font-medium"
-                style={{color: 'var(--color-text-primary)'}}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                大会記録
-              </Link>
-            </div>
-            <div>
-              <Link
-                href="/posts"
-                className="inline-block py-2 text-base font-medium"
-                style={{color: 'var(--color-text-primary)'}}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                記事一覧
-              </Link>
+                検索
+              </button>
+            </form>
+          </div>
+
+          {/* カテゴリー検索（6件表示） */}
+          <div>
+            <h3 className="text-base font-semibold mb-3" style={{color: 'var(--color-text-primary)'}}>
+              カテゴリー
+            </h3>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+              {mobileCategories.map((category: any) => (
+                <Link
+                  key={category.id}
+                  href={`/category/${category.slug}`}
+                  className="text-sm underline transition-all duration-200 hover:font-bold truncate"
+                  style={{color: 'var(--color-text-tertiary)'}}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {category.name} ({category.count})
+                </Link>
+              ))}
             </div>
           </div>
 
-          {/* 記事検索セクション */}
-          <div className="space-y-4">
-            <h3 className="text-base font-semibold" style={{color: 'var(--color-text-primary)'}}>
-              記事検索
+          {/* タグ検索（12件表示） */}
+          <div>
+            <h3 className="text-base font-semibold mb-3" style={{color: 'var(--color-text-primary)'}}>
+              タグ
             </h3>
-            
-            {/* キーワード検索 */}
-            <div>
-              <label 
-                htmlFor="keyword-search-mobile"
-                className="block text-sm font-semibold mb-2"
-                style={{color: 'var(--color-text-primary)'}}
-              >
-                キーワード検索
-              </label>
-              <form onSubmit={handleMobileKeywordSearch} className="flex gap-2">
-                <input 
-                  type="search"
-                  id="keyword-search-mobile"
-                  value={mobileKeyword}
-                  onChange={(e) => setMobileKeyword(e.target.value)}
-                  placeholder="キーワードを入力"
-                  className="flex-1 px-3 py-2 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-offset-0"
+            <div className="flex flex-wrap gap-2">
+              {mobileTags.map((tag: any) => (
+                <Link
+                  key={tag.id}
+                  href={`/tag/${tag.slug}`}
+                  className="inline-block px-2.5 py-1 text-xs rounded border transition-all duration-200 hover:scale-105"
                   style={{
-                    borderColor: 'var(--color-dojo-secondary-key)',
-                    color: 'var(--color-text-primary)',
-                    '--tw-ring-color': 'var(--color-dojoprimary-key)'
-                  } as React.CSSProperties}
-                />
-                <button 
-                  type="submit"
-                  className="px-4 py-2 text-sm font-medium rounded transition-colors hover:opacity-90"
-                  style={{
-                    backgroundColor: 'var(--color-dojoprimary-key)',
-                    color: 'white'
+                    backgroundColor: 'var(--color-dojo-bg-accent)',
+                    borderColor: 'var(--color-dojo-tertiary-accent)',
+                    color: 'var(--color-text-tertiary)'
                   }}
+                  onClick={() => setIsMenuOpen(false)}
                 >
-                  検索
-                </button>
-              </form>
-            </div>
-
-            {/* カテゴリー検索 */}
-            <div>
-              <div 
-                className="block text-sm font-semibold mb-2"
-                style={{color: 'var(--color-text-primary)'}}
-              >
-                カテゴリー
-              </div>
-              <div className="space-y-1.5">
-                {activeCategories.map((category: any) => (
-                  <div key={category.id}>
-                    <Link
-                      href={`/category/${category.slug}`}
-                      className="inline-block text-sm underline transition-all duration-200 hover:font-bold"
-                      style={{color: 'var(--color-text-tertiary)'}}
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {category.name} ({category.count})
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* タグ検索 */}
-            <div>
-              <div 
-                className="block text-sm font-semibold mb-2"
-                style={{color: 'var(--color-text-primary)'}}
-              >
-                タグ
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {activeTags.map((tag: any) => (
-                  <Link
-                    key={tag.id}
-                    href={`/tag/${tag.slug}`}
-                    className="inline-block px-2 py-1 text-xs rounded border transition-all duration-200 hover:scale-110 hover:shadow-md"
-                    style={{
-                      backgroundColor: 'var(--color-dojo-bg-accent)',
-                      borderColor: 'var(--color-dojo-tertiary-accent)',
-                      color: 'var(--color-text-tertiary)'
-                    }}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {tag.name}
-                  </Link>
-                ))}
-              </div>
+                  {tag.name}
+                </Link>
+              ))}
             </div>
           </div>
         </div>
