@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
 import { getMenuByLocation, getCategories, getTags } from "@/lib/wordpress";
 
 // Google Fontsを削除してシステムフォント（明朝体）を使用（LCP改善のため）
@@ -53,6 +54,7 @@ export default async function RootLayout({
         backgroundColor: 'var(--color-dojo-bg-key)',
         fontFamily: '"Yu Mincho", YuMincho, "Hiragino Mincho ProN", "HiraMinProN-W3", "MS PMincho", "Noto Serif JP", "Noto Serif CJK JP", serif'
       }}>
+        <ScrollToTop />
         <div className="flex flex-col min-h-screen">
           <Header menuItems={menuItems} categories={categories} tags={tags} />
           <main className="flex-grow">

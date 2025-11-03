@@ -95,10 +95,14 @@ export default function Header({ menuItems = [], categories = [], tags = [] }: H
               
               {/* ドロップダウンメニュー */}
               <div 
-                className={`absolute top-full left-0 mt-1 w-48 rounded-lg shadow-lg overflow-hidden transition-all duration-200 origin-top ${
-                  isAboutDropdownOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0 pointer-events-none'
+                className={`absolute left-0 w-48 rounded-lg shadow-lg overflow-hidden transition-all duration-200 origin-top ${
+                  isAboutDropdownOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'
                 }`}
-                style={{backgroundColor: 'var(--color-dojo-bg-key)'}}
+                style={{
+                  backgroundColor: 'var(--color-dojo-bg-key)',
+                  top: 'calc(100% - 2px)',
+                  pointerEvents: isAboutDropdownOpen ? 'auto' : 'none'
+                }}
               >
                 <Link
                   href="/about"

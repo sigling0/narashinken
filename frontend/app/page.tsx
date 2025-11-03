@@ -97,7 +97,7 @@ export default async function Home() {
     fetchWithTimeout(getChildPages('history')).catch(() => []),
   ]);
 
-  // 歴代主将データを処理（エラーがないものだけを抽出し、新しい順にソート）
+  // 歴代主将データを処理（エラーがないものだけを抽出し、古い順にソート）
   const captainList = historyPages
     .map((page: any) => {
       const parsed = parseHistoryContent(page.content.rendered, page.title.rendered);
@@ -109,7 +109,7 @@ export default async function Home() {
       };
     })
     .filter((item: any) => !item.hasError && item.year && item.captainName) // エラーがなく、年度と主将名があるもののみ
-    .sort((a: any, b: any) => parseInt(b.year) - parseInt(a.year)); // 新しい順にソート
+    .sort((a: any, b: any) => parseInt(a.year) - parseInt(b.year)); // 古い順にソート
 
   return (
     <div style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>

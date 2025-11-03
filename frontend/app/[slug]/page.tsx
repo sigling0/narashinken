@@ -104,8 +104,19 @@ export default async function PageSlug({ params }: Props) {
 
   const featuredImage = page._embedded?.['wp:featuredmedia']?.[0];
   
-  // 本文から画像を抽出
-  const { images, contentWithoutImages } = extractImagesFromContent(page.content.rendered);
+  // 画像ギャラリーを無効にするページのslugリスト
+  const DISABLE_GALLERY_PAGES = [
+    'dojo-introduction', 'introduction', 'about', 'dojo',
+    'member', 'instructor-introduction', 'instructors', 'coaches', 'teachers', 'shidosha'
+  ];
+  
+  // 画像ギャラリーを使うかどうかを判定
+  const shouldUseGallery = !DISABLE_GALLERY_PAGES.includes(slug);
+  
+  // 画像ギャラリーを使う場合のみ本文から画像を抽出
+  const { images, contentWithoutImages } = shouldUseGallery
+    ? extractImagesFromContent(page.content.rendered)
+    : { images: [], contentWithoutImages: page.content.rendered };
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl" style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
@@ -158,8 +169,8 @@ export default async function PageSlug({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: contentWithoutImages }}
       />
 
-      {/* 画像ギャラリー */}
-      <PostImageGallery images={images} />
+      {/* 画像ギャラリー（画像がある場合のみ表示） */}
+      {images.length > 0 && <PostImageGallery images={images} />}
 
       {/* 戻るボタン */}
       <div className="mt-12 pt-8 border-t" style={{borderColor: 'var(--color-dojo-secondary-key)'}}>

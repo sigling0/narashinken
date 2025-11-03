@@ -39,10 +39,40 @@ export default function PostCard({ post }: PostCardProps) {
     }).replace(/\//g, '年').replace(/年(\d+)月/, '年$1月') + '日';
   };
 
-  // HTMLタグを除去してテキストのみを取得
+  // HTMLタグを除去してテキストのみを取得し、HTMLエンティティをデコード
   const stripHtml = (html: string, maxLength: number = 80) => {
-    const text = html.replace(/<[^>]*>/g, '').trim();
-    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    // HTMLタグを除去
+    let text = html.replace(/<[^>]*>/g, '');
+    
+    // HTMLエンティティをデコード（よく使われるものを置換）
+    text = text
+      .replace(/&hellip;/g, '…')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#039;/g, "'")
+      .replace(/&#8217;/g, '\u2019') // 右シングルクォート
+      .replace(/&#8220;/g, '\u201C') // 左ダブルクォート
+      .replace(/&#8221;/g, '\u201D') // 右ダブルクォート
+      .replace(/&mdash;/g, '—')
+      .replace(/&ndash;/g, '–')
+      .replace(/\[…\]/g, ''); // WordPressの[…]を削除
+    
+    // Unicode正規化（結合文字を正規化して文字数を正しくカウント）
+    text = text.normalize('NFC');
+    
+    // 改行を空白に変換し、複数の空白を1つに統一
+    text = text.replace(/\s+/g, ' ').trim();
+    
+    // 文字数カウント時に絵文字や特殊文字を考慮
+    // Array.from()を使うことで、サロゲートペアや結合文字を正しく扱う
+    const chars = Array.from(text);
+    if (chars.length > maxLength) {
+      return Array.from(text).slice(0, maxLength).join('') + '…';
+    }
+    return text;
   };
 
   return (

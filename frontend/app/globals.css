@@ -27,7 +27,7 @@
 /* プロースタイリング（記事本文用） - 最適化版 */
 @layer base {
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
   }
 
   /* 明朝体の視認性改善 */
