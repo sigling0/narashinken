@@ -85,28 +85,6 @@ export default async function MemberPage({ params }: Props) {
         </span>
       </nav>
 
-      {/* エラー表示 */}
-      {errors.length > 0 && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-8">
-          <div className="flex items-start">
-            <svg className="w-6 h-6 text-red-500 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-            </svg>
-            <div className="flex-1">
-              <h3 className="text-lg font-bold text-red-800 mb-2">データ構造エラー</h3>
-              <p className="text-sm text-red-700 mb-3">
-                このページの本文が正しい形式で入力されていません。以下のエラーを修正してください：
-              </p>
-              <ul className="text-sm text-red-700 space-y-1 list-disc pl-5">
-                {errors.map((error, idx) => (
-                  <li key={idx}>{error}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* アイキャッチ画像 - スマホ: 元の縦横比保持、PC: 固定高さ */}
       {featuredImage && (
         <>
@@ -134,59 +112,58 @@ export default async function MemberPage({ params }: Props) {
         </>
       )}
 
-      {/* タイトル・基本情報 */}
+      {/* タイトルとメタ情報 */}
       <header className="mb-8">
         <h1 
-          className="text-4xl md:text-5xl font-bold mb-6"
+          className="text-4xl md:text-5xl font-bold mb-4"
           style={{color: 'var(--color-text-primary)'}}
         >
           {year ? `${year}年度` : page.title.rendered}
         </h1>
 
-        {/* 主将名 */}
-        {captainName && (
-          <div 
-            className="mb-4 p-4 rounded-lg"
-            style={{backgroundColor: 'var(--color-dojo-bg-accent)'}}
-          >
-            <span className="text-sm font-semibold" style={{color: 'var(--color-text-secondary)'}}>
-              主将:
+        {/* 主将名とエラー表示を統合 */}
+        <div className="flex items-center space-x-4 mb-4" style={{color: 'var(--color-text-tertiary)'}}>
+          {captainName && (
+            <>
+              <span className="text-sm">主将:</span>
+              <span 
+                className="text-lg font-semibold"
+                style={{color: 'var(--color-dojoprimary-key)'}}
+                dangerouslySetInnerHTML={{ __html: captainName }}
+              />
+            </>
+          )}
+          {errors.length > 0 && (
+            <span className="text-xs px-2 py-1 rounded" style={{backgroundColor: '#fee2e2', color: '#991b1b'}}>
+              データ構造エラーあり
             </span>
-            <span 
-              className="ml-2 text-2xl font-bold"
-              style={{color: 'var(--color-dojoprimary-key)'}}
-              dangerouslySetInnerHTML={{ __html: captainName }}
-            />
-          </div>
-        )}
-
-        {/* メンバー */}
-        {memberList && (
-          <div 
-            className="mb-4 p-4 rounded-lg"
-            style={{backgroundColor: 'white', border: '1px solid var(--color-dojo-tertiary-accent)'}}
-          >
-            <h2 className="text-lg font-semibold mb-2" style={{color: 'var(--color-text-secondary)'}}>
-              メンバー
-            </h2>
-            <div 
-              className="prose max-w-none"
-              style={{color: 'var(--color-text-primary)'}}
-              dangerouslySetInnerHTML={{ __html: memberList }}
-            />
-          </div>
-        )}
+          )}
+        </div>
       </header>
+
+      {/* メンバー */}
+      {memberList && (
+        <section className="mb-8">
+          <h2 
+            className="text-xl font-bold mb-3"
+            style={{color: 'var(--color-text-secondary)'}}
+          >
+            メンバー
+          </h2>
+          <div 
+            className="prose prose-lg max-w-none"
+            style={{color: 'var(--color-text-primary)'}}
+            dangerouslySetInnerHTML={{ __html: memberList }}
+          />
+        </section>
+      )}
 
       {/* 大会成績 */}
       {battleRecords && (
         <section className="mb-12">
           <h2 
-            className="text-2xl font-bold mb-4 pb-2 border-b-2"
-            style={{
-              color: 'var(--color-text-primary)',
-              borderColor: 'var(--color-dojo-secondary-key)'
-            }}
+            className="text-xl font-bold mb-3"
+            style={{color: 'var(--color-text-secondary)'}}
           >
             大会成績
           </h2>
@@ -198,23 +175,10 @@ export default async function MemberPage({ params }: Props) {
       )}
 
       {/* 画像ギャラリー */}
-      {images.length > 0 && (
-        <section className="mb-12">
-          <h2 
-            className="text-2xl font-bold mb-4 pb-2 border-b-2"
-            style={{
-              color: 'var(--color-text-primary)',
-              borderColor: 'var(--color-dojo-secondary-key)'
-            }}
-          >
-            ギャラリー
-          </h2>
-          <PostImageGallery images={images} />
-        </section>
-      )}
+      <PostImageGallery images={images} />
 
-      {/* ナビゲーション */}
-      <div className="mt-12 pt-8 border-t flex justify-between" style={{borderColor: 'var(--color-dojo-secondary-key)'}}>
+      {/* 戻るボタン */}
+      <div className="mt-12 pt-8 border-t" style={{borderColor: 'var(--color-dojo-secondary-key)'}}>
         <Link
           href="/history"
           className="inline-flex items-center font-medium hover:underline transition-colors"
@@ -224,14 +188,6 @@ export default async function MemberPage({ params }: Props) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           歴代主将一覧に戻る
-        </Link>
-        
-        <Link
-          href="/"
-          className="inline-flex items-center font-medium hover:underline transition-colors"
-          style={{color: 'var(--color-text-secondary)'}}
-        >
-          ホームに戻る
         </Link>
       </div>
     </article>
