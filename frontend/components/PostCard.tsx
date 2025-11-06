@@ -85,13 +85,18 @@ export default function PostCard({ post }: PostCardProps) {
         }}
       >
         {/* アイキャッチ画像 */}
-        <div className="relative w-full h-44 overflow-hidden" style={{ minHeight: '176px' }}>
+        <div 
+          className="relative w-full aspect-[4/3] overflow-hidden" 
+          style={{ 
+            backgroundColor: '#f3f4f6'
+          }}
+        >
           {featuredImage ? (
             <Image
               src={featuredImage.source_url}
               alt={featuredImage.alt_text || post.title.rendered}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-110"
+              className="object-contain transition-transform duration-300 group-hover:scale-105"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 380px"
               quality={50}
             />

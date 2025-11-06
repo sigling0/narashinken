@@ -123,14 +123,17 @@ export default async function PostPage({ params }: Props) {
         <span style={{color: 'var(--color-text-primary)'}}>{post.title.rendered}</span>
       </nav>
 
-      {/* アイキャッチ画像 - スマホ・デスクトップ共に固定高さ */}
+      {/* アイキャッチ画像 */}
       {featuredImage && (
-        <div className="relative w-full mb-8 rounded-xl overflow-hidden h-64 md:h-96">
+        <div 
+          className="relative w-full mb-8 rounded-xl overflow-hidden h-64 md:h-96"
+          style={{ backgroundColor: '#f3f4f6' }}
+        >
           <Image
             src={featuredImage.source_url}
             alt={featuredImage.alt_text || post.title.rendered}
             fill
-            className="object-cover"
+            className="object-contain"
             priority
             sizes="(max-width: 768px) 100vw, 1200px"
           />
