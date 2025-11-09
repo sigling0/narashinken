@@ -118,7 +118,7 @@ export default async function HistoryPage() {
 
       {/* 歴代主将一覧（アコーディオン形式） */}
       {childPages.length > 0 && (
-        <section className="mt-16">
+        <section id="history-captains" className="mt-16">
           <h2 
             className="text-3xl font-bold mb-8 pb-4 border-b-2"
             style={{

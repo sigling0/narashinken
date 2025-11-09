@@ -257,12 +257,12 @@ export default function Header({ menuItems = [], categories = [], tags = [] }: H
               稽古風景
             </Link>
             <Link
-              href="/category/result"
+              href="/history#history-captains"
               className="py-2 text-base font-medium"
               style={{color: 'var(--color-text-primary)'}}
               onClick={() => setIsMenuOpen(false)}
             >
-              大会記録
+              歴代主将
             </Link>
             <Link
               href="/posts"

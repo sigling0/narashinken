@@ -11,15 +11,44 @@ export default function ScrollToTop() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // ページ遷移時に即座にトップにスクロール
-    window.scrollTo(0, 0);
-    
-    // DOMが完全に更新された後にも再度トップにスクロール（保険）
-    const timer = setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 0);
+    if (typeof window === 'undefined') {
+      return;
+    }
 
-    return () => clearTimeout(timer);
+    const { hash } = window.location;
+
+    if (hash) {
+      const targetId = hash.replace(/^#/, '');
+
+      let frameId: number | null = null;
+      let attempts = 0;
+      const maxAttempts = 24; // 約400ms (24 * ~16ms)
+
+      const tryScroll = () => {
+        attempts += 1;
+        const element = document.getElementById(targetId);
+
+        if (element) {
+          element.scrollIntoView({ behavior: 'auto', block: 'start' });
+          return;
+        }
+
+        if (attempts < maxAttempts) {
+          frameId = window.requestAnimationFrame(tryScroll);
+        }
+      };
+
+      tryScroll();
+
+      return () => {
+        if (frameId !== null) {
+          window.cancelAnimationFrame(frameId);
+        }
+      };
+      return;
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [pathname]);
 
   return null;
