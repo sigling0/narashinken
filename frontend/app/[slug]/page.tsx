@@ -34,6 +34,64 @@ function extractImagesFromContent(html: string): { images: string[], contentWith
   return { images, contentWithoutImages };
 }
 
+// 指導者紹介ページ用にコンテンツを再構成（h2 + 画像 + 本文のブロックを横並び用マークアップに変換）
+function enhanceMemberContentLayout(html: string): string {
+  if (!html) return html;
+
+  // h2で分割し、各ブロックをセクション化する
+  const segments = html.split(/(?=<h2\b[^>]*>)/i);
+
+  const processed = segments.map((segment) => {
+    const trimmed = segment.trim();
+    if (!trimmed) {
+      return '';
+    }
+
+    const headingMatch = trimmed.match(/^(<h2[^>]*>[\s\S]*?<\/h2>)([\s\S]*)$/i);
+    if (!headingMatch) {
+      return segment;
+    }
+
+    const heading = headingMatch[1];
+    let remainder = headingMatch[2].trim();
+
+    if (!remainder) {
+      return segment;
+    }
+
+    const mediaMatch = remainder.match(
+      /^(\s*(?:<figure[\s\S]*?<\/figure>|<p[^>]*>\s*<img[^>]*>\s*<\/p>))([\s\S]*)$/i
+    );
+
+    if (!mediaMatch) {
+      return segment;
+    }
+
+    const media = mediaMatch[1];
+    const detail = mediaMatch[2].trim();
+
+    if (!detail) {
+      return segment;
+    }
+
+    return `
+      <section class="member-entry">
+        ${heading}
+        <div class="member-entry__body">
+          <div class="member-entry__media">
+            ${media}
+          </div>
+          <div class="member-entry__detail">
+            ${detail}
+          </div>
+        </div>
+      </section>
+    `;
+  });
+
+  return processed.join('');
+}
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
@@ -118,6 +176,11 @@ export default async function PageSlug({ params }: Props) {
     ? extractImagesFromContent(page.content.rendered)
     : { images: [], contentWithoutImages: page.content.rendered };
 
+  const renderedContent =
+    slug === 'member'
+      ? enhanceMemberContentLayout(contentWithoutImages)
+      : contentWithoutImages;
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl" style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
       {/* パンくずリスト */}
@@ -165,8 +228,8 @@ export default async function PageSlug({ params }: Props) {
 
       {/* コンテンツ */}
       <div 
-        className="prose prose-lg max-w-none mb-12"
-        dangerouslySetInnerHTML={{ __html: contentWithoutImages }}
+        className={`prose prose-lg max-w-none mb-12${slug === 'member' ? ' member-content' : ''}`}
+        dangerouslySetInnerHTML={{ __html: renderedContent }}
       />
 
       {/* 画像ギャラリー（画像がある場合のみ表示） */}

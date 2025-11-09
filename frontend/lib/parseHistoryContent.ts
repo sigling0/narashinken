@@ -49,6 +49,50 @@ function removeImages(html: string): string {
 }
 
 /**
+ * 先頭に付与されている中黒(・)を除去
+ */
+function removeLeadingMiddleDot(html: string): string {
+  if (!html) return html;
+
+  const bulletPattern = '(?:・|&middot;|&#12539;|&#183;|&bull;)';
+
+  let result = html.replace(
+    new RegExp(`(<(?:p|li|span|div)[^>]*>\\s*)${bulletPattern}\\s*`, 'gi'),
+    '$1'
+  );
+
+  result = result.replace(
+    new RegExp(`(<br\\s*/?>\\s*)${bulletPattern}\\s*`, 'gi'),
+    '$1'
+  );
+
+  result = result.replace(new RegExp(`^\\s*${bulletPattern}\\s*`, 'i'), '');
+
+  return result;
+}
+
+/**
+ * WordPressのリスト構造を段落に変換して箇条書きの中黒を削除
+ */
+function normalizeMemberListStructure(html: string): string {
+  if (!html) return html;
+
+  let result = html;
+
+  result = result.replace(/<ul[^>]*>/gi, '');
+  result = result.replace(/<\/ul>/gi, '');
+  result = result.replace(/<ol[^>]*>/gi, '');
+  result = result.replace(/<\/ol>/gi, '');
+
+  result = result.replace(/<li[^>]*>\s*/gi, '<p class="history-member-line">');
+  result = result.replace(/\s*<\/li>/gi, '</p>');
+
+  result = result.replace(/<p[^>]*>\s*<\/p>/gi, '');
+
+  return result;
+}
+
+/**
  * タイトルから年度を抽出（例: "2008年度" → "2008"）
  */
 function extractYear(title: string): string {
@@ -92,7 +136,8 @@ export function parseHistoryContent(
   
   // 4. 各セクションを抽出
   const captainName = extractSection(cleanHtml, '主将');
-  const memberList = extractSection(cleanHtml, 'メンバー');
+  const memberListRaw = extractSection(cleanHtml, 'メンバー');
+  const memberList = normalizeMemberListStructure(removeLeadingMiddleDot(memberListRaw));
   const battleRecords = extractSection(cleanHtml, '大会成績');
   
   // 5. 必須セクションのバリデーション

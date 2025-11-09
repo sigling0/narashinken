@@ -49,7 +49,11 @@ export default function Header({ menuItems = [], categories = [], tags = [] }: H
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between h-16 md:h-24">
           {/* ロゴ */}
-          <Link href="/" className="flex items-center">
+          <Link 
+            href="/" 
+            className="flex items-center"
+            onClick={() => setIsMenuOpen(false)}
+          >
             <div className="w-48 md:w-72">
               <Image 
                 src="/logo_header.png" 

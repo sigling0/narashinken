@@ -73,6 +73,49 @@
   .prose th, .prose td { border: 1px solid #d1d5db; padding: 0.5rem 1rem; }
   .prose th { background-color: #f3f4f6; font-weight: 600; }
   .prose hr { margin: 2rem 0; border-color: #d1d5db; }
+
+  /* 指導者紹介ページ: PCで画像と本文を横並びに表示 */
+  .member-content .member-entry {
+    margin-bottom: 3rem;
+  }
+
+  .member-content .member-entry:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .member-content .member-entry__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .member-content .member-entry__media figure,
+  .member-content .member-entry__media p {
+    margin: 0;
+  }
+
+  .member-content .member-entry__media img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+  }
+
+  @media (min-width: 1024px) {
+    .member-content .member-entry__body {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 2.5rem;
+    }
+
+    .member-content .member-entry__media {
+      flex: 0 0 min(35%, 320px);
+      max-width: 320px;
+    }
+
+    .member-content .member-entry__detail {
+      flex: 1;
+    }
+  }
 }
 
 /* カスタムスタイル */
