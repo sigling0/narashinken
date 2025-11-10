@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'http://localhost:8888/wp-json';
 
@@ -10,6 +10,45 @@ const wpAPI = axios.create({
   },
   timeout: 5000, // 5秒タイムアウト
 });
+
+const shouldUseBuildCache = process.env.NEXT_PHASE === 'phase-production-build';
+
+type CacheKey = string;
+const requestCache = new Map<CacheKey, Promise<AxiosResponse<any>>>();
+
+function createCacheKey(path: string, config?: AxiosRequestConfig) {
+  const { params, headers, ...rest } = config || {};
+
+  return [
+    path,
+    JSON.stringify(params ?? {}),
+    JSON.stringify(headers ?? {}),
+    JSON.stringify(rest ?? {}),
+  ].join('::');
+}
+
+async function cachedGet<T = any>(
+  path: string,
+  config?: AxiosRequestConfig
+): Promise<AxiosResponse<T>> {
+  if (!shouldUseBuildCache) {
+    return wpAPI.get<T>(path, config);
+  }
+
+  const cacheKey = createCacheKey(path, config);
+
+  const fetchResponse = () =>
+    wpAPI.get<T>(path, config).catch((error) => {
+      requestCache.delete(cacheKey);
+      throw error;
+    });
+
+  if (!requestCache.has(cacheKey)) {
+    requestCache.set(cacheKey, fetchResponse());
+  }
+
+  return requestCache.get(cacheKey)! as Promise<AxiosResponse<T>>;
+}
 
 // 型定義
 export interface Post {
@@ -112,7 +151,7 @@ export interface InstagramFeed {
 // サイト情報の取得
 export async function getSiteInfo(): Promise<SiteInfo> {
   try {
-    const response = await wpAPI.get('/headless/v1/site-info');
+    const response = await cachedGet<SiteInfo>('/headless/v1/site-info');
     return response.data;
   } catch (error) {
     console.error('Error fetching site info:', error);
@@ -123,7 +162,7 @@ export async function getSiteInfo(): Promise<SiteInfo> {
 // 最新投稿の取得
 export async function getRecentPosts(perPage: number = 10): Promise<Post[]> {
   try {
-    const response = await wpAPI.get('/headless/v1/recent-posts', {
+    const response = await cachedGet<Post[]>('/headless/v1/recent-posts', {
       params: { per_page: perPage },
     });
     return response.data;
@@ -151,7 +190,7 @@ export async function getPosts(page: number = 1, perPage: number = 10, search?: 
       params.search = search.trim();
     }
     
-    const response = await wpAPI.get('/wp/v2/posts', {
+    const response = await cachedGet('/wp/v2/posts', {
       params,
     });
     
@@ -172,7 +211,7 @@ export async function getPostBySlug(slug: string): Promise<any> {
     // スラッグがURLエンコードされている場合はデコード
     const decodedSlug = decodeURIComponent(slug);
     
-    const response = await wpAPI.get('/wp/v2/posts', {
+    const response = await cachedGet('/wp/v2/posts', {
       params: {
         slug: decodedSlug,
         _embed: true,
@@ -193,7 +232,7 @@ export async function getPostBySlug(slug: string): Promise<any> {
 // IDで投稿を取得
 export async function getPostById(id: number): Promise<any> {
   try {
-    const response = await wpAPI.get(`/wp/v2/posts/${id}`, {
+    const response = await cachedGet(`/wp/v2/posts/${id}`, {
       params: {
         _embed: true,
       },
@@ -208,7 +247,7 @@ export async function getPostById(id: number): Promise<any> {
 // カテゴリー別投稿の取得（カスタムエンドポイント）
 export async function getPostsByCategory(slug: string): Promise<Post[]> {
   try {
-    const response = await wpAPI.get(`/headless/v1/posts-by-category/${slug}`);
+    const response = await cachedGet(`/headless/v1/posts-by-category/${slug}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching posts by category:', error);
@@ -223,7 +262,7 @@ export async function getPostsByCategorySlug(slug: string, perPage: number = 10)
     const decodedSlug = decodeURIComponent(slug);
     
     // まずカテゴリーIDを取得
-    const categoriesResponse = await wpAPI.get('/wp/v2/categories', {
+    const categoriesResponse = await cachedGet('/wp/v2/categories', {
       params: { slug: decodedSlug }
     });
     
@@ -234,7 +273,7 @@ export async function getPostsByCategorySlug(slug: string, perPage: number = 10)
     const categoryId = categoriesResponse.data[0].id;
     
     // カテゴリーIDで投稿を取得
-    const postsResponse = await wpAPI.get('/wp/v2/posts', {
+    const postsResponse = await cachedGet('/wp/v2/posts', {
       params: {
         categories: categoryId,
         per_page: perPage,
@@ -256,7 +295,7 @@ export async function getPostsByTagSlug(slug: string, perPage: number = 10): Pro
     const decodedSlug = decodeURIComponent(slug);
     
     // まずタグIDを取得
-    const tagsResponse = await wpAPI.get('/wp/v2/tags', {
+    const tagsResponse = await cachedGet('/wp/v2/tags', {
       params: { slug: decodedSlug }
     });
     
@@ -267,7 +306,7 @@ export async function getPostsByTagSlug(slug: string, perPage: number = 10): Pro
     const tagId = tagsResponse.data[0].id;
     
     // タグIDで投稿を取得
-    const postsResponse = await wpAPI.get('/wp/v2/posts', {
+    const postsResponse = await cachedGet('/wp/v2/posts', {
       params: {
         tags: tagId,
         per_page: perPage,
@@ -288,7 +327,7 @@ export async function getTagBySlug(slug: string): Promise<any> {
     // スラッグがURLエンコードされている場合はデコード
     const decodedSlug = decodeURIComponent(slug);
     
-    const response = await wpAPI.get('/wp/v2/tags', {
+    const response = await cachedGet('/wp/v2/tags', {
       params: { slug: decodedSlug }
     });
     
@@ -309,7 +348,7 @@ export async function getCategoryBySlug(slug: string): Promise<any> {
     // スラッグがURLエンコードされている場合はデコード
     const decodedSlug = decodeURIComponent(slug);
     
-    const response = await wpAPI.get('/wp/v2/categories', {
+    const response = await cachedGet('/wp/v2/categories', {
       params: { slug: decodedSlug }
     });
     
@@ -327,7 +366,7 @@ export async function getCategoryBySlug(slug: string): Promise<any> {
 // タグの取得
 export async function getTags(): Promise<any[]> {
   try {
-    const response = await wpAPI.get('/wp/v2/tags', {
+    const response = await cachedGet('/wp/v2/tags', {
       params: {
         per_page: 100,
       },
@@ -342,7 +381,7 @@ export async function getTags(): Promise<any[]> {
 // すべてのカテゴリーを取得
 export async function getCategories(): Promise<Category[]> {
   try {
-    const response = await wpAPI.get('/wp/v2/categories', {
+    const response = await cachedGet('/wp/v2/categories', {
       params: {
         per_page: 100,
       },
@@ -360,7 +399,7 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
     // スラッグがURLエンコードされている場合はデコード
     const decodedSlug = decodeURIComponent(slug);
     
-    const response = await wpAPI.get('/wp/v2/pages', {
+    const response = await cachedGet('/wp/v2/pages', {
       params: {
         slug: decodedSlug,
         _embed: true,
@@ -381,7 +420,7 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
 // すべての固定ページを取得
 export async function getPages(): Promise<Page[]> {
   try {
-    const response = await wpAPI.get('/wp/v2/pages', {
+    const response = await cachedGet('/wp/v2/pages', {
       params: {
         per_page: 100,
         _embed: true,
@@ -400,7 +439,7 @@ export async function getMenuByLocation(location: string): Promise<{
   items: MenuItem[];
 }> {
   try {
-    const response = await wpAPI.get(`/headless/v1/menus/${location}`);
+    const response = await cachedGet(`/headless/v1/menus/${location}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching menu:', error);
@@ -411,7 +450,7 @@ export async function getMenuByLocation(location: string): Promise<{
 // すべてのメニューを取得
 export async function getAllMenus(): Promise<any[]> {
   try {
-    const response = await wpAPI.get('/headless/v1/menus');
+    const response = await cachedGet('/headless/v1/menus');
     return response.data;
   } catch (error) {
     console.error('Error fetching menus:', error);
@@ -427,7 +466,7 @@ export async function getAllPostSlugs(): Promise<string[]> {
     let hasMore = true;
     
     while (hasMore) {
-      const response = await wpAPI.get('/wp/v2/posts', {
+      const response = await cachedGet('/wp/v2/posts', {
         params: {
           per_page: 100,
           page: page,
@@ -458,7 +497,7 @@ export async function getAllPostIds(): Promise<number[]> {
     let hasMore = true;
     
     while (hasMore) {
-      const response = await wpAPI.get('/wp/v2/posts', {
+      const response = await cachedGet('/wp/v2/posts', {
         params: {
           per_page: 100,
           page: page,
@@ -489,7 +528,7 @@ export async function getAllPageSlugs(): Promise<string[]> {
     let hasMore = true;
     
     while (hasMore) {
-      const response = await wpAPI.get('/wp/v2/pages', {
+      const response = await cachedGet('/wp/v2/pages', {
         params: {
           per_page: 100,
           page: page,
@@ -519,7 +558,7 @@ export async function searchPosts(query: string, page: number = 1, perPage: numb
   total: number;
 }> {
   try {
-    const response = await wpAPI.get('/wp/v2/posts', {
+    const response = await cachedGet('/wp/v2/posts', {
       params: {
         search: query,
         page,
@@ -542,7 +581,7 @@ export async function searchPosts(query: string, page: number = 1, perPage: numb
 // Instagram Feedの取得
 export async function getInstagramFeed(limit: number = 6): Promise<InstagramFeed> {
   try {
-    const response = await wpAPI.get('/headless/v1/instagram-feed', {
+    const response = await cachedGet('/headless/v1/instagram-feed', {
       params: { limit },
     });
     return response.data;
@@ -560,7 +599,7 @@ export async function getInstagramFeed(limit: number = 6): Promise<InstagramFeed
 // Instagram Graph APIから投稿を取得
 export async function getInstagramFromGraphAPI(limit: number = 18): Promise<InstagramFeed> {
   try {
-    const response = await wpAPI.get('/headless/v1/instagram-graph', {
+    const response = await cachedGet('/headless/v1/instagram-graph', {
       params: { limit },
     });
     return response.data;
@@ -579,7 +618,7 @@ export async function getInstagramFromGraphAPI(limit: number = 18): Promise<Inst
 export async function getChildPages(parentSlug: string) {
   try {
     // まず親ページを取得
-    const parentResponse = await wpAPI.get('/wp/v2/pages', {
+    const parentResponse = await cachedGet('/wp/v2/pages', {
       params: {
         slug: parentSlug,
         _embed: true,
@@ -593,7 +632,7 @@ export async function getChildPages(parentSlug: string) {
     const parentId = parentResponse.data[0].id;
 
     // 親ページのIDで子ページを取得
-    const childResponse = await wpAPI.get('/wp/v2/pages', {
+    const childResponse = await cachedGet('/wp/v2/pages', {
       params: {
         parent: parentId,
         per_page: 100,
@@ -614,7 +653,7 @@ export async function getChildPages(parentSlug: string) {
 export async function getChildPageBySlug(parentSlug: string, childSlug: string) {
   try {
     // まず親ページを取得
-    const parentResponse = await wpAPI.get('/wp/v2/pages', {
+    const parentResponse = await cachedGet('/wp/v2/pages', {
       params: {
         slug: parentSlug,
         _embed: true,
@@ -628,7 +667,7 @@ export async function getChildPageBySlug(parentSlug: string, childSlug: string) 
     const parentId = parentResponse.data[0].id;
 
     // 子ページを取得
-    const childResponse = await wpAPI.get('/wp/v2/pages', {
+    const childResponse = await cachedGet('/wp/v2/pages', {
       params: {
         parent: parentId,
         slug: childSlug,
