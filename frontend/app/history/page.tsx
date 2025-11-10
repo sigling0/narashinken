@@ -63,7 +63,18 @@ export default async function HistoryPage() {
     );
   }
 
-  const featuredImage = page._embedded?.['wp:featuredmedia']?.[0];
+  type FeaturedMedia = {
+    source_url: string;
+    alt_text: string;
+    media_details?: {
+      width?: number;
+      height?: number;
+    };
+  };
+
+  const featuredImage = page._embedded?.['wp:featuredmedia']?.[0] as FeaturedMedia | undefined;
+  const featuredImageWidth = featuredImage?.media_details?.width;
+  const featuredImageHeight = featuredImage?.media_details?.height;
 
   return (
     <article className="container mx-auto px-4 py-8 max-w-4xl" style={{backgroundColor: 'var(--color-dojo-bg-key)'}}>
@@ -79,12 +90,23 @@ export default async function HistoryPage() {
         <>
           {/* モバイル表示: 元の縦横比を保持（ネイティブimg使用） */}
           <div className="md:hidden w-full mb-8">
-            <img
-              src={featuredImage.source_url}
-              alt={featuredImage.alt_text || page.title.rendered}
-              className="w-full h-auto rounded-lg shadow-sm"
-              loading="eager"
-            />
+            <div
+              className="relative w-full overflow-hidden rounded-lg shadow-sm"
+              style={
+                featuredImageWidth && featuredImageHeight
+                  ? { aspectRatio: `${featuredImageWidth} / ${featuredImageHeight}` }
+                  : { minHeight: '200px' }
+              }
+            >
+              <Image
+                src={featuredImage.source_url}
+                alt={featuredImage.alt_text || page.title.rendered}
+                fill
+                className="object-contain"
+                priority
+                sizes="(max-width: 768px) 100vw"
+              />
+            </div>
           </div>
           
           {/* デスクトップ表示: 固定高さ（Next.js Image使用） */}

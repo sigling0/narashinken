@@ -66,7 +66,18 @@ export default async function MemberPage({ params }: Props) {
     );
   }
 
-  const featuredImage = page._embedded?.['wp:featuredmedia']?.[0];
+  type FeaturedMedia = {
+    source_url: string;
+    alt_text: string;
+    media_details?: {
+      width?: number;
+      height?: number;
+    };
+  };
+
+  const featuredImage = page._embedded?.['wp:featuredmedia']?.[0] as FeaturedMedia | undefined;
+  const featuredImageWidth = featuredImage?.media_details?.width;
+  const featuredImageHeight = featuredImage?.media_details?.height;
   
   // 本文を解析
   const parsed = parseHistoryContent(page.content.rendered, page.title.rendered);
@@ -90,12 +101,23 @@ export default async function MemberPage({ params }: Props) {
         <>
           {/* モバイル表示: 元の縦横比を保持（ネイティブimg使用） */}
           <div className="md:hidden w-full mb-8">
-            <img
-              src={featuredImage.source_url}
-              alt={featuredImage.alt_text || `${year}年度`}
-              className="w-full h-auto rounded-lg shadow-sm"
-              loading="eager"
-            />
+            <div
+              className="relative w-full overflow-hidden rounded-lg shadow-sm"
+              style={
+                featuredImageWidth && featuredImageHeight
+                  ? { aspectRatio: `${featuredImageWidth} / ${featuredImageHeight}` }
+                  : { minHeight: '200px' }
+              }
+            >
+              <Image
+                src={featuredImage.source_url}
+                alt={featuredImage.alt_text || `${year}年度`}
+                fill
+                className="object-contain"
+                priority
+                sizes="(max-width: 768px) 100vw"
+              />
+            </div>
           </div>
           
           {/* デスクトップ表示: 固定高さ（Next.js Image使用） */}
