@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import pLimit from 'p-limit';
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'http://localhost:8888/wp-json';
 
@@ -12,6 +13,11 @@ const wpAPI = axios.create({
 });
 
 const shouldUseBuildCache = process.env.NEXT_PHASE === 'phase-production-build';
+const buildConcurrencyLimit = parseInt(process.env.WP_BUILD_CONCURRENCY ?? '3', 10);
+const limit =
+  shouldUseBuildCache && buildConcurrencyLimit > 0
+    ? pLimit(buildConcurrencyLimit)
+    : null;
 
 type CacheKey = string;
 const requestCache = new Map<CacheKey, Promise<AxiosResponse<any>>>();
@@ -37,14 +43,21 @@ async function cachedGet<T = any>(
 
   const cacheKey = createCacheKey(path, config);
 
-  const fetchResponse = () =>
+  const executeRequest = () =>
     wpAPI.get<T>(path, config).catch((error) => {
       requestCache.delete(cacheKey);
       throw error;
     });
 
+  const run = () => {
+    if (!limit) {
+      return executeRequest();
+    }
+    return limit(() => executeRequest());
+  };
+
   if (!requestCache.has(cacheKey)) {
-    requestCache.set(cacheKey, fetchResponse());
+    requestCache.set(cacheKey, run());
   }
 
   return requestCache.get(cacheKey)! as Promise<AxiosResponse<T>>;
