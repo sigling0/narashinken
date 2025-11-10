@@ -658,7 +658,7 @@ export async function getChildPages(parentSlug: string) {
     return childResponse.data;
   } catch (error) {
     console.error('Error fetching child pages:', error);
-    return [];
+    throw error;
   }
 }
 
@@ -695,7 +695,7 @@ export async function getChildPageBySlug(parentSlug: string, childSlug: string) 
     return childResponse.data[0];
   } catch (error) {
     console.error(`Error fetching child page ${childSlug}:`, error);
-    return null;
+    throw error;
   }
 }
 
