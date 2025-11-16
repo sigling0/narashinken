@@ -1,8 +1,8 @@
-import { getPageBySlug, getChildPages } from '@/lib/wordpress';
+import { getPageBySlug, getHistoryMemberSummaries } from '@/lib/wordpress';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import HistoryAccordion from './HistoryAccordion';
+import { parseHistoryContent } from '@/lib/parseHistoryContent';
 
 export const revalidate = 3600; // 1時間ごとに再生成
 
@@ -44,10 +44,10 @@ export default async function HistoryPage() {
       notFound();
     }
 
-    // 子ページ（歴代主将）を取得
-    childPages = await getChildPages('history');
-    console.log('Child pages count:', childPages.length);
-    console.log('Child pages:', childPages.map((p: any) => ({ slug: p.slug, title: p.title.rendered })));
+    // 子ページ（歴代主将）を軽量取得（_embedなし、必要フィールドのみ）
+    childPages = await getHistoryMemberSummaries('history');
+    console.log('Child pages (light) count:', childPages.length);
+    console.log('Child pages (light):', childPages.map((p: any) => ({ slug: p.slug, title: p.title.rendered })));
   } catch (e) {
     error = 'データの取得に失敗しました';
     console.error('Error fetching history page:', e);
@@ -138,7 +138,7 @@ export default async function HistoryPage() {
         dangerouslySetInnerHTML={{ __html: page.content.rendered }}
       />
 
-      {/* 歴代主将一覧（アコーディオン形式） */}
+      {/* 歴代主将一覧（簡素表示：年度 + 主将名リンク） */}
       {childPages.length > 0 && (
         <section id="history-captains" className="mt-16">
           <h2 
@@ -151,7 +151,31 @@ export default async function HistoryPage() {
             歴代主将一覧
           </h2>
 
-          <HistoryAccordion childPages={childPages} />
+          <ul className="space-y-3">
+            {childPages.map((child: any) => {
+              const parsed = parseHistoryContent(child.content?.rendered ?? '', child.title?.rendered ?? '');
+              const year = parsed.year || child.title?.rendered?.replace(/<[^>]*>/g, '');
+              const captainRaw = parsed.captainName || '';
+              const captainText = captainRaw
+                .replace(/<[^>]*>/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+              return (
+                <li key={child.id} className="text-lg">
+                  <span style={{color: 'var(--color-text-primary)'}}>
+                    {year ? `${year}年度　` : ''}
+                  </span>
+                  <Link 
+                    href={`/history/${child.slug}`} 
+                    className="font-semibold hover:underline"
+                    style={{color: 'var(--color-dojoprimary-key)'}}
+                  >
+                    {captainText || '主将名未設定'}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </section>
       )}
 

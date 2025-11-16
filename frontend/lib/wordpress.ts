@@ -662,6 +662,41 @@ export async function getChildPages(parentSlug: string) {
   }
 }
 
+// 歴代主将の一覧表示向けに軽量な子ページ情報を取得（_embed なし、必要項目のみ）
+export async function getHistoryMemberSummaries(parentSlug: string) {
+  try {
+    // 親ページ取得（軽量）
+    const parentResponse = await cachedGet('/wp/v2/pages', {
+      params: {
+        slug: parentSlug,
+        _fields: 'id',
+      },
+    });
+
+    if (!parentResponse.data || parentResponse.data.length === 0) {
+      return [];
+    }
+
+    const parentId = parentResponse.data[0].id;
+
+    // 子ページを必要なフィールドのみに限定して取得（_embed 無し）
+    const childResponse = await cachedGet('/wp/v2/pages', {
+      params: {
+        parent: parentId,
+        per_page: 100,
+        orderby: 'slug',
+        order: 'asc',
+        _fields: 'id,slug,title,content',
+      },
+    });
+
+    return childResponse.data;
+  } catch (error) {
+    console.error('Error fetching history member summaries:', error);
+    throw error;
+  }
+}
+
 // 特定の子ページを取得（親スラッグ + 子スラッグ）
 export async function getChildPageBySlug(parentSlug: string, childSlug: string) {
   try {
