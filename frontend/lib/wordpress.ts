@@ -674,23 +674,38 @@ export async function getHistoryMemberSummaries(parentSlug: string) {
     });
 
     if (!parentResponse.data || parentResponse.data.length === 0) {
+      console.warn(`Parent page with slug "${parentSlug}" not found`);
       return [];
     }
 
     const parentId = parentResponse.data[0].id;
+    console.log(`Found parent page ID: ${parentId} for slug "${parentSlug}"`);
 
-    // 子ページを必要なフィールドのみに限定して取得（_embed 無し）
+    // 子ページを取得（_fields を削除して確実に content.rendered を取得）
     const childResponse = await cachedGet('/wp/v2/pages', {
       params: {
         parent: parentId,
         per_page: 100,
         orderby: 'slug',
         order: 'asc',
-        _fields: 'id,slug,title,content',
+        // _fields を削除して、content.rendered が確実に含まれるようにする
       },
     });
 
-    return childResponse.data;
+    console.log(`Found ${childResponse.data?.length || 0} child pages for parent ID ${parentId}`);
+    
+    if (childResponse.data && childResponse.data.length > 0) {
+      // デバッグ: 最初の子ページの構造を確認
+      console.log('Sample child page structure:', {
+        id: childResponse.data[0].id,
+        slug: childResponse.data[0].slug,
+        hasTitle: !!childResponse.data[0].title,
+        hasContent: !!childResponse.data[0].content,
+        hasContentRendered: !!(childResponse.data[0].content?.rendered),
+      });
+    }
+
+    return childResponse.data || [];
   } catch (error) {
     console.error('Error fetching history member summaries:', error);
     // エラー時は空配列を返して、セクションヘッダーは表示されるようにする
