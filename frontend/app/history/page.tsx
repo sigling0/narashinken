@@ -211,61 +211,67 @@ export default async function HistoryPage() {
         >
           歴代主将一覧
         </h2>
-
-        {childPages && childPages.length > 0 ? (
-          <ul className="space-y-3">
-            {childPages.map((child: any) => {
-              try {
-                const content = child.content?.rendered ?? '';
-                const title = child.title?.rendered ?? '';
-                const parsed = parseHistoryContent(content, title);
-                const year = parsed.year || title.replace(/<[^>]*>/g, '').match(/\d{4}/)?.[0] || '';
-                const captainRaw = parsed.captainName || '';
-                const captainText = captainRaw
-                  .replace(/<[^>]*>/g, ' ')
-                  .replace(/\s+/g, ' ')
-                  .trim();
-                return (
-                  <li key={child.id} className="text-lg">
-                    <span style={{color: 'var(--color-text-primary)'}}>
-                      {year ? `${year}年度　` : ''}
-                    </span>
-                    <Link 
-                      href={`/history/${child.slug}`} 
-                      className="font-semibold hover:underline"
-                      style={{color: 'var(--color-dojoprimary-key)'}}
-                    >
-                      {captainText || '主将名未設定'}
-                    </Link>
-                  </li>
-                );
-              } catch (e) {
-                console.error('Error parsing child page:', child.id, e);
-                // エラー時はシンプルに表示
-                const title = child.title?.rendered?.replace(/<[^>]*>/g, '') || '';
-                const year = title.match(/\d{4}/)?.[0] || '';
-                return (
-                  <li key={child.id} className="text-lg">
-                    <span style={{color: 'var(--color-text-primary)'}}>
-                      {year ? `${year}年度　` : ''}
-                    </span>
-                    <Link 
-                      href={`/history/${child.slug}`} 
-                      className="font-semibold hover:underline"
-                      style={{color: 'var(--color-dojoprimary-key)'}}
-                    >
-                      {title || '主将名未設定'}
-                    </Link>
-                  </li>
-                );
-              }
-            })}
-          </ul>
-        ) : (
-          <p className="text-lg" style={{color: 'var(--color-text-tertiary)'}}>
-            データがありません
-          </p>
-        )}
+        {(() => {
+          // セクションコンテンツを確実にレンダリングするため、即時実行関数を使用
+          if (!childPages || childPages.length === 0) {
+            return (
+              <p className="text-lg" style={{color: 'var(--color-text-tertiary)'}}>
+                データがありません
+              </p>
+            );
+          }
+          
+          return (
+            <ul className="space-y-3">
+              {childPages.map((child: any) => {
+                try {
+                  const content = child.content?.rendered ?? '';
+                  const title = child.title?.rendered ?? '';
+                  const parsed = parseHistoryContent(content, title);
+                  const year = parsed.year || title.replace(/<[^>]*>/g, '').match(/\d{4}/)?.[0] || '';
+                  const captainRaw = parsed.captainName || '';
+                  const captainText = captainRaw
+                    .replace(/<[^>]*>/g, ' ')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+                  return (
+                    <li key={child.id} className="text-lg">
+                      <span style={{color: 'var(--color-text-primary)'}}>
+                        {year ? `${year}年度　` : ''}
+                      </span>
+                      <Link 
+                        href={`/history/${child.slug}`} 
+                        className="font-semibold hover:underline"
+                        style={{color: 'var(--color-dojoprimary-key)'}}
+                      >
+                        {captainText || '主将名未設定'}
+                      </Link>
+                    </li>
+                  );
+                } catch (e) {
+                  console.error('Error parsing child page:', child.id, e);
+                  // エラー時はシンプルに表示
+                  const title = child.title?.rendered?.replace(/<[^>]*>/g, '') || '';
+                  const year = title.match(/\d{4}/)?.[0] || '';
+                  return (
+                    <li key={child.id} className="text-lg">
+                      <span style={{color: 'var(--color-text-primary)'}}>
+                        {year ? `${year}年度　` : ''}
+                      </span>
+                      <Link 
+                        href={`/history/${child.slug}`} 
+                        className="font-semibold hover:underline"
+                        style={{color: 'var(--color-dojoprimary-key)'}}
+                      >
+                        {title || '主将名未設定'}
+                      </Link>
+                    </li>
+                  );
+                }
+              })}
+            </ul>
+          );
+        })()}
       </section>
 
       {/* 戻るボタン */}
