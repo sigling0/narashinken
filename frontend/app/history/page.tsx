@@ -139,18 +139,18 @@ export default async function HistoryPage() {
       />
 
       {/* 歴代主将一覧（簡素表示：年度 + 主将名リンク） */}
-      {childPages.length > 0 && (
-        <section id="history-captains" className="mt-16">
-          <h2 
-            className="text-3xl font-bold mb-8 pb-4 border-b-2"
-            style={{
-              color: 'var(--color-text-primary)',
-              borderColor: 'var(--color-dojo-secondary-key)'
-            }}
-          >
-            歴代主将一覧
-          </h2>
+      <section id="history-captains" className="mt-16">
+        <h2 
+          className="text-3xl font-bold mb-8 pb-4 border-b-2"
+          style={{
+            color: 'var(--color-text-primary)',
+            borderColor: 'var(--color-dojo-secondary-key)'
+          }}
+        >
+          歴代主将一覧
+        </h2>
 
+        {childPages.length > 0 ? (
           <ul className="space-y-3">
             {childPages.map((child: any) => {
               const parsed = parseHistoryContent(child.content?.rendered ?? '', child.title?.rendered ?? '');
@@ -176,8 +176,12 @@ export default async function HistoryPage() {
               );
             })}
           </ul>
-        </section>
-      )}
+        ) : (
+          <p className="text-lg" style={{color: 'var(--color-text-tertiary)'}}>
+            データがありません
+          </p>
+        )}
+      </section>
 
       {/* 戻るボタン */}
       <div className="mt-12 pt-8 border-t" style={{borderColor: 'var(--color-dojo-secondary-key)'}}>
