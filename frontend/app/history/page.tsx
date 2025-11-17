@@ -45,9 +45,16 @@ export default async function HistoryPage() {
     }
 
     // 子ページ（歴代主将）を軽量取得（_embedなし、必要フィールドのみ）
-    childPages = await getHistoryMemberSummaries('history');
-    console.log('Child pages (light) count:', childPages.length);
-    console.log('Child pages (light):', childPages.map((p: any) => ({ slug: p.slug, title: p.title.rendered })));
+    // エラーが発生しても空配列が返されるので、セクションは表示される
+    try {
+      childPages = await getHistoryMemberSummaries('history');
+      console.log('Child pages (light) count:', childPages.length);
+      console.log('Child pages (light):', childPages.map((p: any) => ({ slug: p.slug, title: p.title.rendered })));
+    } catch (e) {
+      // 子ページ取得のエラーは無視（空配列のまま）
+      console.error('Error fetching child pages (non-fatal):', e);
+      childPages = [];
+    }
   } catch (e) {
     error = 'データの取得に失敗しました';
     console.error('Error fetching history page:', e);

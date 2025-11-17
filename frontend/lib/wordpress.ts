@@ -693,7 +693,8 @@ export async function getHistoryMemberSummaries(parentSlug: string) {
     return childResponse.data;
   } catch (error) {
     console.error('Error fetching history member summaries:', error);
-    throw error;
+    // エラー時は空配列を返して、セクションヘッダーは表示されるようにする
+    return [];
   }
 }
 
