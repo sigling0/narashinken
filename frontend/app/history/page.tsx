@@ -31,10 +31,10 @@ export async function generateMetadata() {
 export default async function HistoryPage() {
   let page = null;
   let childPages: any[] = [];
-  let error = null;
+  let pageError = null;
 
+  // 親ページを取得
   try {
-    // 親ページを取得
     page = await getPageBySlug('history');
     console.log('=== History Page Debug ===');
     console.log('Parent page found:', !!page);
@@ -43,31 +43,78 @@ export default async function HistoryPage() {
       console.log('Parent page not found, returning 404');
       notFound();
     }
-
-    // 子ページ（歴代主将）を軽量取得（_embedなし、必要フィールドのみ）
-    // エラーが発生しても空配列が返されるので、セクションは表示される
-    try {
-      childPages = await getHistoryMemberSummaries('history');
-      console.log('Child pages (light) count:', childPages.length);
-      console.log('Child pages (light):', childPages.map((p: any) => ({ slug: p.slug, title: p.title.rendered })));
-    } catch (e) {
-      // 子ページ取得のエラーは無視（空配列のまま）
-      console.error('Error fetching child pages (non-fatal):', e);
-      childPages = [];
-    }
   } catch (e) {
-    error = 'データの取得に失敗しました';
+    pageError = 'ページデータの取得に失敗しました';
     console.error('Error fetching history page:', e);
   }
 
-  if (error || !page) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-red-800">
-          <p className="font-medium">{error || 'ページが見つかりませんでした'}</p>
+  // 子ページ（歴代主将）を軽量取得（_embedなし、必要フィールドのみ）
+  // エラーが発生しても空配列が返されるので、セクションは表示される
+  try {
+    childPages = await getHistoryMemberSummaries('history');
+    console.log('Child pages (light) count:', childPages.length);
+    console.log('Child pages (light):', childPages.map((p: any) => ({ slug: p.slug, title: p.title?.rendered })));
+  } catch (e) {
+    // 子ページ取得のエラーは無視（空配列のまま）
+    console.error('Error fetching child pages (non-fatal):', e);
+    childPages = [];
+  }
+
+  // 親ページが取得できない場合は404を返す
+  if (!page) {
+    if (pageError) {
+      return (
+        <div className="container mx-auto px-4 py-8">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-red-800">
+            <p className="font-medium">{pageError}</p>
+          </div>
+          {/* エラー時でもセクションは表示 */}
+          <section id="history-captains" className="mt-16">
+            <h2 
+              className="text-3xl font-bold mb-8 pb-4 border-b-2"
+              style={{
+                color: 'var(--color-text-primary)',
+                borderColor: 'var(--color-dojo-secondary-key)'
+              }}
+            >
+              歴代主将一覧
+            </h2>
+            {childPages.length > 0 ? (
+              <ul className="space-y-3">
+                {childPages.map((child: any) => {
+                  const parsed = parseHistoryContent(child.content?.rendered ?? '', child.title?.rendered ?? '');
+                  const year = parsed.year || child.title?.rendered?.replace(/<[^>]*>/g, '');
+                  const captainRaw = parsed.captainName || '';
+                  const captainText = captainRaw
+                    .replace(/<[^>]*>/g, ' ')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+                  return (
+                    <li key={child.id} className="text-lg">
+                      <span style={{color: 'var(--color-text-primary)'}}>
+                        {year ? `${year}年度　` : ''}
+                      </span>
+                      <Link 
+                        href={`/history/${child.slug}`} 
+                        className="font-semibold hover:underline"
+                        style={{color: 'var(--color-dojoprimary-key)'}}
+                      >
+                        {captainText || '主将名未設定'}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p className="text-lg" style={{color: 'var(--color-text-tertiary)'}}>
+                データがありません
+              </p>
+            )}
+          </section>
         </div>
-      </div>
-    );
+      );
+    }
+    notFound();
   }
 
   type FeaturedMedia = {
