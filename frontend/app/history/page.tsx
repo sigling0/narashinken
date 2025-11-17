@@ -52,13 +52,20 @@ export default async function HistoryPage() {
   // エラーが発生しても空配列が返されるので、セクションは表示される
   try {
     childPages = await getHistoryMemberSummaries('history');
-    console.log('Child pages (light) count:', childPages.length);
-    console.log('Child pages (light):', childPages.map((p: any) => ({ slug: p.slug, title: p.title?.rendered })));
+    console.log('=== History Page: Child pages fetched ===');
+    console.log('Child pages (light) count:', childPages?.length ?? 0);
+    console.log('Child pages (light):', childPages?.map((p: any) => ({ slug: p.slug, title: p.title?.rendered })) ?? []);
   } catch (e) {
     // 子ページ取得のエラーは無視（空配列のまま）
     console.error('Error fetching child pages (non-fatal):', e);
     childPages = [];
   }
+  
+  // セクション表示のためのデバッグ情報
+  console.log('=== History Page: Section render check ===');
+  console.log('Page exists:', !!page);
+  console.log('Child pages exists:', !!childPages);
+  console.log('Child pages length:', childPages?.length ?? 0);
 
   // 親ページが取得できない場合は404を返す
   if (!page) {
@@ -193,7 +200,8 @@ export default async function HistoryPage() {
       />
 
       {/* 歴代主将一覧（簡素表示：年度 + 主将名リンク） */}
-      <section id="history-captains" className="mt-16">
+      {/* セクションは常に表示される（データの有無に関わらず） */}
+      <section id="history-captains" className="mt-16" data-section="history-captains">
         <h2 
           className="text-3xl font-bold mb-8 pb-4 border-b-2"
           style={{
@@ -204,30 +212,53 @@ export default async function HistoryPage() {
           歴代主将一覧
         </h2>
 
-        {childPages.length > 0 ? (
+        {childPages && childPages.length > 0 ? (
           <ul className="space-y-3">
             {childPages.map((child: any) => {
-              const parsed = parseHistoryContent(child.content?.rendered ?? '', child.title?.rendered ?? '');
-              const year = parsed.year || child.title?.rendered?.replace(/<[^>]*>/g, '');
-              const captainRaw = parsed.captainName || '';
-              const captainText = captainRaw
-                .replace(/<[^>]*>/g, ' ')
-                .replace(/\s+/g, ' ')
-                .trim();
-              return (
-                <li key={child.id} className="text-lg">
-                  <span style={{color: 'var(--color-text-primary)'}}>
-                    {year ? `${year}年度　` : ''}
-                  </span>
-                  <Link 
-                    href={`/history/${child.slug}`} 
-                    className="font-semibold hover:underline"
-                    style={{color: 'var(--color-dojoprimary-key)'}}
-                  >
-                    {captainText || '主将名未設定'}
-                  </Link>
-                </li>
-              );
+              try {
+                const content = child.content?.rendered ?? '';
+                const title = child.title?.rendered ?? '';
+                const parsed = parseHistoryContent(content, title);
+                const year = parsed.year || title.replace(/<[^>]*>/g, '').match(/\d{4}/)?.[0] || '';
+                const captainRaw = parsed.captainName || '';
+                const captainText = captainRaw
+                  .replace(/<[^>]*>/g, ' ')
+                  .replace(/\s+/g, ' ')
+                  .trim();
+                return (
+                  <li key={child.id} className="text-lg">
+                    <span style={{color: 'var(--color-text-primary)'}}>
+                      {year ? `${year}年度　` : ''}
+                    </span>
+                    <Link 
+                      href={`/history/${child.slug}`} 
+                      className="font-semibold hover:underline"
+                      style={{color: 'var(--color-dojoprimary-key)'}}
+                    >
+                      {captainText || '主将名未設定'}
+                    </Link>
+                  </li>
+                );
+              } catch (e) {
+                console.error('Error parsing child page:', child.id, e);
+                // エラー時はシンプルに表示
+                const title = child.title?.rendered?.replace(/<[^>]*>/g, '') || '';
+                const year = title.match(/\d{4}/)?.[0] || '';
+                return (
+                  <li key={child.id} className="text-lg">
+                    <span style={{color: 'var(--color-text-primary)'}}>
+                      {year ? `${year}年度　` : ''}
+                    </span>
+                    <Link 
+                      href={`/history/${child.slug}`} 
+                      className="font-semibold hover:underline"
+                      style={{color: 'var(--color-dojoprimary-key)'}}
+                    >
+                      {title || '主将名未設定'}
+                    </Link>
+                  </li>
+                );
+              }
             })}
           </ul>
         ) : (
