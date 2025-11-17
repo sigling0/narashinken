@@ -209,6 +209,7 @@ export default async function HistoryPage() {
 
       {/* 歴代主将一覧（簡素表示：年度 + 主将名リンク） */}
       {/* セクションは常に表示される（データの有無・エラーの有無に関わらず） */}
+      {/* ビルド時に確実にレンダリングされるよう、シンプルな構造に変更 */}
       <section id="history-captains" className="mt-16" data-section="history-captains">
         <h2 
           className="text-3xl font-bold mb-8 pb-4 border-b-2"
@@ -219,19 +220,13 @@ export default async function HistoryPage() {
         >
           歴代主将一覧
         </h2>
-        {(() => {
-          try {
-            // セクションコンテンツを確実にレンダリングするため、即時実行関数を使用
-            // エラーが発生してもセクションは表示される
-            if (!childPages || !Array.isArray(childPages) || childPages.length === 0) {
-              return (
-                <p className="text-lg" style={{color: 'var(--color-text-tertiary)'}}>
-                  データがありません
-                </p>
-              );
-            }
-            
-            const listItems = childPages.map((child: any) => {
+        {!childPages || !Array.isArray(childPages) || childPages.length === 0 ? (
+          <p className="text-lg" style={{color: 'var(--color-text-tertiary)'}}>
+            データがありません
+          </p>
+        ) : (
+          <ul className="space-y-3">
+            {childPages.map((child: any) => {
               try {
                 const content = child?.content?.rendered ?? '';
                 const title = child?.title?.rendered ?? '';
@@ -290,19 +285,9 @@ export default async function HistoryPage() {
                   </li>
                 );
               }
-            });
-            
-            return <ul className="space-y-3">{listItems}</ul>;
-          } catch (e) {
-            // セクション全体のエラーでも、セクションは表示される
-            console.error('Error rendering captain list section:', e);
-            return (
-              <p className="text-lg" style={{color: 'var(--color-text-tertiary)'}}>
-                データの読み込み中にエラーが発生しました
-              </p>
-            );
-          }
-        })()}
+            })}
+          </ul>
+        )}
       </section>
 
       {/* 戻るボタン */}
