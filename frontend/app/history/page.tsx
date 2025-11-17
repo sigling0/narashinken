@@ -51,21 +51,29 @@ export default async function HistoryPage() {
   // 子ページ（歴代主将）を軽量取得（_embedなし、必要フィールドのみ）
   // エラーが発生しても空配列が返されるので、セクションは表示される
   try {
-    childPages = await getHistoryMemberSummaries('history');
+    const fetchedPages = await getHistoryMemberSummaries('history');
+    // 確実に配列であることを保証
+    childPages = Array.isArray(fetchedPages) ? fetchedPages : [];
     console.log('=== History Page: Child pages fetched ===');
-    console.log('Child pages (light) count:', childPages?.length ?? 0);
-    console.log('Child pages (light):', childPages?.map((p: any) => ({ slug: p.slug, title: p.title?.rendered })) ?? []);
+    console.log('Child pages (light) count:', childPages.length);
+    console.log('Child pages (light):', childPages.map((p: any) => ({ slug: p.slug, title: p.title?.rendered })));
   } catch (e) {
     // 子ページ取得のエラーは無視（空配列のまま）
     console.error('Error fetching child pages (non-fatal):', e);
     childPages = [];
   }
   
+  // childPagesが確実に配列であることを保証
+  if (!Array.isArray(childPages)) {
+    console.warn('Child pages is not an array, resetting to empty array');
+    childPages = [];
+  }
+  
   // セクション表示のためのデバッグ情報
   console.log('=== History Page: Section render check ===');
   console.log('Page exists:', !!page);
-  console.log('Child pages exists:', !!childPages);
-  console.log('Child pages length:', childPages?.length ?? 0);
+  console.log('Child pages is array:', Array.isArray(childPages));
+  console.log('Child pages length:', childPages.length);
 
   // 親ページが取得できない場合は404を返す
   if (!page) {
@@ -200,7 +208,7 @@ export default async function HistoryPage() {
       />
 
       {/* 歴代主将一覧（簡素表示：年度 + 主将名リンク） */}
-      {/* セクションは常に表示される（データの有無に関わらず） */}
+      {/* セクションは常に表示される（データの有無・エラーの有無に関わらず） */}
       <section id="history-captains" className="mt-16" data-section="history-captains">
         <h2 
           className="text-3xl font-bold mb-8 pb-4 border-b-2"
@@ -212,65 +220,88 @@ export default async function HistoryPage() {
           歴代主将一覧
         </h2>
         {(() => {
-          // セクションコンテンツを確実にレンダリングするため、即時実行関数を使用
-          if (!childPages || childPages.length === 0) {
+          try {
+            // セクションコンテンツを確実にレンダリングするため、即時実行関数を使用
+            // エラーが発生してもセクションは表示される
+            if (!childPages || !Array.isArray(childPages) || childPages.length === 0) {
+              return (
+                <p className="text-lg" style={{color: 'var(--color-text-tertiary)'}}>
+                  データがありません
+                </p>
+              );
+            }
+            
+            const listItems = childPages.map((child: any) => {
+              try {
+                const content = child?.content?.rendered ?? '';
+                const title = child?.title?.rendered ?? '';
+                const slug = child?.slug ?? '';
+                const id = child?.id ?? Math.random();
+                
+                // parseHistoryContentを安全に呼び出す
+                let parsed;
+                try {
+                  parsed = parseHistoryContent(content, title);
+                } catch (parseError) {
+                  console.error('Error in parseHistoryContent:', parseError);
+                  parsed = { year: '', captainName: '' };
+                }
+                
+                const year = parsed?.year || title.replace(/<[^>]*>/g, '').match(/\d{4}/)?.[0] || '';
+                const captainRaw = parsed?.captainName || '';
+                const captainText = captainRaw
+                  .replace(/<[^>]*>/g, ' ')
+                  .replace(/\s+/g, ' ')
+                  .trim();
+                
+                return (
+                  <li key={id} className="text-lg">
+                    <span style={{color: 'var(--color-text-primary)'}}>
+                      {year ? `${year}年度　` : ''}
+                    </span>
+                    <Link 
+                      href={`/history/${slug}`} 
+                      className="font-semibold hover:underline"
+                      style={{color: 'var(--color-dojoprimary-key)'}}
+                    >
+                      {captainText || title.replace(/<[^>]*>/g, '') || '主将名未設定'}
+                    </Link>
+                  </li>
+                );
+              } catch (e) {
+                console.error('Error processing child page:', child?.id, e);
+                // エラー時はシンプルに表示
+                const title = child?.title?.rendered?.replace(/<[^>]*>/g, '') || '';
+                const year = title.match(/\d{4}/)?.[0] || '';
+                const slug = child?.slug ?? '';
+                const id = child?.id ?? Math.random();
+                return (
+                  <li key={id} className="text-lg">
+                    <span style={{color: 'var(--color-text-primary)'}}>
+                      {year ? `${year}年度　` : ''}
+                    </span>
+                    <Link 
+                      href={`/history/${slug}`} 
+                      className="font-semibold hover:underline"
+                      style={{color: 'var(--color-dojoprimary-key)'}}
+                    >
+                      {title || '主将名未設定'}
+                    </Link>
+                  </li>
+                );
+              }
+            });
+            
+            return <ul className="space-y-3">{listItems}</ul>;
+          } catch (e) {
+            // セクション全体のエラーでも、セクションは表示される
+            console.error('Error rendering captain list section:', e);
             return (
               <p className="text-lg" style={{color: 'var(--color-text-tertiary)'}}>
-                データがありません
+                データの読み込み中にエラーが発生しました
               </p>
             );
           }
-          
-          return (
-            <ul className="space-y-3">
-              {childPages.map((child: any) => {
-                try {
-                  const content = child.content?.rendered ?? '';
-                  const title = child.title?.rendered ?? '';
-                  const parsed = parseHistoryContent(content, title);
-                  const year = parsed.year || title.replace(/<[^>]*>/g, '').match(/\d{4}/)?.[0] || '';
-                  const captainRaw = parsed.captainName || '';
-                  const captainText = captainRaw
-                    .replace(/<[^>]*>/g, ' ')
-                    .replace(/\s+/g, ' ')
-                    .trim();
-                  return (
-                    <li key={child.id} className="text-lg">
-                      <span style={{color: 'var(--color-text-primary)'}}>
-                        {year ? `${year}年度　` : ''}
-                      </span>
-                      <Link 
-                        href={`/history/${child.slug}`} 
-                        className="font-semibold hover:underline"
-                        style={{color: 'var(--color-dojoprimary-key)'}}
-                      >
-                        {captainText || '主将名未設定'}
-                      </Link>
-                    </li>
-                  );
-                } catch (e) {
-                  console.error('Error parsing child page:', child.id, e);
-                  // エラー時はシンプルに表示
-                  const title = child.title?.rendered?.replace(/<[^>]*>/g, '') || '';
-                  const year = title.match(/\d{4}/)?.[0] || '';
-                  return (
-                    <li key={child.id} className="text-lg">
-                      <span style={{color: 'var(--color-text-primary)'}}>
-                        {year ? `${year}年度　` : ''}
-                      </span>
-                      <Link 
-                        href={`/history/${child.slug}`} 
-                        className="font-semibold hover:underline"
-                        style={{color: 'var(--color-dojoprimary-key)'}}
-                      >
-                        {title || '主将名未設定'}
-                      </Link>
-                    </li>
-                  );
-                }
-              })}
-            </ul>
-          );
         })()}
       </section>
 
