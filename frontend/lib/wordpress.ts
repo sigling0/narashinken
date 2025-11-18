@@ -3,6 +3,14 @@ import pLimit from 'p-limit';
 
 const API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'http://localhost:8888/wp-json';
 
+// 環境変数の確認（ビルド時とランタイム時の両方で確認）
+if (typeof process !== 'undefined') {
+  console.log('[WordPress API Config] API_URL:', API_URL);
+  console.log('[WordPress API Config] NEXT_PUBLIC_WORDPRESS_API_URL:', process.env.NEXT_PUBLIC_WORDPRESS_API_URL);
+  console.log('[WordPress API Config] NODE_ENV:', process.env.NODE_ENV);
+  console.log('[WordPress API Config] NEXT_PHASE:', process.env.NEXT_PHASE);
+}
+
 // Axiosインスタンスの作成
 const wpAPI = axios.create({
   baseURL: API_URL,
@@ -665,6 +673,9 @@ export async function getChildPages(parentSlug: string) {
 // 歴代主将の一覧表示向けに軽量な子ページ情報を取得（_embed なし、必要項目のみ）
 export async function getHistoryMemberSummaries(parentSlug: string) {
   try {
+    console.log(`[getHistoryMemberSummaries] Starting fetch for parent slug: "${parentSlug}"`);
+    console.log(`[getHistoryMemberSummaries] API_URL: ${API_URL}`);
+    
     // 親ページ取得（軽量）
     const parentResponse = await cachedGet('/wp/v2/pages', {
       params: {
@@ -674,12 +685,14 @@ export async function getHistoryMemberSummaries(parentSlug: string) {
     });
 
     if (!parentResponse.data || parentResponse.data.length === 0) {
-      console.warn(`Parent page with slug "${parentSlug}" not found`);
+      console.warn(`[getHistoryMemberSummaries] Parent page with slug "${parentSlug}" not found`);
+      console.warn(`[getHistoryMemberSummaries] Response status: ${parentResponse.status}`);
+      console.warn(`[getHistoryMemberSummaries] Response data:`, parentResponse.data);
       return [];
     }
 
     const parentId = parentResponse.data[0].id;
-    console.log(`Found parent page ID: ${parentId} for slug "${parentSlug}"`);
+    console.log(`[getHistoryMemberSummaries] Found parent page ID: ${parentId} for slug "${parentSlug}"`);
 
     // 子ページを取得（_fields を削除して確実に content.rendered を取得）
     const childResponse = await cachedGet('/wp/v2/pages', {
@@ -692,22 +705,28 @@ export async function getHistoryMemberSummaries(parentSlug: string) {
       },
     });
 
-    console.log(`Found ${childResponse.data?.length || 0} child pages for parent ID ${parentId}`);
+    console.log(`[getHistoryMemberSummaries] Found ${childResponse.data?.length || 0} child pages for parent ID ${parentId}`);
     
     if (childResponse.data && childResponse.data.length > 0) {
       // デバッグ: 最初の子ページの構造を確認
-      console.log('Sample child page structure:', {
+      console.log('[getHistoryMemberSummaries] Sample child page structure:', {
         id: childResponse.data[0].id,
         slug: childResponse.data[0].slug,
         hasTitle: !!childResponse.data[0].title,
         hasContent: !!childResponse.data[0].content,
         hasContentRendered: !!(childResponse.data[0].content?.rendered),
       });
+    } else {
+      console.warn(`[getHistoryMemberSummaries] No child pages found for parent ID ${parentId}`);
     }
 
     return childResponse.data || [];
-  } catch (error) {
-    console.error('Error fetching history member summaries:', error);
+  } catch (error: any) {
+    console.error('[getHistoryMemberSummaries] Error fetching history member summaries:', error);
+    console.error('[getHistoryMemberSummaries] Error message:', error?.message);
+    console.error('[getHistoryMemberSummaries] Error response:', error?.response?.data);
+    console.error('[getHistoryMemberSummaries] Error status:', error?.response?.status);
+    console.error('[getHistoryMemberSummaries] API_URL at error:', API_URL);
     // エラー時は空配列を返して、セクションヘッダーは表示されるようにする
     return [];
   }
