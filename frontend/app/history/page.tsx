@@ -9,7 +9,11 @@ console.log('[History Page Module] Module loaded at build time');
 console.log('[History Page Module] NODE_ENV:', process.env.NODE_ENV);
 console.log('[History Page Module] NEXT_PHASE:', process.env.NEXT_PHASE);
 
-export const revalidate = 3600; // 1時間ごとに再生成
+// ビルド時に確実に静的生成されるように設定
+export const dynamic = 'force-static';
+// revalidateを削除して完全に静的生成にする（ビルド時に確実に生成される）
+// 必要に応じて、手動で再ビルドすることで更新可能
+// export const revalidate = 3600; // 1時間ごとに再生成（コメントアウト）
 
 // メタデータの生成
 export async function generateMetadata() {
