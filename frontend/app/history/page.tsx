@@ -4,12 +4,19 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { parseHistoryContent } from '@/lib/parseHistoryContent';
 
+// モジュール読み込み時にログを出力（ビルド時に確実に実行される）
+console.log('[History Page Module] Module loaded at build time');
+console.log('[History Page Module] NODE_ENV:', process.env.NODE_ENV);
+console.log('[History Page Module] NEXT_PHASE:', process.env.NEXT_PHASE);
+
 export const revalidate = 3600; // 1時間ごとに再生成
 
 // メタデータの生成
 export async function generateMetadata() {
+  console.log('[History Page] generateMetadata called');
   try {
     const page = await getPageBySlug('history');
+    console.log('[History Page] generateMetadata - page found:', !!page);
     
     if (!page) {
       return {
@@ -22,6 +29,7 @@ export async function generateMetadata() {
       description: page.excerpt.rendered.replace(/<[^>]*>/g, '').substring(0, 160),
     };
   } catch (error) {
+    console.error('[History Page] generateMetadata error:', error);
     return {
       title: 'エラー',
     };
@@ -29,15 +37,19 @@ export async function generateMetadata() {
 }
 
 export default async function HistoryPage() {
+  console.log('[History Page] HistoryPage function called');
+  console.log('[History Page] Function execution started');
+  
   let page = null;
   let childPages: any[] = [];
   let pageError = null;
 
   // 親ページを取得
   try {
+    console.log('[History Page] Fetching parent page...');
     page = await getPageBySlug('history');
-    console.log('=== History Page Debug ===');
-    console.log('Parent page found:', !!page);
+    console.log('[History Page] === Parent page fetched ===');
+    console.log('[History Page] Parent page found:', !!page);
     
     if (!page) {
       console.log('Parent page not found, returning 404');
@@ -218,6 +230,14 @@ export default async function HistoryPage() {
       {/* 歴代主将一覧（簡素表示：年度 + 主将名リンク） */}
       {/* セクションは常に表示される（データの有無・エラーの有無に関わらず） */}
       {/* ビルド時に確実にレンダリングされるよう、シンプルな構造に変更 */}
+      {(() => {
+        console.log('[History Page] Rendering section - childPages:', {
+          isArray: Array.isArray(childPages),
+          length: childPages?.length || 0,
+          hasData: childPages && childPages.length > 0
+        });
+        return null;
+      })()}
       <section id="history-captains" className="mt-16" data-section="history-captains">
         <h2 
           className="text-3xl font-bold mb-8 pb-4 border-b-2"
