@@ -51,15 +51,23 @@ export default async function HistoryPage() {
   // 子ページ（歴代主将）を軽量取得（_embedなし、必要フィールドのみ）
   // エラーが発生しても空配列が返されるので、セクションは表示される
   try {
+    console.log('[History Page] Starting to fetch child pages...');
+    console.log('[History Page] API_URL:', process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'NOT SET');
     const fetchedPages = await getHistoryMemberSummaries('history');
     // 確実に配列であることを保証
     childPages = Array.isArray(fetchedPages) ? fetchedPages : [];
-    console.log('=== History Page: Child pages fetched ===');
-    console.log('Child pages (light) count:', childPages.length);
-    console.log('Child pages (light):', childPages.map((p: any) => ({ slug: p.slug, title: p.title?.rendered })));
-  } catch (e) {
+    console.log('[History Page] === Child pages fetched ===');
+    console.log('[History Page] Child pages count:', childPages.length);
+    if (childPages.length > 0) {
+      console.log('[History Page] First child page:', { slug: childPages[0].slug, title: childPages[0].title?.rendered });
+    } else {
+      console.warn('[History Page] WARNING: No child pages found! This may cause the section to not render.');
+    }
+  } catch (e: any) {
     // 子ページ取得のエラーは無視（空配列のまま）
-    console.error('Error fetching child pages (non-fatal):', e);
+    console.error('[History Page] ERROR fetching child pages (non-fatal):', e);
+    console.error('[History Page] Error message:', e?.message);
+    console.error('[History Page] Error stack:', e?.stack);
     childPages = [];
   }
   

@@ -9,6 +9,12 @@ if (typeof process !== 'undefined') {
   console.log('[WordPress API Config] NEXT_PUBLIC_WORDPRESS_API_URL:', process.env.NEXT_PUBLIC_WORDPRESS_API_URL);
   console.log('[WordPress API Config] NODE_ENV:', process.env.NODE_ENV);
   console.log('[WordPress API Config] NEXT_PHASE:', process.env.NEXT_PHASE);
+  
+  // 本番環境で環境変数が設定されていない場合は警告
+  if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_WORDPRESS_API_URL) {
+    console.error('[WordPress API Config] ERROR: NEXT_PUBLIC_WORDPRESS_API_URL is not set in production!');
+    console.error('[WordPress API Config] This will cause API requests to fail.');
+  }
 }
 
 // Axiosインスタンスの作成
