@@ -278,6 +278,24 @@ class HeadlessAPIConfig {
                 'count' => 0,
                 'posts' => [],
                 'message' => 'Instagram access token not configured.',
+                'debug' => [
+                    'token_from_constant' => defined('INSTAGRAM_GRAPH_ACCESS_TOKEN'),
+                    'token_from_option' => !empty(get_option('instagram_graph_access_token', '')),
+                    'token_length' => 0,
+                ],
+            ];
+        }
+        
+        // アクセストークンの形式を確認（簡易チェック）
+        $token_length = strlen($access_token);
+        if ($token_length < 50) {
+            return [
+                'count' => 0,
+                'posts' => [],
+                'message' => 'Instagram access token appears to be invalid (too short).',
+                'debug' => [
+                    'token_length' => $token_length,
+                ],
             ];
         }
         
@@ -291,11 +309,22 @@ class HeadlessAPIConfig {
         
         $profile_picture_url = '';
         $account_username = '';
+        $user_error = null;
         
-        if (!is_wp_error($user_response)) {
+        if (is_wp_error($user_response)) {
+            $user_error = $user_response->get_error_message();
+        } else {
             $user_body = wp_remote_retrieve_body($user_response);
             $user_data = json_decode($user_body, true);
-            $account_username = $user_data['username'] ?? '';
+            $user_response_code = wp_remote_retrieve_response_code($user_response);
+            
+            if ($user_response_code !== 200 || isset($user_data['error'])) {
+                $user_error = isset($user_data['error']) 
+                    ? $user_data['error']['message'] ?? 'Unknown error'
+                    : 'HTTP ' . $user_response_code;
+            } else {
+                $account_username = $user_data['username'] ?? '';
+            }
         }
         
         // Instagram Graph APIで投稿を取得
@@ -317,13 +346,48 @@ class HeadlessAPIConfig {
         }
         
         $body = wp_remote_retrieve_body($response);
+        $response_code = wp_remote_retrieve_response_code($response);
         $data = json_decode($body, true);
+        
+        // デバッグ情報を追加
+        $debug_info = [
+            'response_code' => $response_code,
+            'has_data_key' => isset($data['data']),
+            'data_is_array' => is_array($data['data'] ?? null),
+            'data_count' => is_array($data['data'] ?? null) ? count($data['data']) : 0,
+            'has_error' => isset($data['error']),
+        ];
+        
+        // エラーレスポンスの場合
+        if (isset($data['error'])) {
+            return [
+                'count' => 0,
+                'posts' => [],
+                'message' => 'Instagram API Error: ' . ($data['error']['message'] ?? 'Unknown error'),
+                'error_code' => $data['error']['code'] ?? null,
+                'error_type' => $data['error']['type'] ?? null,
+                'debug' => $debug_info,
+            ];
+        }
+        
+        // レスポンスコードが200以外の場合
+        if ($response_code !== 200) {
+            return [
+                'count' => 0,
+                'posts' => [],
+                'message' => 'Instagram API returned status code: ' . $response_code,
+                'response_body' => $body,
+                'debug' => $debug_info,
+            ];
+        }
         
         if (!isset($data['data']) || empty($data['data'])) {
             return [
                 'count' => 0,
                 'posts' => [],
                 'message' => 'No Instagram posts found in API response.',
+                'debug' => $debug_info,
+                'response_sample' => substr($body, 0, 500), // 最初の500文字を返す
             ];
         }
         
@@ -367,6 +431,7 @@ class HeadlessAPIConfig {
             'posts' => $posts,
             'username' => $account_username ?: ($posts[0]['username'] ?? ''),
             'profile_picture_url' => $profile_picture_url,
+            'user_info_error' => $user_error, // ユーザー情報取得時のエラー（あれば）
         ];
     }
     
